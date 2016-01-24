@@ -3,9 +3,11 @@
   foreach($products as $product_item):
     $url = product_url($product_item);    
   	$path = "/".$product_item['product_image_path'];
+    $img_alt = $product_item['product_intro'];
   	$image_properties = array(
             'src' => "$path",          
             'class' => 'img-responsive',
+            'alt' => "$img_alt",
   );
   ?>
   	<div class="col-md-4">

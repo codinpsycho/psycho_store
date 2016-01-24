@@ -66,7 +66,7 @@
 					<?php endforeach; ?>
 				<?php endforeach; ?>
 				<?php echo $latest_order[0]['address']['city'].", ". $latest_order[0]['address']['state'] ?>
-				</h3>				
+				</h3>
 			</div>
 		</div>
 		<div class="row">
