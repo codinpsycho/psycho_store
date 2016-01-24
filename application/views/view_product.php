@@ -20,7 +20,7 @@
       </div>
       <div class="modal-body">
         <h5>Ques : Why should i pre-order?<br><br>
-        Ans : Look at the loot, just look at it damn it. You know how many mercenaries have been hired to snatch this loot from us and you ask why should you pre-order. Our production minions are playing with their lives here to get you this loot and for that we need your confirmation as there is a limit to everything.<br><br>So pre-order this right now and we start shipping from <strong>9th october</strong>.
+        Ans : Look at the loot, just look at it damn it. You know how many mercenaries have been hired to snatch this loot from us and you ask why should you pre-order. Our production minions are playing with their lives here to get you this loot and for that we need your confirmation as there is a limit to everything.<br><br>So pre-order this right now and we start shipping from <strong>2nd November</strong>.
         </h5>
       </div>
       <div class="modal-footer">
@@ -48,7 +48,7 @@
         </li>
       </ul>
       <div class="col-md-6 text-center">
-        <?php echo $this->load->view('view_product_image')?>
+        <?php $data['img_alt'] = $product['product_intro']; echo $this->load->view('view_product_image', $data)?>
         <?php echo $this->load->view('view_product_social', null); ?>
       </div>
       <div class="col-md-4">
@@ -77,7 +77,7 @@
               </select>
             </div>  
             <div class="col-md-8">
-              <?php $button_text = $product_state == 'live' ? 'Add To Cart' : 'Pre-Order'?>              
+              <?php $button_text = $product_state == 'preorder' ? 'Pre-Order' : 'Add To Cart'?>
               <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
             </div>
           </form> 
