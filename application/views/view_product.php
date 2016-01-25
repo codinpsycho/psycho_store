@@ -31,22 +31,22 @@
 </div>
 
 <div class="container">
-  <div class="section">
-    <div class="top-bottom-space">
-    <div class="row">
+    <div class="row top-bottom-space">
       <div class="col-md-12">
         <h1 id="product_name" class="text-left"><?php echo $product['product_name'] ?> 
         <span class="pull-right"> <i class="fa fa-rupee"></i> <?php echo $product['product_price']?> </span> </h1>
         <hr>
       </div>
-      <ul class="pager">
-        <li class="previous">
-      <?php echo anchor("$prev_id", "Previous");?>
-        </li>
-        <li class="next">
-          <?php echo anchor("$next_id", "Next");?>
-        </li>
-      </ul>
+      <div class="col-md-12">
+        <ul class="pager">
+          <li class="previous">
+            <?php echo anchor("$prev_id", "Previous");?>
+          </li>
+          <li class="next">
+            <?php echo anchor("$next_id", "Next");?>
+          </li>
+        </ul>
+      </div>      
       <div class="col-md-6 text-center">
         <?php $data['img_alt'] = $product['product_intro']; echo $this->load->view('view_product_image', $data)?>
         <?php echo $this->load->view('view_product_social', null); ?>
@@ -107,10 +107,9 @@
 
             <?php endforeach ?>             
           </div>
-        </div>            
+        </div>
       </div>
     </div>
-  </div>
   <div id='prod_desc'>
     <?php echo $this->load->view('view_product_desc'); ?>
   </div>  
@@ -118,5 +117,4 @@
   <?php $data['product_name'] = $product['product_name']; echo $this->load->view('view_disqus', $data); ?>
 
   <?php echo $this->load->view('view_product_recent'); ?>
-  </div>
 </div>
