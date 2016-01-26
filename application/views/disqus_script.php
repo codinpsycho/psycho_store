@@ -1,4 +1,4 @@
-<div id="disqus_thread"></div>
+<div id="disqus_thread">
 		<script type="text/javascript">
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
