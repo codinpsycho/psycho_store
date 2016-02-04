@@ -17,7 +17,7 @@
 <div class="row">
 	<div class="col-md-5 col-sm-12 col-xs-12">
 		<h4 class="">LXG TV India </h4>
-		<h5>Interview with Ishkaran Singh from Psych Store at VGF 16 Pune : </h5>		
+		<h5>Interview with Ishkaran Singh from Psych Store at VGF 16 Pune : </h5>
 		<p>So the good guys at LXG TV India (League of extraordinary gamers), quite an extraordinary name for sure, interviewed us at Video Game Fest 16 Pune where we discussed what we do, why we do it and how we will be taking it forward to the next level.
 	</div>
 	<div class="col-md-7 col-sm-12 col-xs-12">		
