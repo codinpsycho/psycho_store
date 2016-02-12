@@ -44,7 +44,8 @@
     </td>
 </tr>
     <td colspan="2" align='center'>
-        <h5>Minions : "<?php echo $name ?>, we send each and every order with extreme love.<br> Actually seeing you using it makes us very happy.<br> So take a pic with this merchandise and share it with us. That will make our day."</h5>
+        <h5>Use this hashtag on instagram and get a chance to feature on psycho store.</h5>
+        <strong><h1>#PSYCHOFAMOUS</h1></strong>
     </td>
 <tr> 
 </tr>
