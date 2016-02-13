@@ -30,6 +30,24 @@ $(function () {
 			<?php $data['products'] = $products; $this->load->view('catalog',$data);?>
 		</div>
 	</div>
+
+	<div class="row top-bottom-space">
+		<div class="col-md-12">
+			<h2>Psycho Lab updates</h2>
+			<h5>Get up to date with our scientists at Psycho Labs, as they blog about their experience.</h5>
+			<hr>
+		</div>
+		<div class="col-md-4">
+			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/139231574131" data-did="0f33af7f0c3b71e24f567863b76525403a751edd"><a href="http://psychostorein.tumblr.com/post/139231574131/understanding-the-concept-of-being-remarkable">http://psychostorein.tumblr.com/post/139231574131/understanding-the-concept-of-being-remarkable</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
+		</div>
+		<div class="col-md-4">
+			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/138974414701" data-did="f5607c02b1df939a364f1ac20812b7e8f24c2859"><a href="http://psychostorein.tumblr.com/post/138974414701/shashikanthreddy-spower-tshirt">http://psychostorein.tumblr.com/post/138974414701/shashikanthreddy-spower-tshirt</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
+		</div>
+		<div class="col-md-4">
+			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/138610644421" data-did="63733c0e9073ef999b013b9793fbe60a734af88b"><a href="http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune">http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
+		</div>
+	</div>
+
 	<div class="row top-bottom-space">
 		<div class="col-md-12">
 		<h2 class="molot">Any Comments?</h2>

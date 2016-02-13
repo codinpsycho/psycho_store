@@ -24,7 +24,7 @@ class admin extends CI_controller
 		$this->load->helper('form');
 		$this->load->helper('psycho_helper');
 		$this->load->helper('mailgun_helper');
-		$this->load->helper('shipping_helper');		
+		$this->load->helper('shipping_helper');
 		$this->load->library('session');
 		$this->config->load('shipping_settings');
 	}
@@ -115,7 +115,7 @@ class admin extends CI_controller
 		$label = create_shipping_label($waybill);
 		$label = $label['packages'][0];
 		$shipping_details = $this->database->GetShippingDetails($shipment['address']['pincode']);
-
+				
 		$data['company_logo'] = site_url($this->config->item('company_logo'));
 		$data['courier_logo'] = site_url($this->config->item('delhivery_logo'));
 		$data['wb_barcode'] = $label['barcode'];
