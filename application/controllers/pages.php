@@ -140,6 +140,7 @@ class Pages extends CI_controller
 			$data['xl_stock']="";
 			$data['size_chart'] = site_url($this->config->item('size_chart'));
 			$data['images'] = get_product_image($result['product_id']);
+			$data['hashtag'] = $result['hashtag'];
 
 			if($result['product_count_small'] <= 0)
 				$data['small_stock'] = 'disabled';
@@ -149,7 +150,10 @@ class Pages extends CI_controller
 				$data['large_stock'] = 'disabled';
 			if($result['product_count_xl'] <= 0)
 				$data['xl_stock'] = 'disabled';
-			
+
+			$params['tag_name'] = $data['hashtag'];
+			notify_event('instafeed', $params);
+
 			//Generate Suggestions
 			$data['suggested_products'] = $this->GenerateSuggestions($result, 3);
 

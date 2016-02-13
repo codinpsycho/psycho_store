@@ -39,3 +39,5 @@ else
   ga('create', 'UA-32790740-2', 'auto');
   ga('send', 'pageview');
 </script>
+
+<script type="text/javascript" src= <?php echo site_url("scripts/instafeed.min.js") ?> ></script>

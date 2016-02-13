@@ -105,14 +105,17 @@
                   <?php echo anchor($prod_url, img($image_properties));?>      
               </div>
 
-            <?php endforeach ?>             
+            <?php endforeach ?>
           </div>
         </div>
       </div>
-    </div>
+    </div>  
+
   <div id='prod_desc'>
     <?php echo $this->load->view('view_product_desc'); ?>
-  </div>  
+  </div>
+
+  <?php $data['tag_name'] = $hashtag; echo $this->load->view('view_product_instagram', $data); ?>
   
   <?php $data['product_name'] = $product['product_name']; echo $this->load->view('view_disqus', $data); ?>
 

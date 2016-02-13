@@ -283,6 +283,11 @@ if(!function_exists('execute_events'))
 						$script_params['timeout'] = $params['timeout'];
 						$data['scripts'][] = array('path' => 'events/alert', 'params' => $script_params);
 						break;
+					
+					case 'instafeed':
+						$script_params['tag_name'] = $params['tag_name'];						
+						$data['scripts'][] = array('path' => 'events/instafeed', 'params' => $script_params);
+						break;						
 
 					default:
 						# code...
