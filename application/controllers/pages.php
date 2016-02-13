@@ -271,6 +271,13 @@ class Pages extends CI_controller
 		display('basic', $data);
 	}
 
+	function coupon_partners()
+	{
+		$data['heading'] = "Coupon Partners";		
+		$data['content'] = $this->load->view('view_coupon_partners', $data, true);
+		display('basic', $data);	
+	}
+
 	function contact()
 	{
 		$data['return_address'] = format_address($this->config->item('return_address'));

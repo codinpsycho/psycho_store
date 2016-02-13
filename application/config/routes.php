@@ -50,6 +50,7 @@ $route['media'] = 'pages/media/';
 $route['popular'] = 'pages/popular/';
 $route['feedback'] = 'pages/feedback/';
 $route['giveaways'] = 'pages/giveaways/';
+$route['coupon_partners'] = 'pages/coupon_partners/';
 $route['beta'] = 'pages/beta/';
 $route['404_override'] = '';
 

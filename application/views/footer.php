@@ -58,6 +58,9 @@
               </li>
               <li>
                 <a target="_blank" href= "http://psychostorein.tumblr.com/" >Blog</a>
+              </li>
+              <li>
+                <a href= <?php echo site_url('coupon_partners')?> >Coupon Partners</a>
               </li>              
             </ul>
           </div>

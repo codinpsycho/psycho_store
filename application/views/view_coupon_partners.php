@@ -1,0 +1,2 @@
+<a target="_blank" href="http://couponclue.com"><img src= <?php echo site_url('images/coupon_partners/couponclue.png')?> ></a>
+<a target="_blank" href="http://couponrani.com"><img src= <?php echo site_url('images/coupon_partners/couponrani.png')?> ></a>
