@@ -44,7 +44,7 @@
     </td>
 </tr>
     <td colspan="2" align='center'>
-        <h5>Use this hashtag on instagram and get a chance to feature on psycho store.</h5>
+        <h5>Show off your geeky side. Use this hashtag on instagram to get featured.</h5>
         <strong><h1>#PSYCHOFAMOUS</h1></strong>
     </td>
 <tr> 
