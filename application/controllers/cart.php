@@ -206,18 +206,26 @@ class cart extends CI_controller
 		}
 
 		switch ($coupon)
-		{
-			case 'godmode_frapp':
+		{			
+			case 'psychoness10':
 				//Should be applied on purchase of only one tshirt
-				if($this->cart->total_items() == 1)
+				if($this->cart->total_items() >= 1)
 				{
 					$check_result = true;
 				}
 				break;
-			
-			case 'godmode_psycho':				
-				//Should be applied on purchase of only one tshirt
-				if($this->cart->total_items() == 1)
+
+			case 'psychoness15':
+				//Should be applied on purchase of 2 or 3 tshirts
+				if($this->cart->total_items() > 1)
+				{
+					$check_result = true;
+				}
+				break;
+
+			case 'godmode_psycho':
+				//Should be applied on purchase of 4 or more tshirts
+				if($this->cart->total_items() > 3)
 				{
 					$check_result = true;
 				}
