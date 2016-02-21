@@ -12,7 +12,7 @@ class checkout extends CI_controller
 		$this->load->library('cart');
 		$this->load->library('session');
 		$this->load->helper('url');
-		$this->load->helper('html');
+		$this->load->helper('html');		
 		$this->load->helper('psycho_helper');
 		$this->load->helper('mailgun_helper');
 		$this->load->model('database');
@@ -365,7 +365,7 @@ class checkout extends CI_controller
 	}
 
 	function success()
-	{	
+	{
 		$success = $this->load->view("success", null, TRUE);
 		$data = array('heading' => "Minions Assemble Now" );
 		$data['content'] = $success;
@@ -426,6 +426,11 @@ class checkout extends CI_controller
 				$params = mg_create_mail_params('second_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
+
+			case '3':
+				$params = mg_create_mail_params('third_order', $data);
+				mg_send_mail($user['email'], $params);
+				break;				
 			
 			default:
 				# code...
