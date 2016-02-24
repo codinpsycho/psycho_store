@@ -3,8 +3,8 @@
 
 //Default meta tags info
 
-$config['title'] = 'Psycho Store | Satisfy your inner Geek!';
-$config['description'] = 'We make stuff for the gaming and geek community of earth (other planets can wait for now). Get your hands dirty with gaming, anime and geeky t shirts and much more stuff.';
+$config['title'] = 'Satisfy your inner Geek! | Psycho Store';
+$config['description'] = 'We make stuff for the gaming and geek community of earth (other planets can wait for now). Get your hands dirty with some of the best gaming, anime and geeky t shirts in India.';
 $config['keywords'] = 't-shirt, tshirt, t shirt, shirt, tee, t, t-shirts, tshirts, t shirts, shirts, tees, ts, clothing, clothes, threads, wear, gift, gifts, hats, hat, beanies, beanie, gear, sweatshirt, hoodie, sweatshirts, hoodies, gamer, geek, hacker, nerd, computer, gamers, geeks, hackers, nerds, coder, coders, psychostore, psycho, store, psycho store, india, ';
 
 $config['favico'] = 'images/favico.png';
