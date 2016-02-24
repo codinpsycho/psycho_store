@@ -19,8 +19,7 @@
 					<h1>Sorry</h1>
 					<p> Note : We have no idea where your realm is. We have deployed our scout minions in search of your address. But until then go back and try some other adrress, or send us a mail at <a href="mailto:contact@psychostore.in">contact@psychostore.in</a> for a personal delivery (no extra charges).</p>
 				</div>
-			<?php// else: ?> -->
-			<div id="alert"></div>
+			<?php// else: ?> -->			
 			<div class="col-md-4">
 				<h1>Shipping To</h1>
 				<h4> <?php echo $address;?> </h4>

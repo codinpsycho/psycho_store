@@ -259,14 +259,13 @@ class checkout extends CI_controller
 		$this->_validate_address();
 
 		//make sure address is set in checkout_db
-		$checkout_order = $this->_get_active_checkout_order();				
+		$checkout_order = $this->_get_active_checkout_order();
 
 		if( is_null($checkout_order['address_id'] ))
-		{				
+		{
 			redirect('checkout/');
 		}
-		
-		show_alert("One more click and all this awesomeness will be yours, go on we know you cant wait.");
+
 
 		$address = $this->database->GetAddressById($checkout_order['address_id']);		
 		$shipping_details = $this->database->GetShippingDetails($address['pincode']);
