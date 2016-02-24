@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+	<?php echo $intro_signature?>
 <head>
 	<?php echo $header?>
 	<?php echo $external_scripts ?>

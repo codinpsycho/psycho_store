@@ -452,6 +452,7 @@ function _live($page, $data)
 	$data['custom_events'] = $ci->load->view('custom_events', $data, true);
 	$data['external_scripts'] = $ci->load->view('external_scripts', null, true);
 	$data['event_tracking'] = $ci->load->view('event_tracking', null, true);
+	$data['intro_signature'] = $ci->load->view('intro_signature.html', null, true);
 
 	$footer = $ci->load->view('footer', $data, true);
 
