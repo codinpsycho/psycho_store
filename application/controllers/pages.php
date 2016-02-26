@@ -8,6 +8,7 @@ class Pages extends CI_controller
 	{
 		parent::__construct();
 		$this->load->model('database');
+		$this->load->model('tank_auth/users');
 		$this->load->helper('url');
 		$this->load->helper('html');
 		$this->load->helper('form');
@@ -113,6 +114,28 @@ class Pages extends CI_controller
 	function feedback()
 	{
 		$feedback = $this->database->GetFeedback(TRUE);
+
+		//This is required to show what the user bought
+		foreach ($feedback as $key => $value)
+		{
+			$user = (array)$this->users->get_user_by_email($value['email']);
+			if($user)
+			{
+				$orders = $this->database->GetOrdersForUser($user['id'], true);
+				if($orders)
+				{
+					//We will show the latest order
+					$latest_order_num = count($orders) - 1;
+					$order_items = $orders[$latest_order_num]['order_items'];
+
+					foreach ($order_items as $item_key => $item)
+					{
+						$feedback[$key]['products'][] = array('product_name' => $item['product']['product_name'], 'product_url' => product_url($item['product']) );
+					}
+				}				
+			}
+		}		
+
 		$feedback = array_reverse($feedback);
 		
 		$data['feedbacks'] = $feedback;
@@ -124,7 +147,7 @@ class Pages extends CI_controller
 	{
 		$total_products = $this->database->GetMaxProductID();
 		$url = $this->beautify($url,'_');
-		$result = $this->database->GetProductById($id);		
+		$result = $this->database->GetProductById($id);
 		if($result)
 		{
 			$next = $prev = 0;
@@ -132,8 +155,8 @@ class Pages extends CI_controller
 			$data['product'] = $result;
 			$data['total_products'] = $total_products;
 			$data['product_state'] = $result['product_state'];
-			$data['next_id'] = product_url( $this->database->GetProductById($next), false );
-			$data['prev_id'] = product_url( $this->database->GetProductById($prev), false );
+			$data['next_id'] = product_url( $this->database->GetProductById($next) );
+			$data['prev_id'] = product_url( $this->database->GetProductById($prev) );
 			$data['small_stock']="";
 			$data['medium_stock']="";
 			$data['large_stock']="";
@@ -195,7 +218,7 @@ class Pages extends CI_controller
 
 	function like($game = "")
 	{
-		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($game,'-');
+		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($game,'-');		
 
 		$data['search_result'] = 0;
 		$data['search_text'] = $name;

@@ -124,8 +124,8 @@ function add_subscriber($email, $username = null)
 
 if(!function_exists('product_url'))
 {
-	function product_url(&$product)
-	{		
+	function product_url($product)
+	{
 		$id = $product['product_id'];
 		$url = url_title($product['product_url']);
 		$final_url = "product/"."$id/$url";

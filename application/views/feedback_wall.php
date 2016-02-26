@@ -12,9 +12,15 @@
     				<h4> <?php echo $value['name'] ?> - </h4>
     				<div class='well'>
     					<p> <?php echo $value['message'] ?> </p>
+                        <?php if ( isset($value['products']) ): ?>
+                            <?php foreach($value['products'] as $key => $product): ?>
+                                <?php  echo anchor($product['product_url'], $product['product_name']) ?>
+                                <br>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
     				</div>
     			</div>
-    		<?php endforeach; ?>	    	
+    		<?php endforeach; ?>
 		</div>	
 	</div>
     <a class='btn btn-default' href= <?php echo site_url('') ?> >Return To Awesomess</a>

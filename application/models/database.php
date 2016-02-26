@@ -58,6 +58,9 @@ class Database extends CI_Model
 		else if($sort =='popular')				
 			$this->db->order_by('product_qty_sold', 'desc');	//Sort by selling amount
 
+		//Dont get hidden products
+		$this->db->where('product_state !=', 'hidden');
+
 		$query = $this->db->get('products');
 		return $query->result_array();
 	}
@@ -338,11 +341,25 @@ class Database extends CI_Model
 		return $query->result_array();
 	}
 
-	function GetOrdersForUser($userId)
+	function GetOrdersForUser($userId, $detailed = false)
 	{
 		$this->db->where('user_id', $userId);
 		$query = $this->db->get('orders');
-		return $query->result_array();
+		$final_orders = $query->result_array();
+
+		if( count($final_orders) && $detailed )
+		{
+			$order_array = $query->result_array();
+
+			foreach ($order_array as $key => $value)
+			{
+				$orders[] =  $this->GetOrderById($value['txn_id']);
+			}
+
+			$final_orders = $orders;
+		}
+
+		return $final_orders;
 	}
 
 	function RewardUser($user_id, $points)
