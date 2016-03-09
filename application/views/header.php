@@ -14,53 +14,65 @@
 <link href='http://fonts.googleapis.com/css?family=Carrois+Gothic+SC' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href=<?php echo site_url('css/bootstrap.min.css') ?> >
 <link rel="stylesheet" href= <?php echo site_url('css/font-awesome.min.css') ?> >
-<link rel="stylesheet" href=<?php echo site_url('css/manual.css?v2')?>>
+<link rel="stylesheet" href=<?php echo site_url('css/manual.css?v3')?>>
 <script type="text/javascript" src= <?php echo site_url('scripts/jquery-2.1.3.min.js') ?> ></script>
 <script type="text/javascript" src= <?php echo site_url('scripts/bootstrap.min.js') ?> ></script>
 
 <header>
-  <nav class="panel collapse navbar-collapse">
-    <ul class="nav nav-pills navbar-right ">
-      <li>
-    	<a target="_blank" href="https://www.facebook.com/psychostorein"><i class="navbar-btn fa fa-facebook"></i></a>
-      </li>
-      <li>
-    	<a target="_blank" href="https://twitter.com/psychostorein"><i class="navbar-btn fa fa-twitter"></i></a>
-      </li>
-      <li>
-    	<a target="_blank" href="http://instagram.com/psychostore.in"><i class="navbar-btn fa fa-instagram"></i></a>
-      </li>
-      <li>
-       <form class="navbar-form" method = "post" action=<?php echo site_url("like");?>>
-        <div class="btn-group">
-          <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">What do you like <span class="caret"></span>  </a>
-          <ul class="dropdown-menu">
-            <?php foreach ($supported_games as $key => $game):?>
-              <li>
-                <a href=<?php $game_url = url_title($game['product_game']); echo site_url("like/$game_url")?>> <?php echo $game['product_game'] ?></a>
-              </li>
-            <?php endforeach ?>
-          </ul>
-        </div>
-      </form>  
-      </li>      
-      <li>
-      	<?php if($user_id > 0): ?>
-        	<h4 class="navbar-text"> <?php echo $user_name ?> </h4>
-    	<?php endif; ?>
-      </li>
-      <li>
-        <?php $redirect_url = rawurlencode(uri_string()); ?>
-      	<?php  if ( $user_id == 0 ): ?> <a href= <?php  echo site_url('auth/login').'?redirect_url='.$redirect_url; ?> > <h5 class="navbar-btn">Login </h5></a>
-      	<?php else: ?> <a href= <?php echo site_url('auth/logout').'?redirect_url='.$redirect_url; ?> > <h5 class="navbar-btn">Logout </h5></a> <?php endif; ?>
-      </li>
-      <li>
-        <a class="" href= <?php echo site_url('cart')?> ><i class="navbar-btn fa fa-shopping-cart"></i><span class="badge"><?php echo $num_items ?></span></a>
-      </li>
-    </ul>
-    <ul class="nav nav-pills navbar-left">    	
-		<a href= <?php echo site_url('') ?> ><h4 class='molot navbar-text'>Psycho Store</h4></a>    
-    </ul>
-  </nav>
-  
+  <nav class="panel navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand molot" href= <?php echo site_url('') ?> >Psycho Store</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-pills">
+          <a target="_blank" href="https://www.facebook.com/psychostorein"><i class=" fa fa-facebook"></i></a>
+        </li>
+        <li class="nav-pills">
+          <a target="_blank" href="https://twitter.com/psychostorein"><i class=" fa fa-twitter"></i></a>
+        </li>
+        <li class="nav-pills">
+          <a target="_blank" href="http://instagram.com/psychostore.in"><i class=" fa fa-instagram"></i></a>
+        </li>       
+        <li class="dropdown">
+          <form class="navbar-form" role="search" method = "post" action=<?php echo site_url("like");?>>
+          <div class="btn-group">
+            <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">What do you like <span class="caret"></span>  </a>
+            <ul class="dropdown-menu">
+              <?php foreach ($supported_games as $key => $game):?>
+                <li>
+                  <a href=<?php $game_url = url_title($game['product_game']); echo site_url("like/$game_url")?>> <?php echo $game['product_game'] ?></a>
+                </li>
+              <?php endforeach ?>
+            </ul>
+          </div>
+        </form>
+        </li>
+        <li>
+          <?php if($user_id > 0): ?>
+            <h4 class="navbar-text"> <?php echo $user_name ?> </h4>
+          <?php endif; ?>
+        </li>
+        <li>
+          <?php $redirect_url = rawurlencode(uri_string()); ?>
+          <?php  if ( $user_id == 0 ): ?> <a href= <?php  echo site_url('auth/login').'?redirect_url='.$redirect_url; ?> > Login </a>
+          <?php else: ?> <a href= <?php echo site_url('auth/logout').'?redirect_url='.$redirect_url; ?> >Logout</a> <?php endif; ?>
+        </li>
+        <li>
+          <a class="" href= <?php echo site_url('cart')?> ><i class="fa fa-shopping-cart"></i><span class="badge"><?php echo $num_items ?></span></a>
+        </li>
+      </ul>      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 </header>
