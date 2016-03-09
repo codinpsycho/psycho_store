@@ -160,6 +160,16 @@ margin-bottom: 5px;
     background-color: rgb(9,9,8);
 }
 
+.navbar-default .navbar-brand
+{
+    color: #bababa;
+}
+
+.navbar-default .navbar-text
+{
+    color: #bababa;
+}
+
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus
 {
     color: inherit;
