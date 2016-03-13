@@ -41,10 +41,10 @@ $(function () {
 			        	<div class="pull-right">
 							<h4><a href= <?php echo site_url("cart/remove/{$items['rowid']}")?>>Remove <i class="fa fa-times"></i></a></h4>
 						</div>
-			        	<div class="col-md-2 col-lg-2 ">
+			        	<div class="col-md-2 col-lg-2 col-xs-12">
 							<?php echo anchor($url, img($image_properties));?>
 						</div>
-						<div class="col-md-10">
+						<div class="col-md-10 col-xs-12 col-sm-12">
 							<nav>
 								<ul class='nav nav-pills navbar-left'>
 									<li>
