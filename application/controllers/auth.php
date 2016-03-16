@@ -434,9 +434,19 @@ class Auth extends CI_Controller
 	}
 
 	function remove_address($address_id)
-	{		
+	{
 		$this->database->RemoveAddress($address_id);
 		redirect('checkout/address');
+	}
+
+	function _show_address_detection_popup()
+	{
+		show_alert("Our satellites are trying to pin point your location. Please dont move and select share/allow on the top left pop up." );
+	}
+
+	function _detect_address()
+	{
+		notify_event('geolocation');
 	}
 
 	function register_address()
@@ -447,6 +457,10 @@ class Auth extends CI_Controller
 			redirect('/auth/send_again/');
 		else 
 		{
+			//Run address detection script
+			$this->_show_address_detection_popup();
+			$this->_detect_address();
+
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');

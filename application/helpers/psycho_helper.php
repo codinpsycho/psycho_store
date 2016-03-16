@@ -287,7 +287,11 @@ if(!function_exists('execute_events'))
 					case 'instafeed':
 						$script_params['tag_name'] = $params['tag_name'];						
 						$data['scripts'][] = array('path' => 'events/instafeed', 'params' => $script_params);
-						break;						
+						break;
+
+					case 'geolocation':
+						$data['scripts'][] = array('path' => 'events/geolocation', 'params' => null);
+						break;
 
 					default:
 						# code...

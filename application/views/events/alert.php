@@ -1,5 +1,4 @@
 <script type="text/javascript">
-	//window.addEventListener('load', init);
 	
 	function init()
 	{
@@ -28,5 +27,5 @@
 	}
 
 	init();
-	
+
 </script>

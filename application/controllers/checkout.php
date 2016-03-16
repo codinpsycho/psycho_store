@@ -115,10 +115,12 @@ class checkout extends CI_controller
 			$this->_save_user_details();
 
 			$result = $this->database->GetAddressesForUser($user_id);
-			if(count($result) == 0 )
+			
+			if(count($result) == 0 )	//Directly send the user to address entry page
 			{
 				redirect('auth/register_address');
 			}
+
 			$data['addresses'] = $result;
 			display('address',$data);
 		}

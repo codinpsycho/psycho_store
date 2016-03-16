@@ -90,6 +90,7 @@ $number = array(
 <div class="container top-bottom-space">
 	<h1>Wheres your realm?</h1>
 	<hr>
+	<div id="alert"></div>
 	<div class="well">
 		<div class="row">
 			<div class="col-md-8">
@@ -133,7 +134,7 @@ $number = array(
 					<div class="col-md-4">
 						<div class="form-group">
 								<?php echo ('State'); ?>
-								<select name="state" class='form-control'>
+								<select id="state" name="state" class='form-control'>
 									<option value="Anadaman and Nicobar Islands" <?php echo set_select('state', 'Anadaman and Nicobar Islands'); ?>>Anadaman and Nicobar Islands</option>
 									<option value="Andhra Pradesh" <?php echo set_select('state', 'Andhra Pradesh'); ?> >Andhra Pradesh</option>
 									<option value="Arunachal Pradesh" <?php echo set_select('state', 'Arunachal Pradesh'); ?> >Arunachal Pradesh</option>
@@ -157,7 +158,7 @@ $number = array(
 									<option value="Meghalaya" <?php echo set_select('state', 'Meghalaya'); ?> >Meghalaya</option>
 									<option value="Mizoram" <?php echo set_select('state', 'Mizoram'); ?> >Mizoram</option>
 									<option value="Nagaland" <?php echo set_select('state', 'Nagaland'); ?> >Nagaland</option>
-									<option value="New Delhi" <?php echo set_select('state', 'New Delhi', TRUE); ?> >New Delhi</option>
+									<option value="Delhi" <?php echo set_select('state', 'Delhi', TRUE); ?> >Delhi</option>
 									<option value="Orissa" <?php echo set_select('state', 'Orissa'); ?> >Orissa</option>
 									<option value="Pondicherry" <?php echo set_select('state', 'Pondicherry'); ?> >Pondicherry</option>
 									<option value="Punjab" <?php echo set_select('state', 'Punjab'); ?> >Punjab</option>
