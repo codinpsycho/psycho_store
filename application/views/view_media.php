@@ -24,3 +24,18 @@
 		<iframe width="640" height="360" src="https://www.youtube.com/embed/x2wb6NElbGU" frameborder="0" allowfullscreen></iframe>
 	</div>	
 </div>
+<div class="row top-bottom-space">
+	<div class="col-md-4">
+		<a target="_blank" href="http://asidcast.com/we-take-a-look-at-psycho-store-an-online-store-to-satisfy-ones-inner-geek/">
+			<img class="img-responsive circular-pic" src= <?php echo site_url('images/media/asidcast.jpg')?>  alt="ASidCast Review of Psycho Store">
+		</a>
+	</div>
+	<div class="col-md-8">
+		<h4 class="">ASidCast</h4>
+		<h5>We Take A Look At Psycho Store: An Online Store To Satisfy One's Inner Geek</h5>
+		<p>It's really surprising how these little, tiny things that they do (also like writing an unconventional confirmation email) makes you feel that they genuinely care about what they are doing here and I believe that touch needs to come back to e-commerce startups in order for them to find their niche in this overcrowded market. 
+
+		<a target="_blank" href="http://gamingcentral.in/psycho-store-interview-with-ishkaran-singh/">Read more </a>
+		</p>
+	</div>
+</div>
