@@ -48,7 +48,7 @@ class insights extends CI_Controller
 		$data['revenue_data'] = $month_info['revenue'];
 		$data['total_revenue'] = $month_info['total_revenue'];
 		$data['cod_orders'] = $this->_getNumCodOrders($all_orders);
-		$data['online_orders'] = $this->_getNumOnlineOrders($all_orders);		
+		$data['online_orders'] = $this->_getNumPrePaidOrders($all_orders);		
 		$data['is_admin'] = $is_admin;
 		$data['latest_order'] = $latest_order;
 		
@@ -124,7 +124,7 @@ class insights extends CI_Controller
 		return $count;
 	}
 
-	function _getNumOnlineOrders($orders)
+	function _getNumPrePaidOrders($orders)
 	{
 		$count = 0;
 		foreach ($orders as $key => $value)
@@ -203,8 +203,8 @@ class insights extends CI_Controller
 		{
 			foreach ($orders as $key => $order)
 			{
-				$order_items = $order['order_items'];			
-				$total_products += count($order_items);
+				$order_items = $order['order_items'];
+				$total_products += $order_items[0]['count'];
 			}
 		}
 
