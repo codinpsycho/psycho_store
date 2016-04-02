@@ -18,7 +18,7 @@ $(function () {
 			<span class="pull-right">
 				<a class="molot" data-toggle="tooltip" title="win free stuff" data-placement="top" href= <?php echo site_url('giveaways')?> > Giveaways </a> 
 	            	<small>/</small>
-	            	<a class="molot" data-toggle="tooltip" title="see what people are saying" data-placement="top" href= <?php echo site_url('feedback')?> > Feedback </a>
+	            	<a class="molot" data-toggle="tooltip" title="see what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
 	            	<small>/</small>
 	            	<a class="molot" data-toggle="tooltip" title="gaming in india" data-placement="right" href= <?php echo site_url('insights')?> > Statistics </a>
             </span>
@@ -31,7 +31,7 @@ $(function () {
 		</div>
 	</div>
 
-	<div class="row top-bottom-space">
+	<!-- <div class="row top-bottom-space">
 		<div class="col-md-12">
 			<h2>Psycho Lab updates</h2>
 			<h5>Get up to date with our scientists at Psycho Labs, as they blog about their experience.</h5>
@@ -46,7 +46,7 @@ $(function () {
 		<div class="col-md-4">
 			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/138610644421" data-did="63733c0e9073ef999b013b9793fbe60a734af88b"><a href="http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune">http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
 		</div>
-	</div>
+	</div> -->
 
 	<div class="row top-bottom-space">
 		<div class="col-md-12">
