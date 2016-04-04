@@ -204,7 +204,10 @@ class insights extends CI_Controller
 			foreach ($orders as $key => $order)
 			{
 				$order_items = $order['order_items'];
-				$total_products += $order_items[0]['count'];
+				foreach ($order_items as $key => $item)
+				{
+					$total_products += $item['count'];
+				}				
 			}
 		}
 
