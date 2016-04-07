@@ -31,6 +31,8 @@ $(function () {
 		</div>
 	</div>
 
+	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data); ?>
+
 	<!-- <div class="row top-bottom-space">
 		<div class="col-md-12">
 			<h2>Psycho Lab updates</h2>

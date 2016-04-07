@@ -197,7 +197,10 @@ class Pages extends CI_controller
 	{
 		$data['products'] = $this->database->GetProducts('all', 'latest', 'all');
 		$data['latest_link_state'] = 'active';
-		$data['popular_link_state'] = 'none';		
+		$data['popular_link_state'] = 'none';
+		$params['tag_name'] = 'psychofamous';
+		notify_event('instafeed', $params);
+
 		display('browse', $data);
 	}
 
@@ -206,6 +209,9 @@ class Pages extends CI_controller
 		$data['products'] = $this->database->GetProducts('all', 'popular', 'all');
 		$data['popular_link_state'] = 'active';
 		$data['latest_link_state'] = 'none';
+		$params['tag_name'] = 'psychofamous';
+		notify_event('instafeed', $params);
+
 		display('browse', $data);
 	}
 	
