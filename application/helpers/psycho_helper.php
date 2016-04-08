@@ -258,18 +258,19 @@ if(!function_exists('execute_events'))
 						break;
 
 					case 'apply_discount':
-						$script_params['modal_title'] = $params['title'];
-						$script_params['modal_body']  = $params['body'];
-						
-						$data['scripts'][] = array('path' => 'events/modal', 'params' => $script_params);
+						$script_params['title'] = $params['title'];
+						$script_params['body']  = $params['body'];
+						$script_params['type']  = $params['type'];
+						$data['scripts'][] = array('path' => 'events/sweetalert', 'params' => $script_params);
 						break;
 					
 					case 'show_cheat_code':
-						$script_params['modal_title'] = $params['title'];
-						$script_params['modal_body']  = $params['body'];
+						$script_params['title'] = $params['title'];
+						$script_params['body']  = $params['body'];
+						$script_params['type']  = 'info';
 						$script_params['timeout'] = $params['timeout'];
 						$script_params['button_text'] = 'Thanks, you guys rock';
-						$data['scripts'][] = array('path' => 'events/modal', 'params' => $script_params);
+						$data['scripts'][] = array('path' => 'events/sweetalert', 'params' => $script_params);
 						break;
 
 					case 'register_cart':

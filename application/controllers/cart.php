@@ -64,7 +64,7 @@ class cart extends CI_controller
 
 		if($num_items)
 		{
-			$this->_show_cheat_code_after_timeout(25000);
+			//$this->_show_cheat_code_after_timeout(10000);
 		}
 
 		$data['cheat_hints'] = $this->load->view('cheatcode_hints', null, true);
@@ -248,17 +248,20 @@ class cart extends CI_controller
 		if($discount_percentage == 0)
 		{
 			$params['title'] = "wrong cheat code";
+			$params['type'] = "error";
 
 			$params['body'] = "<strong>$username</strong>, either there is no such cheat code like this or it cannot be applied right now.<br>Anyway, we strongly encourage playing games with no cheat codes applied.<br>But here is a hint just for you.<br><br><strong>Hint : Google \"What is the Konami code\"</strong>. " ;
 		}
 		else if(count($domain_discount))
 		{
 			$params['title'] = $username;
+			$params['type'] = "success";
 
 			$params['body'] = "We already gave you <strong>{$domain_discount['how_much']}%</strong> off because you belong to the lands of <strong>{$domain_discount['domain']}</strong>. Now dont push us, we cannot afford to give you anymore discount, that would be unfair for our people. Hope you understand.";
 		}
 		else
-		{			
+		{
+			$params['type'] = "success";
 			//Personalised message depending on cheat code applied
 			switch ($coupon)
 			{
