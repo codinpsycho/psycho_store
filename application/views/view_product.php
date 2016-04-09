@@ -61,11 +61,9 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <h5><a class="inline" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> 
             <?php if($product_state == 'preorder'): ?>
-              <span class="pull-right"><a class="inline" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order?</a> </span>
-            <?php endif; ?>  
-            </h5>
+              <<h5 class="pull-right"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order?</a> </h5>
+            <?php endif; ?>
           </div>
           <div class="col-md-4">
             <form  method = "post" action = <?php echo site_url("cart/add/{$product['product_id']}")?> role="form">
@@ -75,14 +73,15 @@
                   <option <?php echo $large_stock; ?> value ="Large">Large <?php if($large_stock == 'disabled') echo '(Out Of Stock)';?> </option>
                   <option <?php echo $xl_stock; ?> value ="XL">XL <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';?> </option>
               </select>
-            </div>  
+            </div>
             <div class="col-md-8">
               <?php $button_text = $product_state == 'preorder' ? 'Pre-Order' : 'Add To Cart'?>
               <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
             </div>
           </form> 
           <div class="col-md-12">
-             <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >Free shipping + 365 days return</a></h5>
+             <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >Free shipping + 365 days return</a>
+             <a class="pull-right" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> </h5>
           </div>
         </div>
         <hr>
