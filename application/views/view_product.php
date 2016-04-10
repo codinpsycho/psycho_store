@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col-md-12">
             <?php if($product_state == 'preorder'): ?>
-              <<h5 class="pull-right"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order?</a> </h5>
+              <h5 class="pull-right"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order?</a> </h5>
             <?php endif; ?>
           </div>
           <div class="col-md-4">
