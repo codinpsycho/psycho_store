@@ -6,7 +6,6 @@
 		{
 			add_cart_btn.addEventListener('click', function()
 			{
-				console.log("Add to Cart");
 				ga('send', 'event', 'cart', 'add', {'nonInteraction': 1} );
 			});
 		}
@@ -19,7 +18,6 @@
 		{
 			apply_disc_btn.addEventListener('click', function()
 			{
-				console.log("Apply Discount");
 				ga('send', 'event', 'cart', 'discount');
 			});
 		}
@@ -32,7 +30,6 @@
 		{
 			checkout_btn.addEventListener('click', function()
 			{
-				console.log("Checkout");
 				ga('send', 'event', 'cart', 'checkout', {'nonInteraction': 1} );
 			});
 		}
