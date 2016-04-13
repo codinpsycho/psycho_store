@@ -1,34 +1,25 @@
-<div class="modal fade" id="size_chart" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <img class='img-responsive' src= <?php echo $size_chart ?> >
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default text-center" data-dismiss="modal">Got it!</button>
-      </div>
-    </div>
-  </div>
-</div>
+<?php echo $this->load->view('view_product_modals', null); ?>
 
-<div class="modal fade" id="preorder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="molot modal-title text-center" id="modal_title"> Grab this loot before it vanishes </h4>
-      </div>
-      <div class="modal-body">
-        <h5>Ques : Why should i pre-order?<br><br>
-        Ans : Look at the loot, just look at it damn it. You know how many mercenaries have been hired to snatch this loot from us and you ask why should you pre-order. Our production minions are playing with their lives here to get you this loot and for that we need your confirmation as there is a limit to everything.<br><br>So pre-order this right now and we start shipping from <strong>2nd November</strong>.
-        </h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default text-center" data-dismiss="modal">Hell Yeah! I Want One.</button>
-      </div>
-    </div>
-  </div>
-</div>
+<script type="text/javascript">
+  function update_addtocart_btn_text()
+  {
+    <?php if($show_size_preorder_info): ?>
+    
+      var btn = document.getElementById('add_to_cart');
+      var size_select = document.getElementById('size_selection');
+      var selected = size_select.options[size_select.selectedIndex].text;
+      if(selected.indexOf('Pre-Order') == -1)
+      {
+        btn.innerHTML = "Add To Cart";
+      }
+      else
+      {
+        btn.innerHTML = "Pre-Order";
+      }
+
+    <?php endif; ?>  
+  }
+</script>
 
 <div class="container">
     <div class="row top-bottom-space">
@@ -60,26 +51,39 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-12 col-sm-12 col-xs-12">
             <?php if($product_state == 'preorder'): ?>
               <h5 class="pull-right"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order?</a> </h5>
             <?php endif; ?>
+            <?php if($show_size_preorder_info): ?>
+              <h5 class="pull-right"><a class="" href='#size_preorder' data-toggle='modal' data-target="#size_preorder">Pre-order out of stock sizes</a> </h5>
+            <?php endif; ?>            
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 col-sm-12 col-xs-12">
             <form  method = "post" action = <?php echo site_url("cart/add/{$product['product_id']}")?> role="form">
-              <select class="form-control" name="size">
-                  <option <?php echo $small_stock; ?> value ="Small">Small <?php if($small_stock == 'disabled') echo '(Out Of Stock)';?> </option>
-                  <option <?php echo $medium_stock; ?> value ="Medium">Medium <?php if($medium_stock == 'disabled') echo '(Out Of Stock)';?> </option>
-                  <option <?php echo $large_stock; ?> value ="Large">Large <?php if($large_stock == 'disabled') echo '(Out Of Stock)';?> </option>
-                  <option <?php echo $xl_stock; ?> value ="XL">XL <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';?> </option>
+              <select id="size_selection" required class="form-control" name="size" onchange="update_addtocart_btn_text()">
+                <option disabled selected value="">Select Size</option>  
+                <option <?php echo $small_stock; ?> value ="Small">Small 
+                <?php if($small_stock == 'disabled') echo '(Out Of Stock)';
+                elseif ($small_stock == 'preorder') echo '(Pre-Order)';?>
+                </option>
+                <option <?php echo $medium_stock; ?> value ="Medium">Medium
+                <?php if($medium_stock == 'disabled') echo '(Out Of Stock)';
+                elseif ($medium_stock == 'preorder') echo '(Pre-Order)';?></option>
+                <option <?php echo $large_stock; ?> value ="Large">Large
+                <?php if($large_stock == 'disabled') echo '(Out Of Stock)';
+                elseif ($large_stock == 'preorder') echo '(Pre-Order)';?></option>
+                <option <?php echo $xl_stock; ?> value ="XL">XL
+                <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';
+                elseif ($xl_stock == 'preorder') echo '(Pre-Order)';?></option>
               </select>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-12 col-xs-12">
               <?php $button_text = $product_state == 'preorder' ? 'Pre-Order' : 'Add To Cart'?>
               <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
             </div>
           </form> 
-          <div class="col-md-12">
+          <div class="col-md-12 col-sm-12 col-xs-12">
              <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >Free shipping + 365 days return</a>
              <a class="pull-right" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> </h5>
           </div>

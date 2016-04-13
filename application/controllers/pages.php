@@ -165,14 +165,7 @@ class Pages extends CI_controller
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
 
-			if($result['product_count_small'] <= 0)
-				$data['small_stock'] = 'disabled';
-			if($result['product_count_medium'] <= 0)
-				$data['medium_stock'] = 'disabled';
-			if($result['product_count_large'] <= 0)
-				$data['large_stock'] = 'disabled';
-			if($result['product_count_xl'] <= 0)
-				$data['xl_stock'] = 'disabled';
+			$this->_setup_stock_info($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
 			notify_event('instafeed', $params);
@@ -190,6 +183,32 @@ class Pages extends CI_controller
 			$data['heading'] = 'No Products Found';
 			$data['content'] = "I am sure, this has something to do with G-Man, anyways just go somewhere else, try some other product";
 			display('basic', $data);
+		}
+	}
+
+	function _setup_stock_info($product, &$data)
+	{
+		$data['show_size_preorder_info'] = false;
+
+		if($product['product_count_small'] <= 0)
+		{
+			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
+			$data['small_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+		}
+		if($product['product_count_medium'] <= 0)
+		{
+			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
+			$data['medium_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+		}
+		if($product['product_count_large'] <= 0)
+		{
+			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
+			$data['large_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+		}
+		if($product['product_count_xl'] <= 0)
+		{
+			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
+			$data['xl_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
 		}
 	}
 

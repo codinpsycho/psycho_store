@@ -44,8 +44,9 @@ class cart extends CI_controller
 				//For product woth no size info like action figures .. later on
 			}
 
+			$size_preorder_allowed = $product['size_preorder'];
 			
-			if($items['qty'] > $size_in_stock)
+			if($size_preorder_allowed == false && $items['qty'] > $size_in_stock)
 				$data['products'][$items['rowid'].'stock_state'] = "Out Of Stock";
 
 			$data['products'][$prod_id] = $product;
