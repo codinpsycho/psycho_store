@@ -138,6 +138,7 @@ $number = array(
 									<option value="Anadaman and Nicobar Islands" <?php echo set_select('state', 'Anadaman and Nicobar Islands'); ?>>Anadaman and Nicobar Islands</option>
 									<option value="Andhra Pradesh" <?php echo set_select('state', 'Andhra Pradesh'); ?> >Andhra Pradesh</option>
 									<option value="Arunachal Pradesh" <?php echo set_select('state', 'Arunachal Pradesh'); ?> >Arunachal Pradesh</option>
+									<option value="Assam" <?php echo set_select('state', 'Assam'); ?>>Assam</option>
 									<option value="Bihar" <?php echo set_select('state', 'Bihar'); ?> >Bihar</option>
 									<option value="Chandigarh" <?php echo set_select('state', 'Chandigarh'); ?> >Chandigarh</option>
 									<option value="Chhattisgarh" <?php echo set_select('state', 'Chhattisgarh'); ?> >Chhattisgarh</option>
