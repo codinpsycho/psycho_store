@@ -32,6 +32,11 @@ $(function () {
 	</div>
 
 	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data); ?>
+	<div class="row">
+		<div class="col-md-12">
+			<a class ="btn btn-default btn-tabbed" href="">View All</a>
+		</div>
+	</div>
 
 	<!-- <div class="row top-bottom-space">
 		<div class="col-md-12">
