@@ -164,6 +164,7 @@ class Pages extends CI_controller
 			$data['size_chart'] = site_url($this->config->item('size_chart'));
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
+			$data['restock_date'] = $this->config->item('restock_date');
 
 			$this->_setup_stock_info($result, $data);
 

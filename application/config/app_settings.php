@@ -10,6 +10,8 @@ $config['keywords'] = 't-shirt, tshirt, t shirt, shirt, tee, t, t-shirts, tshirt
 $config['favico'] = 'images/favico.png';
 $config['size_chart'] = 'images/size_chart.jpg';
 
+$config['restock_date'] = '20th June';
+
 //Admin Panel
 $config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com');
 
