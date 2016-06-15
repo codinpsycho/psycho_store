@@ -388,6 +388,7 @@ class admin extends CI_controller
 			$data['site_name'] = "Psycho Store";
 			$data['subscribers'] = $this->database->GetTestEmails();
 			$data['num_subscribers'] = count($data['subscribers']);
+			$data['to'] = 'test@news.psychostore.in';
 			$data['subject'] = $this->input->post('subject');
 		
 			$this->_send_mass_mail($data);
@@ -405,7 +406,7 @@ class admin extends CI_controller
 			$data['site_name'] = "Psycho Store";
 			$data['subscribers'] = $this->database->GetSubscribersForUpdate();
 			$data['num_subscribers'] = count($data['subscribers']);
-
+			$data['to'] = 'update@news.psychostore.in';
 			$data['subject'] = $this->input->post('subject');
 		
 			$this->_send_mass_mail($data);
@@ -422,14 +423,14 @@ class admin extends CI_controller
 
 		if($params)
 		{
-			$data['params'] = $params;
+			mg_send_mail($data['to'], $params);
 		}
 		else
 		{
 			die("No such file exists. Please check subject");
 		}
 
-		$this->load->view('admin/mass_mail', $data);
+		redirect('admin/mails');
 	}
 
 	function _create_params_for_newsletter($subject)
@@ -444,8 +445,8 @@ class admin extends CI_controller
 			$params['domain'] = 'news.psychostore.in';
 			$params['campaign_id'] = $this->config->item('campaign_id');
 			$params['reply_to'] = 'contact@psychostore.in';
-			$params['txt'] = $this->load->view("email/newsletter/$subject-txt", $data, TRUE);
-			$params['html'] = $this->load->view("email/newsletter/$subject-html", $data, TRUE);	
+			$params['txt'] = $this->load->view("email/newsletter/$subject-txt", null, TRUE);
+			$params['html'] = $this->load->view("email/newsletter/$subject-html", null, TRUE);	
 		}
 
 		return $params;
@@ -499,7 +500,7 @@ class admin extends CI_controller
 		{
 			case 'unsubscribed':
 				$email = $mailgun_post['recipient'];
-				$this->database->Unsubscribe($email);
+				//$this->database->Unsubscribe($email);	//Don't delete keep the mail id
 				mg_unsubscribe($email);
 				break;
 			
@@ -708,6 +709,7 @@ class admin extends CI_controller
 		{
 			$this->database->UpdateOrderStatus($id, OrderState::Returned);
 			$this->database->RemoveWaybillFromOrder($id);
+			//TODO : Mark Payment mode as Pre-paid
 		}
 	}
 
