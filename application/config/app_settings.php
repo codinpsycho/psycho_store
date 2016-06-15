@@ -17,7 +17,7 @@ $config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotm
 
 //Mailgun and Newsletter
 $config['mailgun_key'] = 'key-0f80f2f05eb0cc5a7f733be72c8fb5c9';	//old one
-$config['newsletter_address'] = 'updates@news.psychostore.in';
+$config['newsletter_address'] = 'update@news.psychostore.in';
 $config['campaign_id'] = 'psycho_campaign';
 
 $config['return_address'] = array(
