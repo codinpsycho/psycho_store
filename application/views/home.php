@@ -16,7 +16,7 @@ $(function () {
 		<div class="col-md-6">
 		<h4>
 			<span class="pull-right">
-				<a class="molot" data-toggle="tooltip" title="win free stuff" data-placement="top" href= <?php echo site_url('giveaways')?> > Giveaways </a> 
+				<a class="molot" data-toggle="tooltip" target="_blank" title="Kingdom of gamers geeks and otaku kinights" data-placement="top" href= 'http://psychostore.in/blog' > Psycho Realm </a> 
 	            	<small>/</small>
 	            	<a class="molot" data-toggle="tooltip" title="see what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
 	            	<small>/</small>
@@ -32,11 +32,6 @@ $(function () {
 	</div>
 
 	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data); ?>
-	<div class="row">
-		<div class="col-md-12">
-			<a class ="btn btn-default btn-tabbed" href="">View All</a>
-		</div>
-	</div>
 
 	<!-- <div class="row top-bottom-space">
 		<div class="col-md-12">

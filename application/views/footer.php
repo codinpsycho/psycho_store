@@ -57,7 +57,7 @@
                 <a href= <?php echo site_url('media')?> >Media</a>
               </li>
               <li>
-                <a target="_blank" href= "http://psychostorein.tumblr.com/" >Blog</a>
+                <a target="_blank" href= "http://psychostore.in/blog" >Psycho Realm</a>
               </li>
               <li>
                 <a href= <?php echo site_url('coupon_partners')?> >Coupon Partners</a>
