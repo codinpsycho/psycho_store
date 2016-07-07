@@ -25,11 +25,11 @@
     var modal_name = '#' + event_name;    
     var tile_id = event_name + '_title';
     var title = document.getElementById(tile_id);
-    title.innerHTML= '<?php echo $modal_title ?>';    
+    title.innerHTML= '<?php echo $title ?>';    
    
     var body_id = '<?php echo $event_name.'_body'?>';
     var body =  document.getElementById(body_id);
-    body.innerHTML= '<?php echo $modal_body ?>';
+    body.innerHTML= '<?php echo $body ?>';
     
     setTimeout( function(){ $(modal_name).modal('show'); } , <?php echo $timeout; ?>);
   }
