@@ -33,22 +33,52 @@ $(function () {
 
 	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data); ?>
 
-	<!-- <div class="row top-bottom-space">
+	<div class="row top-bottom-space">
 		<div class="col-md-12">
-			<h2>Psycho Lab updates</h2>
-			<h5>Get up to date with our scientists at Psycho Labs, as they blog about their experience.</h5>
-			<hr>
+			<h2>What's Your Geek Quotient?</h2>
+			<h5>Consider yourself a true geek?</h5>
+			<h5> Our knights from the <a target="_blank" href="http://psychostore.in/blog/">psycho realm</a> have created these epic quizzes, for you to test your geekiness and know your geek quotient.</h5>
 		</div>
-		<div class="col-md-4">
-			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/139231574131" data-did="0f33af7f0c3b71e24f567863b76525403a751edd"><a href="http://psychostorein.tumblr.com/post/139231574131/understanding-the-concept-of-being-remarkable">http://psychostorein.tumblr.com/post/139231574131/understanding-the-concept-of-being-remarkable</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
+		<div class="col-md-12">
+			<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+			  <!-- Wrapper for slides -->
+				<div class="carousel-inner" role="listbox">
+				    <div class="item active">
+				    	<iframe src="//renderer.qmerce.com/interaction/5757443b245d1126130297fe"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
+				    	<div class="carousel-caption">
+				    	</div>
+			    	</div>
+				    <div class="item">
+				    	<iframe src="//renderer.qmerce.com/interaction/5757dc50245d112613078acd"  width="100%" height="590" frameborder="0" scrolling="no"></iframe>
+				    	<div class="carousel-caption">
+				      	</div>
+				    </div>
+				    <div class="item">
+						<iframe src="//renderer.qmerce.com/interaction/5778f405eaef76d524362e4d"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
+				      	<div class="carousel-caption">
+				      	</div>
+				    </div>
+			  	</div>
+
+				<!-- Left and right controls -->
+				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden=""></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden=""></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/138974414701" data-did="f5607c02b1df939a364f1ac20812b7e8f24c2859"><a href="http://psychostorein.tumblr.com/post/138974414701/shashikanthreddy-spower-tshirt">http://psychostorein.tumblr.com/post/138974414701/shashikanthreddy-spower-tshirt</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
+		<div class="col-md-12 text-center">
+			<div class="row">
+				<div class="col-md-12">
+					<a target="_blank" href="http://psychostore.in/blog" class="btn btn-primary" type="submit">More At Psycho Realm</a>
+				</div>
+			</div>			
 		</div>
-		<div class="col-md-4">
-			<div class="tumblr-post" data-href="https://embed.tumblr.com/embed/post/ydtRnGIEjsJLy5PyTsCdcA/138610644421" data-did="63733c0e9073ef999b013b9793fbe60a734af88b"><a href="http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune">http://psychostorein.tumblr.com/post/138610644421/so-this-happened-at-video-game-fest-16-pune</a></div><script async src="https://secure.assets.tumblr.com/post.js"></script>
-		</div>
-	</div> -->
+	</div>
 
 	<div class="row top-bottom-space">
 		<div class="col-md-12">
