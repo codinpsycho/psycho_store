@@ -45,19 +45,16 @@ $(function () {
 				<div class="carousel-inner" role="listbox">
 				    <div class="item active">
 				    	<iframe src="//renderer.qmerce.com/interaction/5757443b245d1126130297fe"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
-				    	<div class="carousel-caption">
-				    	</div>
 			    	</div>
 				    <div class="item">
 				    	<iframe src="//renderer.qmerce.com/interaction/5757dc50245d112613078acd"  width="100%" height="590" frameborder="0" scrolling="no"></iframe>
-				    	<div class="carousel-caption">
-				      	</div>
 				    </div>
 				    <div class="item">
 						<iframe src="//renderer.qmerce.com/interaction/5778f405eaef76d524362e4d"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
-				      	<div class="carousel-caption">
-				      	</div>
 				    </div>
+				    <div class="item">
+						<iframe src="//renderer.qmerce.com/interaction/574f4b72521a3b9853cb8a5c"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
+				    </div>				    
 			  	</div>
 
 				<!-- Left and right controls -->
