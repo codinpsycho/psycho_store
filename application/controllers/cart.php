@@ -89,6 +89,32 @@ class cart extends CI_controller
 		}
 	}
 
+	function instant_checkout($product_id)
+	{		
+		//Get the product using id
+		$product = $this->database->getProductbyId($product_id);
+		if($product)
+		{
+			$size = $this->input->post('size');
+			if($size)
+			{
+				$cart_item = array
+					(
+						'id' 	=> $product_id,
+						'qty'	=> '1',
+						'price' => $product['product_price'],
+						'name'  => $product['product_name'],
+						'options'=> array('Size' => $size),
+					);
+				
+				$row_id = $this->cart->insert($cart_item);
+			}
+		}
+
+		
+		redirect('checkout/');
+	}	
+
 	function add($product_id)
 	{		
 		//Get the product using id

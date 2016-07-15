@@ -1,23 +1,54 @@
 <?php echo $this->load->view('view_product_modals', null); ?>
 
 <script type="text/javascript">
-  function update_addtocart_btn_text()
+  function update_btn_text_on_size_select(size_select)
   {
     <?php if($show_size_preorder_info): ?>
     
       var btn = document.getElementById('add_to_cart');
-      var size_select = document.getElementById('size_selection');
       var selected = size_select.options[size_select.selectedIndex].text;
+      var cb = document.getElementById('add_to_cart_checkbox'); 
+
       if(selected.indexOf('Pre-Order') == -1)
       {
-        btn.innerHTML = "Add To Cart";
+        btn.innerHTML = cb.checked == true ? "Add To Cart" : "Order Now";
       }
       else
       {
-        btn.innerHTML = "Pre-Order";
+        btn.innerHTML = cb.checked == true ? "Pre-Order" : "Pre-Order Now";
       }
 
     <?php endif; ?>  
+  }
+
+  function update_btn_text_on_addtocart(cb)
+  {
+    var btn = document.getElementById('add_to_cart');
+    var size_select = document.getElementById('size_selection');
+    //var cb = document.getElementById('add_to_cart_checkbox');
+    var selected = size_select.options[size_select.selectedIndex].text;    
+    var prod_state = "<?php echo $product_state ?>";
+
+    if(cb.checked)
+    {
+      var path = "<?php echo site_url("cart/add/{$product['product_id']}")?>";
+    }
+    else
+    {
+      var path = "<?php echo site_url("cart/instant_checkout/{$product['product_id']}")?>";
+    }
+
+    var form = document.getElementById('cart_form');
+    form.setAttribute("action", path);
+
+    if(selected.indexOf('Pre-Order') == -1 && prod_state != "preorder")
+    {
+      btn.innerHTML = cb.checked == true ? "Add To Cart" : "Order Now";            
+    }
+    else
+    {
+      btn.innerHTML = cb.checked == true ? "Pre-Order" : "Pre-Order Now";
+    }
   }
 </script>
 
@@ -53,15 +84,18 @@
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <?php if($product_state == 'preorder'): ?>
-              <h5 class="pull-right"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order? (Ships on <?php echo $restock_date ?>)</a> </h5>
+              <h5 class="pull-left"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order? (Ships on <?php echo $restock_date ?>)</a> </h5>
             <?php endif; ?>
             <?php if($show_size_preorder_info): ?>
-              <h5 class="pull-right"><a class="" href='#size_preorder' data-toggle='modal' data-target="#size_preorder">Pre-Orders shipping from <?php echo $restock_date ?></a> </h5>
-            <?php endif; ?>            
+              <h5 class="pull-left"><a class="" href='#size_preorder' data-toggle='modal' data-target="#size_preorder">Pre-Orders shipping from <?php echo $restock_date ?></a> </h5>
+            <?php endif; ?> 
+            <div class="checkbox">
+              <label class="pull-right "><input id="add_to_cart_checkbox" onclick="update_btn_text_on_addtocart(this)" type="checkbox" name="optradio">add to cart</label>
+            </div>
           </div>
           <div class="col-md-4 col-sm-12 col-xs-12">
-            <form  method = "post" action = <?php echo site_url("cart/add/{$product['product_id']}")?> role="form">
-              <select id="size_selection" required class="form-control" name="size" onchange="update_addtocart_btn_text()">
+            <form id="cart_form" method = "post" action = <?php echo site_url("cart/instant_checkout/{$product['product_id']}")?> role="form">
+              <select id="size_selection" required class="form-control" name="size" onchange="update_btn_text_on_size_select(this)">
                 <option disabled selected value="">Select Size</option>  
                 <option <?php echo $small_stock; ?> value ="Small">Small 
                 <?php if($small_stock == 'disabled') echo '(Out Of Stock)';
@@ -79,7 +113,7 @@
               </select>
             </div>
             <div class="col-md-8 col-sm-12 col-xs-12">
-              <?php $button_text = $product_state == 'preorder' ? 'Pre-Order' : 'Add To Cart'?>
+              <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
               <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
             </div>
           </form> 
