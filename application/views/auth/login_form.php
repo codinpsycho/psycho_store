@@ -37,7 +37,7 @@ $(function () {
               <input type="checkbox"> Remember Me
             </label>
           </div>
-          <?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor('/auth/register/', ' Register'); ?> \
+          <?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor("/auth/register/?redirect_url=$redirect_url", ' Register'); ?> \
           <?php echo anchor('/auth/forgot_password/', 'Forgot password'); ?>
         </div>
         <div class="col-md-1 col-xs-12 vcenter">

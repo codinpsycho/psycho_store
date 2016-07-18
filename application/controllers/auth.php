@@ -66,7 +66,6 @@ class Auth extends CI_Controller
 		$this->users->update_login_info( $user_id, $this->config->item('login_record_ip', 'tank_auth'), 
 										 $this->config->item('login_record_time', 'tank_auth'));
 		
-
 		$this->_redirect($this->input->get('redirect_url'));
 	}
 
@@ -287,13 +286,16 @@ class Auth extends CI_Controller
 					} 
 					else
 					{
-						if ($this->config->item('email_account_details', 'tank_auth')) {	// send "welcome" email
+						//Directly login the user, that's it, no activation nonsense (for nows)
+						$this->_external_login($data['user_id'], $this->form_validation->set_value('username') );
+						
+						// if ($this->config->item('email_account_details', 'tank_auth')) {	// send "welcome" email
 
-							$this->_send_email('welcome', $data['email'], $data);
-						}
-						unset($data['password']); // Clear password (just for any case)
+						// 	$this->_send_email('welcome', $data['email'], $data);
+						// }
+						// unset($data['password']); // Clear password (just for any case)
 
-						$this->_show_message($this->lang->line('auth_message_registration_completed_2').'   '.anchor('/auth/login/', 'Login'));
+						// $this->_show_message($this->lang->line('auth_message_registration_completed_2').'   '.anchor('/auth/login/', 'Login'));
 					}
 				}
 				else

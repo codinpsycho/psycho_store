@@ -6,7 +6,9 @@
 	<div class="well">
 		<div class="row">
 			<div class="col-md-6 col-xs-12 vcenter">
-				<?php echo form_open($this->uri->uri_string()); ?>
+				<?php $redirect_url =  rawurlencode($this->input->get('redirect_url'))?>
+        		<?php $attributes = array('id' => 'login_form');?>
+				<?php echo form_open($this->uri->uri_string().'?redirect_url='.$redirect_url, $attributes); ?>
 				<div class="form-group">
 					<?php echo $this->load->view('view_username') ?>	
 				</div>
