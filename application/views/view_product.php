@@ -1,6 +1,10 @@
 <?php echo $this->load->view('view_product_modals', null); ?>
 
 <script type="text/javascript">
+  fbq('track', "ViewContent");  
+</script>
+
+<script type="text/javascript">
   function update_btn_text_on_size_select(size_select)
   {
     <?php if($show_size_preorder_info): ?>
@@ -25,7 +29,6 @@
   {
     var btn = document.getElementById('add_to_cart');
     var size_select = document.getElementById('size_selection');
-    //var cb = document.getElementById('add_to_cart_checkbox');
     var selected = size_select.options[size_select.selectedIndex].text;    
     var prod_state = "<?php echo $product_state ?>";
 

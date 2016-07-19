@@ -7,6 +7,7 @@
 			add_cart_btn.addEventListener('click', function()
 			{
 				ga('send', 'event', 'cart', 'add', {'nonInteraction': 1} );
+				fbq('track', 'AddToCart');
 			});
 		}
 	}
@@ -31,6 +32,7 @@
 			checkout_btn.addEventListener('click', function()
 			{
 				ga('send', 'event', 'cart', 'checkout', {'nonInteraction': 1} );
+				fbq('track', 'InitiateCheckout');
 			});
 		}
 	}	
