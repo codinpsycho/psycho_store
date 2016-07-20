@@ -39,3 +39,18 @@
 		</p>
 	</div>
 </div>
+<div class="row top-bottom-space">
+	<div class="col-md-8">
+		<h4 class="">Indian Noob</h4>
+		<h5>Psychostore :: Where Gamers go to buy T-shirts</h5>
+		<p>This is what I think separates Psychostore from the crowd. Right from the time, when you open the Psychostore webpage, the subtle nods to various anime, video-games, tech-crunch and movies is evident.
+
+		<a target="_blank" href="http://asidcast.com/we-take-a-look-at-psycho-store-an-online-store-to-satisfy-ones-inner-geek/"">Read more </a>
+		</p>
+	</div>
+	<div class="col-md-4">
+		<a target="_blank" href="http://indiannoob.in/psychostore-gamers-go-buy-t-shirts/">
+			<img class="img-responsive" src= "http://indiannoob.in/wp-content/uploads/2016/06/IndianNoobLongLogo.jpg"  alt="Indian Noob Reviews Psycho Store">
+		</a>
+	</div>
+</div>
