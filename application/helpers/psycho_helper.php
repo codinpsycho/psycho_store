@@ -433,7 +433,10 @@ function _live($page, $data)
 			break;
 		case 'admin_checkouts':
 			$body = $ci->load->view('admin/admin_checkouts', $data, true);
-			break;			
+			break;
+		case 'partner':
+			$body = $ci->load->view('partner_view', $data, true);
+			break;
 		case 'address':
 			$body = $ci->load->view('view_address', $data, true);
 			break;
