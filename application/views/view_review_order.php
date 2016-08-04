@@ -48,7 +48,7 @@
 			<?php //endif; //We dont deliver at this address ?>	
 		</div>
 	</div>
-	Note : Placing the order implies you agree to our <a href = <?php echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a>
+	Placing the order implies you agree to our <a target="_blank" href = <?php echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a>
 	<?php //if($shipping_available == true): ?>
 		<button class="btn btn-primary pull-right" type="submit"> Place Order | <i class="fa fa-rupee"></i>  <?php echo $this->cart->final_price();?> <i class="fa fa-arrow-right"></i></button>
 	<?php //endif; ?>	
