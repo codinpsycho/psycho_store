@@ -460,8 +460,8 @@ class Auth extends CI_Controller
 		else 
 		{
 			//Run address detection script
-			$this->_show_address_detection_popup();
-			$this->_detect_address();
+			//$this->_show_address_detection_popup();
+			//$this->_detect_address();
 
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
