@@ -589,10 +589,11 @@ class checkout extends CI_controller
 		{
 			$order_info['payment_mode'] = 'cod';
 			$checkout_order = $this->_get_active_checkout_order();
+
 		}		
 
 		$order_info['txn_id'] = $checkout_order['txn_id'];
-		$order_info['amount'] = $checkout_order['order_amount'];
+		$order_info['amount'] = $order_info['payment_mode'] == 'cod' ? $checkout_order['order_amount'] + $this->config->item('cod_charge') : $checkout_order['order_amount'];
 		$order_info['address_id'] = $checkout_order['address_id'];
 		$order_info['user_id'] = $checkout_order['user_id'];
 		$order_info['checkout_items'] = $this->database->GetCheckoutOrderItems($order_info['txn_id']);
