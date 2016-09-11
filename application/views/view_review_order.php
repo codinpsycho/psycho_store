@@ -42,7 +42,7 @@
 <div class="container top-bottom-space">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 id='header_price'>Confirm Order
+			<h1 id='header_price'>Order Review
 			<span class="pull-right"> <i class="fa fa-rupee"></i> <span id='price'> <?php echo $this->cart->final_price()?></span></span> 
 			</h1>
 		</div>

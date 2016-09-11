@@ -24,7 +24,7 @@
 		<?php endif; ?>
 	</div>
 		<?php if(count($addresses) > 0): ?>
-			<button class="btn btn-primary" type="submit">Review and Confirm Order</button>
+			<button class="btn btn-primary" type="submit">Review Order</button>
 		<?php endif; ?>	
 	</form>
 </div>
