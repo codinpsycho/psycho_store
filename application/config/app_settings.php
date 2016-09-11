@@ -17,7 +17,7 @@ $config['cod_charge'] = '60';
 $config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com');
 
 //Partner Email
-$config['partner_email'] = array('ishkaran.fearme@gmail.com');
+$config['partner_email'] = array('ishkaran.fearme@gmail.com', 'abhishek@gamexs.in');
 
 //Mailgun and Newsletter
 $config['mailgun_key'] = 'key-0f80f2f05eb0cc5a7f733be72c8fb5c9';	//old one

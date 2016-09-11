@@ -22,9 +22,9 @@ class Partner extends CI_controller
 	{
 		$current_user = $this->database->GetUserById($this->tank_auth->get_user_id());
 		$valid_user = false;
-		$admin_emails = $this->config->item('partner_email');
+		$partner_emails = $this->config->item('partner_email');
 
-		foreach ($admin_emails as $key => $email)
+		foreach ($partner_emails as $key => $email)
 		{
 			if($current_user)
 			{
