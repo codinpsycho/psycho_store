@@ -29,7 +29,7 @@
 		actual_price.innerHTML = "Actual Price : <i class='fa fa-rupee'></i> " + price;
 
 		var header_price = document.getElementById('header_price');
-		header_price.innerHTML = "Confirm Order <span class='pull-right'> <i class='fa fa-rupee'></i> <span id='price'>" +  price;
+		header_price.innerHTML = "Order Review <span class='pull-right'> <i class='fa fa-rupee'></i> <span id='price'>" +  price;
 
 		var final_price = document.getElementById('final_price');
 		final_price.innerHTML = "Final Price : <i class='fa fa-rupee'></i> " +  price;
