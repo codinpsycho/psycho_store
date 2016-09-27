@@ -13,13 +13,13 @@
 
 	function update_for_cod()
 	{
-		var new_price = parseInt(<?php echo $this->cart->total() + 60 ?>);
+		var new_price = parseInt(<?php echo $this->cart->final_price() + 60 ?>);
 		update_price_text(new_price);
 	}
 
 	function update_for_online()
 	{
-		var new_price = parseInt(<?php echo $this->cart->total()?>);
+		var new_price = parseInt(<?php echo $this->cart->final_price()?>);
 		update_price_text(new_price);
 	}
 
