@@ -77,17 +77,19 @@ if(!function_exists('generate_product_table_for_email'))
 			$ci->table->add_row($name,$size,$qty,$price,$total );
 			$final_total += $total;
 		}
-
-		if($order['payment_mode'] == 'cod')
-		{
-			$final_total += $ci->config->item('cod_charge');
-		}
 		
 		$tmpl = array ( 'table_open'  => '<table border="1" cellpadding="5" cellspacing="0" >' );
 		$ci->table->set_template($tmpl);
 
 		$cell = array('data'=>'Sub Total :', 'colspan'=>4, 'align'=>'right');
 		$ci->table->add_row($cell, $final_total );
+
+		if($order['payment_mode'] == 'cod')
+		{			
+			$cell = array('data'=>'Cod Charges :', 'colspan'=>4, 'align'=>'right');
+			$ci->table->add_row($cell,  $ci->config->item('cod_charge') );
+			$final_total += $ci->config->item('cod_charge');
+		}	
 
 		$cell = array('data'=>'Discount :', 'colspan'=>4, 'class'=>'highlight', 'align'=>'right');
 		$ci->table->add_row($cell, $final_total - $order['order_amount'] );
