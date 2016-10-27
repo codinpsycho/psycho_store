@@ -11,7 +11,23 @@ $(function () {
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="molot" >Shop&nbsp;<small>By</small> <a class = <?php echo $latest_link_state ?> href="latest">Latest</a><small>&nbsp;/&nbsp;</small><a class = <?php echo $popular_link_state ?> href="popular">Popularity</a>
+<form class="form-inline">
+  <div class="form-group">
+    			<h4 class="molot" ><a class = <?php echo $latest_link_state ?> href="latest">Latest</a><small>&nbsp;/&nbsp;</small><a class = <?php echo $popular_link_state ?> href="popular">Popular</a><small>&nbsp;/&nbsp;</small>
+                	</h4>
+  </div>
+  <div class="form-group">
+            <div class="btn-group">
+            <a class="molot btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">product type <span class="caret"></span>  </a>
+            <ul class="dropdown-menu">              
+                <li>
+                  <a href="">T Shirts</a>
+                  <a href="">Mobile Covers</a>
+                </li>
+            </ul>
+          </div>
+  </div>
+</form>
 		</div>
 		<div class="col-md-6">
 		<h4>

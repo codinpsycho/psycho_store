@@ -15,7 +15,14 @@ class Database extends CI_Model
 	{
 		$this->db->where('product_id', $id);
 		$query = $this->db->get('products');
-		return $query->row_array();
+		$product = $query->row_array();
+
+		if($query->num_rows() > 0)
+		{
+			$this->GetProductDetails($product);
+		}
+				
+		return $product;
 	}
 
 	function GetProductByURL($url)
@@ -62,7 +69,45 @@ class Database extends CI_Model
 		$this->db->where('product_state !=', 'hidden');
 
 		$query = $this->db->get('products');
-		return $query->result_array();
+		
+		$products = $query->result_array();
+
+		foreach ($query->result_array() as $key => $prod)
+		{
+			$products[$key]['product_details'] = $this->GetProductDetails($prod);
+		}
+
+		return $products;
+	}
+
+	function GetProductDetails(&$product)
+	{
+		$product_id = $product['product_id'];
+		$prod_type = $product['product_type'];
+		$prod_details = null;
+
+		//Add Product Details based on what type it is
+		switch ($prod_type)
+		{
+			case 'tshirt':
+				$prod_details = $this->GetTshirtDetails($product_id);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		$product['product_details'] = $prod_details;
+
+		return $prod_details;
+	}
+
+	function GetTshirtDetails($product_id)
+	{
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('tshirt_details');
+		return $query->row_array();
 	}
 
 	function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an array with exception values*/)
@@ -95,11 +140,55 @@ class Database extends CI_Model
 
 	function AddProduct($product)
 	{
+		$this->AddProductDetails($product);
+		unset($product['product_details']);			//Unset it here in the last step
 		$this->db->insert('products',$product);
+	}
+
+	function AddProductDetails($product)
+	{
+		switch ($product['product_type'])
+		{
+			case 'tshirt':
+				$this->AddTshirtDetails($product['product_details']);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function AddTshirtDetails($product_details)
+	{
+		$this->db->insert('tshirt_details',$product_details);
+	}
+
+	function ModifyProductDetails($product)
+	{
+		switch ($product['product_type'])
+		{
+			case 'tshirt':
+				$this->ModifyTshirtDetails($product['product_details']);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function ModifyTshirtDetails($product_details)
+	{
+		$this->db->where('product_id', $product_details['product_id']);
+		$this->db->update('tshirt_details', $product_details);
 	}
 
 	function ModifyProduct($product)
 	{
+		$this->ModifyProductDetails($product);
+		
+		unset($product['product_details']);		//Do it here in the final step
 		$this->db->where('product_id', $product['product_id']);
 		$this->db->update('products', $product);
 	}

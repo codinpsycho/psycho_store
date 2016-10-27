@@ -143,11 +143,30 @@ class Pages extends CI_controller
 		display('feedback_wall', $data);
 	}
 
+	function type($prod_type, $url)
+	{
+		switch (variable)
+		{	
+			case 'tshirt':
+				# code...
+				break;
+			
+			case 'mobilecover':
+				# code...
+				break;				
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
 	function product($id, $url = null)
 	{
 		$total_products = $this->database->GetMaxProductID();
 		$url = $this->beautify($url,'_');
 		$result = $this->database->GetProductById($id);
+
 		if($result)
 		{
 			$next = $prev = 0;
@@ -157,10 +176,6 @@ class Pages extends CI_controller
 			$data['product_state'] = $result['product_state'];
 			$data['next_id'] = product_url( $this->database->GetProductById($next) );
 			$data['prev_id'] = product_url( $this->database->GetProductById($prev) );
-			$data['small_stock']="";
-			$data['medium_stock']="";
-			$data['large_stock']="";
-			$data['xl_stock']="";
 			$data['size_chart'] = site_url($this->config->item('size_chart'));
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
@@ -189,27 +204,48 @@ class Pages extends CI_controller
 
 	function _setup_stock_info($product, &$data)
 	{
+		switch ($product['product_type'])
+		{
+			case 'tshirt':
+				$this->_setup_tshirt_stock_info($product, $data);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function _setup_tshirt_stock_info($product, &$data)
+	{
+		$data['small_stock']="";
+		$data['medium_stock']="";
+		$data['large_stock']="";
+		$data['xl_stock']="";
+
+		$prod_details = $product['product_details'];
+
 		$data['show_size_preorder_info'] = false;
 
-		if($product['product_count_small'] <= 0)
+		if($prod_details['small_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['small_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['small_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_medium'] <= 0)
+		if($prod_details['medium_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['medium_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['medium_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_large'] <= 0)
+		if($prod_details['large_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['large_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['large_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_xl'] <= 0)
+		if($prod_details['xl_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['xl_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['xl_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
 	}
 
@@ -242,9 +278,9 @@ class Pages extends CI_controller
 	}
 
 
-	function like($game = "")
+	function like($like_what = "")
 	{
-		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($game,'-');		
+		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($like_what,'-');
 
 		$data['search_result'] = 0;
 		$data['search_text'] = $name;

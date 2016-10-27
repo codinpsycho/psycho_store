@@ -386,8 +386,6 @@ class admin extends CI_controller
 		if($this->input->post('subject') != false)
 		{			
 			$data['site_name'] = "Psycho Store";
-			$data['subscribers'] = $this->database->GetTestEmails();
-			$data['num_subscribers'] = count($data['subscribers']);
 			$data['to'] = 'test@news.psychostore.in';
 			$data['subject'] = $this->input->post('subject');
 		
@@ -404,9 +402,7 @@ class admin extends CI_controller
 		if($this->input->post('subject') != false)
 		{
 			$data['site_name'] = "Psycho Store";
-			$data['subscribers'] = $this->database->GetSubscribersForUpdate();
-			$data['num_subscribers'] = count($data['subscribers']);
-			$data['to'] = 'update@news.psychostore.in';
+			$data['to'] = 'update@news.psychostore.in';	//Newsletter alias address
 			$data['subject'] = $this->input->post('subject');
 		
 			$this->_send_mass_mail($data);
@@ -790,7 +786,7 @@ class admin extends CI_controller
 		
 		if( count($products) && ($products[0] != null) )
 		{
-			$data['products'] = $products;			
+			$data['products'] = $products;
 			$data['num_prods'] = count($products);
 			$data['products_table'] = $this->_generate_products_table($products);
 			display('admin_products', $data);
@@ -827,11 +823,12 @@ class admin extends CI_controller
 		if(count($product))
 		{
 			$this->_set_product_form_rules();
-
+			
 			if($this->form_validation->run())
 			{
 				$product = $this->_get_product_form_post($this->input->post());
 				$product['product_id'] = $product_id;
+				$product['product_details']['product_id'] = $product_id;
 
 				$this->database->ModifyProduct($product);
 				redirect('admin/products');
@@ -856,7 +853,7 @@ class admin extends CI_controller
 		/*product_id for adding product is done automatically
 		for editing product we mention seprately, doesnt come from form
 		*/
-		$product['product_type'] =$input['type'];
+		$product['product_type'] = $input['type'];
 		$product['product_game'] = $input['game_name'];
 		$product['product_name'] = $input['product_name'];
 		$product['product_url'] = strtolower($input['url']);
@@ -864,10 +861,21 @@ class admin extends CI_controller
 		$product['product_desc'] = $input['desc'];
 		$product['product_image_path'] = $input['image_path'];
 		$product['product_price'] = $input['price'];
-		$product['product_count_small'] = $input['s_qty'];
-		$product['product_count_medium'] = $input['m_qty'];
-		$product['product_count_large'] = $input['l_qty'];
-		$product['product_count_xl'] = $input['xl_qty'];
+
+		switch ($input['type'])
+		{
+			case 'tshirt':
+				$product['product_details']['small_qty'] = $input['s_qty'];
+				$product['product_details']['medium_qty'] = $input['m_qty'];
+				$product['product_details']['large_qty'] = $input['l_qty'];
+				$product['product_details']['xl_qty'] = $input['xl_qty'];
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
 
 		return $product;
 	}
@@ -898,10 +906,20 @@ class admin extends CI_controller
 		$data['desc'] = is_null($product) ? '' : $product['product_desc'];		
 		$data['image_path'] = is_null($product) ? '' : $product['product_image_path'];
 		$data['price'] = is_null($product) ? '' : $product['product_price'];
-		$data['s_qty'] = is_null($product) ? '' : $product['product_count_small'];
-		$data['m_qty'] = is_null($product) ? '' : $product['product_count_medium'];
-		$data['l_qty'] = is_null($product) ? '' : $product['product_count_large'];
-		$data['xl_qty'] = is_null($product) ? '' : $product['product_count_xl'];
+
+		switch ($product['product_type'])
+		{
+			case 'tshirt':
+				$data['s_qty'] = is_null($product) ? '' : $product['product_details']['small_qty'];
+				$data['m_qty'] = is_null($product) ? '' : $product['product_details']['medium_qty'];
+				$data['l_qty'] = is_null($product) ? '' : $product['product_details']['large_qty'];
+				$data['xl_qty'] = is_null($product) ? '' : $product['product_details']['xl_qty'];
+				break;
+			
+			default:
+				# code...
+				break;
+		}		
 
 		return $data;
 	}
@@ -1030,8 +1048,9 @@ class admin extends CI_controller
 			//Product Link			
 			$prod_url = product_url($prod);
 			$prod_name_cell = anchor($prod_url, $prod['product_name']);
+			$prod_details = $prod['product_details'];
 
-			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $prod['product_count_small'], $prod['product_count_medium'], $prod['product_count_large'], $prod['product_count_xl'], $prod['product_qty_sold']);
+			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $prod_details['small_qty'], $prod_details['medium_qty'], $prod_details['large_qty'], $prod_details['xl_qty'], $prod['product_qty_sold']);
 		}
 
 		return $this->table->generate();

@@ -33,24 +33,35 @@ class cart extends CI_controller
 
 			//Check stock and set stock info
 			$data['products'][$items['rowid'].'stock_state'] = "";
-
-			if( $product['product_type'] == "Tshirt" || $product['product_type'] == "Hoodie")
-			{
-				$size = $items['options']['Size'];
-				$size_in_stock = $product['product_count_'.strtolower($size)];
-			}
-			else
-			{
-				//For product woth no size info like action figures .. later on
-			}
-
-			$size_preorder_allowed = $product['size_preorder'];
 			
-			if($size_preorder_allowed == false && $items['qty'] > $size_in_stock)
+			$stock_vars = $this->_set_stock_vars_for_prod($product, $items);
+			
+			if($stock_vars['preorder_allowed'] == false && $items['qty'] > $stock_vars['size_in_stock'])
 				$data['products'][$items['rowid'].'stock_state'] = "Out Of Stock";
 
 			$data['products'][$prod_id] = $product;
 		}
+	}
+
+	function _set_stock_vars_for_prod($product, $item)
+	{
+		$stock_vars = array();
+		
+		switch ($product['product_type'])
+		{
+			case 'hoodie':
+			case 'tshirt':
+				$stock_vars['size'] = $item['options']['Size'];
+				$stock_vars['preorder_allowed'] = $product['product_details']['size_preorder'];
+				$stock_vars['size_in_stock'] = $product['product_details'][strtolower($stock_vars['size']).'_qty'];
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		return $stock_vars;
 	}
 
 	//Show items in cart
@@ -65,7 +76,7 @@ class cart extends CI_controller
 
 		if($num_items)
 		{
-			//$this->_show_cheat_code_after_timeout(10000);
+			$this->_show_cheat_code_after_timeout(5000);
 		}
 
 		$data['cheat_hints'] = $this->load->view('cheatcode_hints', null, true);

@@ -61,7 +61,7 @@ $(function () {
 										<li>
 										<form class="form" method="post" action=<?php echo site_url('cart/update/')?> >
 						                    <div class="input-group">
-						                      <input type="number" min ='0' max = <?php echo $product['product_count_'.strtolower($items['options']['Size'])] ?> name=<?php echo $items['rowid']?> class="form-control input-sm" value=<?php echo $items['qty']?> >
+						                      <input type="number" min ='0' max = <?php echo $product['product_details'][strtolower($items['options']['Size']).'_qty'] ?> name=<?php echo $items['rowid']?> class="form-control input-sm" value=<?php echo $items['qty']?> >
 						                      <span class="input-group-btn"><button class="btn btn-default btn-sm" type="submit">Update</button></span>
 						                    </div>
 				                  		</form>
