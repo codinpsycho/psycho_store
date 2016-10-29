@@ -404,6 +404,7 @@ class checkout extends CI_controller
 		$checkout_order = $this->_get_active_checkout_order();
 
 		$rzp_key = $this->config->item('rzp_merchant_key');
+		$rzp_secret = $this->config->item('rzp_merchant_secret');
 		$rzp_payment_id = $post_params['rzp_payment_id'];
 		$url = "https://api.razorpay.com/v1/payments/$rzp_payment_id/capture";
 
@@ -417,7 +418,7 @@ class checkout extends CI_controller
 		// Setting our options
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_USERPWD, 'rzp_test_5jy8dWlhijqi9d:cJbH1ngDWIuY0y45v0QjH89Y');
+		curl_setopt($ch, CURLOPT_USERPWD, "$rzp_key:$rzp_secret");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
 
 		$res = curl_exec($ch);
