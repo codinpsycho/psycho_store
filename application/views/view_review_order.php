@@ -1,3 +1,4 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script type="text/javascript">
 	function update_price(select)
 	{
@@ -10,31 +11,25 @@
 			update_for_online();
 		}
 	}
-
 	function update_for_cod()
 	{
-		var new_price = parseInt(<?php echo $this->cart->final_price() + 60 ?>);
+		var new_price = parseInt(<?php echo $this->cart->final_price() + $cod_charges ?>);
 		update_price_text(new_price);
 	}
-
 	function update_for_online()
 	{
 		var new_price = parseInt(<?php echo $this->cart->final_price()?>);
 		update_price_text(new_price);
 	}
-
 	function update_price_text(price)
 	{
 		var actual_price = document.getElementById('actual_price');
 		actual_price.innerHTML = "Actual Price : <i class='fa fa-rupee'></i> " + price;
-
 		var header_price = document.getElementById('header_price');
 		header_price.innerHTML = "Order Review <span class='pull-right'> <i class='fa fa-rupee'></i> <span id='price'>" +  price;
-
 		var final_price = document.getElementById('final_price');
 		final_price.innerHTML = "Final Price : <i class='fa fa-rupee'></i> " +  price;
-
-		var button_price = document.getElementById('button_price');
+		var button_price = document.getElementById('place_order_btn');
 		button_price.innerHTML = "Place Order | <i class='fa fa-rupee'></i> " +  price + " <i class='fa fa-arrow-right'>";
 	}
 </script>
@@ -62,7 +57,7 @@
 			<?php// else: ?> -->			
 			<div class="col-md-4">
 				<h1>Shipping To</h1>
-				<h4> <?php echo $address;?> </h4>
+				<h4> <?php echo $formatted_address;?> </h4>
 			</div>
 			<div class="col-md-4">
 				<h1>Pricing
@@ -74,13 +69,14 @@
 			</div>
 			<div class="col-md-4">
 				<h1>Payment Mode</h1>
-				<form  method = "post" action = <?php echo site_url('checkout/payment')?> role="form" onchange="update_price(this)">
-					<select class="form-control" name="payment_mode" onchange="update_price(this)">
+				<form id="payment_mode_form"  method = "post" action = <?php echo site_url('checkout/payment')?> role="form">
+					<select class="form-control" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
 						<option value="pre-paid" >Pay Online</option>
 						<?php if($cod_available == true): ?>
-						<option value="cod">Cash On Delivery (+60 INR) </option>
+						<option value="cod">Cash On Delivery (+<?php echo $cod_charges ?> INR) </option>
 						<?php endif; ?>
 					</select>
+				</form>
 				<?php if($cod_available == false): ?>
 						<p> Note : Cash On Delivery Service not available for your address</p>
 				<?php endif; ?>			
@@ -89,8 +85,59 @@
 		</div>
 	</div>
 	Placing the order implies you agree to our <a target="_blank" href = <?php echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a>
-	<?php //if($shipping_available == true): ?>
-		<button class="btn btn-primary pull-right" type="submit" id='button_price'> Place Order | <i class="fa fa-rupee"></i>  <?php echo $this->cart->final_price();?> <i class="fa fa-arrow-right"></i></button>
-	<?php //endif; ?>	
-	</form>
+	<button class="btn btn-primary pull-right" id='place_order_btn'> Place Order | <i class="fa fa-rupee"></i>  <?php echo $this->cart->final_price();?> <i class="fa fa-arrow-right"></i></button>
 </div>
+
+<script>
+var options = {
+    "key": "<?php echo $this->config->item('rzp_merchant_key') ?>",
+    "amount": "<?php echo $this->cart->final_price()*100; ?>", // 2000 paise = INR 20
+    "name": "Psycho Store",
+    
+    "handler": payment_authorized,
+    "prefill": {
+        "name": "<?php echo $raw_address['first_name'].' '.$raw_address['last_name']; ?>",
+        "email": "<?php echo $email ?>",
+        "contact": "<?php echo $raw_address['phone_number']; ?>"
+    },
+    "notes": {
+    	"Name": "<?php echo $raw_address['first_name'].' '.$raw_address['last_name']; ?>",
+    	"Txn_id": "<?php echo $txn_id; ?>",
+    },
+    "theme": {
+        "color": "#09f"
+    }
+};
+document.getElementById('place_order_btn').onclick = process_order_payment
+function process_order_payment()
+{
+	
+	select = document.getElementById('payment_mode_select');
+	if(select.options[select.selectedIndex].value == 'cod')
+	{
+		document.getElementById('payment_mode_form').submit();
+	}
+	else if(select.options[select.selectedIndex].value == 'pre-paid')
+	{
+		var rzp = new Razorpay(options);
+		rzp.open();
+	}
+}
+function payment_authorized(response)
+{
+	// Form reference:
+	var the_form = document.getElementById('payment_mode_form');
+	// Add rzp_payment_id
+	addHidden(the_form, 'rzp_payment_id', response.razorpay_payment_id);
+	the_form.submit();
+}
+function addHidden(theForm, key, value)
+{
+    // Create a hidden input element, and append it to the form:
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    theForm.appendChild(input);
+}
+</script>

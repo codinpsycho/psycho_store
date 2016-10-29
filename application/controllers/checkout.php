@@ -267,6 +267,7 @@ class checkout extends CI_controller
 
 		//make sure address is set in checkout_db
 		$checkout_order = $this->_get_active_checkout_order();
+		$user = $this->database->GetUserById($checkout_order['user_id']);
 
 		if( is_null($checkout_order['address_id'] ))
 		{
@@ -289,9 +290,13 @@ class checkout extends CI_controller
 			}	
 		}
 
+		$data['txn_id'] = $checkout_order['txn_id'];
+		$data['email'] = $user['email'];
+ 		$data['raw_address'] = $address;
+ 		$data['formatted_address'] = format_address($address);
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
-		$data['address'] = format_address($address);
+		$data['cod_charges'] = $this->config->item('cod_charge');		
 		
 		display('review', $data);
 	}
@@ -320,7 +325,7 @@ class checkout extends CI_controller
 
 			case 'pre-paid':
 				$this->_lock_active_checkout_order();
-				$this->_payment_gateway();
+				$this->_payment_gateway($this->input->post());
 				break;
 			
 			default:
@@ -331,7 +336,9 @@ class checkout extends CI_controller
 
 	function place_order()
 	{
-		$ok_to_place_order = false;		
+		$ok_to_place_order = false;
+
+		$order_info_params = array();
 
 		//Verify checksum (not sure abt this, might be unnecessary)
 		if($this->input->post( 'key' ) != (string)false )
@@ -343,21 +350,24 @@ class checkout extends CI_controller
 			//<SALT>|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key
 			$hash_string = $this->input->post('additionalCharges').'|'.$this->input->post('salt').'|'.$status.'|'.'||||||||||'.'|'.$this->input->post('email').'|'.$this->input->post('firstname').'|'.$this->input->post('productinfo').'|'.$this->input->post('amount').'|'.$this->input->post('txnid').'|'.$this->input->post('key');
 
-			$hash = strtolower(hash('sha512', $hash_string));			
+			$hash = strtolower(hash('sha512', $hash_string));
 			
 			if($this->input->post( 'status' ) === "success")
 			{
 				$ok_to_place_order = true;
+				$order_info_params = $this->input->post();
 			}
 		}
 		else
 		{
+			//For COD and Razorpay
 			$ok_to_place_order = $this->session->flashdata('ok_to_order');
+			$order_info_params['rzp_payment_id'] = $this->session->flashdata('rzp_payment_id');
 		}		
 
 		if($ok_to_place_order)
 		{
-			$order_info = $this->_generate_orderinfo($this->input->post());
+			$order_info = $this->_generate_orderinfo($order_info_params);
 			$this->_place_order($order_info);
 			$this->_reward_user($order_info);
 			$this->_send_order_mail($order_info);
@@ -368,6 +378,116 @@ class checkout extends CI_controller
 		{
 			redirect('checkout');
 		}	
+	}
+
+	function _payment_gateway($post_params)
+	{
+		switch ($this->config->item('payment_gateway'))
+		{
+			case 'razorpay':
+				$this->_process_razorpay($post_params);
+				break;
+			
+			case 'payu':
+				$this->_process_payu();
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function _process_razorpay($post_params)
+	{
+		//Need to capture the payment using the payment id
+		$checkout_order = $this->_get_active_checkout_order();
+
+		$rzp_key = $this->config->item('rzp_merchant_key');
+		$rzp_payment_id = $post_params['rzp_payment_id'];
+		$url = "https://api.razorpay.com/v1/payments/$rzp_payment_id/capture";
+
+		$ch = curl_init($url);
+
+		$params['amount'] = $checkout_order['order_amount']*100; 	//Amount in paisa
+
+		// Form post string
+		$postString = http_build_query($params);
+
+		// Setting our options
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_USERPWD, 'rzp_test_5jy8dWlhijqi9d:cJbH1ngDWIuY0y45v0QjH89Y');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+
+		$res = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		//Captured, now just redirect like we do in COD orders
+		$this->session->set_flashdata('ok_to_order', true);
+		$this->session->set_flashdata('rzp_payment_id', $rzp_payment_id);
+		redirect('checkout/place_order');
+	}
+
+	function process_payu()
+	{
+		$gateway_params = array();
+		
+		$checkout_order = $this->_get_active_checkout_order();
+
+		//Gateway config
+		$gateway_params['key'] = $this->config->item('merchant_key');
+		$gateway_params['salt'] = $this->config->item('salt');			
+		$gateway_params['surl'] = $this->config->item('success_url');
+		$gateway_params['furl'] = $this->config->item('failure_url');
+		$gateway_params['txnid'] = $checkout_order['txn_id'];
+		$gateway_params['service_provider'] = $this->config->item('service_provider');
+
+		//Site specific info				
+		$address = $this->database->GetAddressById($checkout_order['address_id']);
+		$user = $this->database->GetUserById($checkout_order['user_id']);
+
+		$gateway_params['amount'] = $checkout_order['order_amount'];
+		$gateway_params['firstname'] = $address['first_name'];
+		$gateway_params['lastname'] = $address['last_name'];
+		$gateway_params['address1'] = $address['address_1'];
+		$gateway_params['address2'] = $address['address_2'];
+		$gateway_params['city'] = $address['city'];
+		$gateway_params['state'] = $address['state'];
+		$gateway_params['country'] = $address['country'];
+		$gateway_params['zipcode'] = $address['pincode'];
+		$gateway_params['email'] = $user['email'];
+		$gateway_params['phone'] = $address['phone_number'];
+		$gateway_params['productinfo'] = "Psycho Store Merchandise";	//To be added
+
+
+		//Generate hash
+		//key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10
+		$hash_string = $gateway_params['key'].'|'.$gateway_params['txnid'].'|'.$gateway_params['amount'].'|'.$gateway_params['productinfo'].'|'.$gateway_params['firstname'].'|'.$gateway_params['email'].'|'.'||||||||||'.$gateway_params['salt'];
+
+		$gateway_params['hash'] = strtolower(hash('sha512', $hash_string));
+
+		//Do a post request
+		$url = $this->config->item('gateway_url');
+		
+		// Create a connection
+		$ch = curl_init($url);
+
+		// Form post string
+		$postString = http_build_query($gateway_params);
+
+		// Setting our options
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+
+		// Get the response
+		$res = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+
+		redirect($info['redirect_url']);
 	}
 
 	function success()
@@ -457,67 +577,7 @@ class checkout extends CI_controller
 		//This is to be sent for each order
 		$params = mg_create_mail_params('order', $data);
 		mg_send_mail($user['email'], $params);
-	}
-
-	function _payment_gateway()
-	{
-		$gateway_params = array();
-		
-		$checkout_order = $this->_get_active_checkout_order();
-
-		//Gateway config
-		$gateway_params['key'] = $this->config->item('merchant_key');
-		$gateway_params['salt'] = $this->config->item('salt');			
-		$gateway_params['surl'] = $this->config->item('success_url');
-		$gateway_params['furl'] = $this->config->item('failure_url');
-		$gateway_params['txnid'] = $checkout_order['txn_id'];
-		$gateway_params['service_provider'] = $this->config->item('service_provider');
-
-		//Site specific info				
-		$address = $this->database->GetAddressById($checkout_order['address_id']);
-		$user = $this->database->GetUserById($checkout_order['user_id']);
-
-		$gateway_params['amount'] = $checkout_order['order_amount'];
-		$gateway_params['firstname'] = $address['first_name'];
-		$gateway_params['lastname'] = $address['last_name'];
-		$gateway_params['address1'] = $address['address_1'];
-		$gateway_params['address2'] = $address['address_2'];
-		$gateway_params['city'] = $address['city'];
-		$gateway_params['state'] = $address['state'];
-		$gateway_params['country'] = $address['country'];
-		$gateway_params['zipcode'] = $address['pincode'];
-		$gateway_params['email'] = $user['email'];
-		$gateway_params['phone'] = $address['phone_number'];
-		$gateway_params['productinfo'] = "Psycho Store Merchandise";	//To be added
-
-
-		//Generate hash
-		//key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10
-		$hash_string = $gateway_params['key'].'|'.$gateway_params['txnid'].'|'.$gateway_params['amount'].'|'.$gateway_params['productinfo'].'|'.$gateway_params['firstname'].'|'.$gateway_params['email'].'|'.'||||||||||'.$gateway_params['salt'];
-
-		$gateway_params['hash'] = strtolower(hash('sha512', $hash_string));
-
-		//Do a post request
-		$url = $this->config->item('gateway_url');
-		
-		// Create a connection
-		$ch = curl_init($url);
-
-		// Form post string
-		$postString = http_build_query($gateway_params);
-
-		// Setting our options
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-
-		// Get the response
-		$res = curl_exec($ch);
-		$info = curl_getinfo($ch);
-		curl_close($ch);
-
-		redirect($info['redirect_url']);
-	}
+	}	
 
 	function _place_order($order_info)
 	{
@@ -585,15 +645,21 @@ class checkout extends CI_controller
 			$txn_id = $post_back_params['txnid'];
 			$checkout_order = $this->database->GetCheckoutOrder($txn_id);
 		}
+		else if( $post_back_params['rzp_payment_id'] )	//For Razorpay
+		{
+			$order_info['payment_mode'] = 'pre-paid';
+			$checkout_order = $this->_get_active_checkout_order();
+		}
 		else
 		{
 			$order_info['payment_mode'] = 'cod';
 			$checkout_order = $this->_get_active_checkout_order();
+			$checkout_order['order_amount'] += $this->config->item('cod_charge') ;
 
 		}		
 
 		$order_info['txn_id'] = $checkout_order['txn_id'];
-		$order_info['amount'] = $order_info['payment_mode'] == 'cod' ? $checkout_order['order_amount'] + $this->config->item('cod_charge') : $checkout_order['order_amount'];
+		$order_info['amount'] = $checkout_order['order_amount'];
 		$order_info['address_id'] = $checkout_order['address_id'];
 		$order_info['user_id'] = $checkout_order['user_id'];
 		$order_info['checkout_items'] = $this->database->GetCheckoutOrderItems($order_info['txn_id']);

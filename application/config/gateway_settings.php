@@ -1,8 +1,11 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+$config['payment_gateway'] = 'razorpay';
 
+//Razorpay
+  
 //PayUMoney Settings
-$config['merchant_key'] = 'JBZaLc';
+$config['payu_merchant_key'] = 'JBZaLc';
 $config['salt'] = 'GQs7yium';
 $config['service_provider'] = 'payu_paisa';
 $config['gateway_url'] = 'https://test.payu.in/_payment/';
