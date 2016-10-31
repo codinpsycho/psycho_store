@@ -2,6 +2,9 @@
 /**
 * 
 */
+require APPPATH.'third_party/razorpay-php/Razorpay.php';
+use Razorpay\Api\Api;
+
 class checkout extends CI_controller
 {
 	
@@ -406,24 +409,12 @@ class checkout extends CI_controller
 		$rzp_key = $this->config->item('rzp_merchant_key');
 		$rzp_secret = $this->config->item('rzp_merchant_secret');
 		$rzp_payment_id = $post_params['rzp_payment_id'];
-		$url = "https://api.razorpay.com/v1/payments/$rzp_payment_id/capture";
+		$amount = $checkout_order['order_amount']*100; 	//Amount in paisa
 
-		$ch = curl_init($url);
+		$api = new Api($rzp_key, $rzp_secret);
 
-		$params['amount'] = $checkout_order['order_amount']*100; 	//Amount in paisa
-
-		// Form post string
-		$postString = http_build_query($params);
-
-		// Setting our options
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_USERPWD, "$rzp_key:$rzp_secret");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-
-		$res = curl_exec($ch);
-		$info = curl_getinfo($ch);
-		curl_close($ch);
+		$payment = $api->payment->fetch($rzp_payment_id);
+		$payment->capture(array('amount' => $amount));
 		
 		//Captured, now just redirect like we do in COD orders
 		$this->session->set_flashdata('ok_to_order', true);
