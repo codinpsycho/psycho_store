@@ -43,6 +43,7 @@
 		</div>
 	</div>
 	<hr>
+	<div id="alert"></div>
 	<div class="well">
 		<div class="row">			
 <!-- 			<?php //if($shipping_available == false): ?>
@@ -73,7 +74,7 @@
 					<select class="form-control" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
 						<option value="pre-paid" >Pay Online</option>
 						<?php if($cod_available == true): ?>
-						<option value="cod">Cash On Delivery (+<?php echo $cod_charges ?> INR) </option>
+						<option disabled value="cod">Cash On Delivery (temporary disabled) </option>
 						<?php endif; ?>
 					</select>
 				</form>
