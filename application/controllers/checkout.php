@@ -299,7 +299,10 @@ class checkout extends CI_controller
  		$data['formatted_address'] = format_address($address);
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
-		$data['cod_charges'] = $this->config->item('cod_charge');		
+		$data['cod_charges'] = $this->config->item('cod_charge');
+
+		//For time being since COD has been disabled
+		show_alert("Save your cash for the essentials, we have disabled cod for some time. #digitalindia");		
 		
 		display('review', $data);
 	}
