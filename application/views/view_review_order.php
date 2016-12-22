@@ -74,7 +74,7 @@
 					<select class="form-control" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
 						<option value="pre-paid" >Pay Online</option>
 						<?php if($cod_available == true): ?>
-						<option disabled value="cod">Cash On Delivery (temporary disabled) </option>
+						<option value="cod">Cash On Delivery</option>
 						<?php endif; ?>
 					</select>
 				</form>
