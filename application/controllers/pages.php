@@ -21,7 +21,12 @@ class Pages extends CI_controller
 
 	function index()
 	{
-		$this->latest('all');
+		$this->home();
+	}
+
+	function home()
+	{
+		$this->latest();
 	}
 
 	function launch_signup()
@@ -143,22 +148,63 @@ class Pages extends CI_controller
 		display('feedback_wall', $data);
 	}
 
-	function type($prod_type, $url)
+	function explore($url = null, $sorting = 'latest')
 	{
-		switch (variable)
-		{	
-			case 'tshirt':
-				# code...
+		$data['base_url'] = $url;		
+		switch ($url)
+		{
+			case 'gaming-anime-geek-t-shirts-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
+				$data['prod_1_title'] = 'Mobile Covers';
+				$data['prod_2_title'] = 'Coffee Mugs';
+				$data['header_title'] = "T-Shirts";
+				$this->_browse($data, 'tshirt', $sorting);
 				break;
 			
-			case 'mobilecover':
-				# code...
-				break;				
-			
+			case 'gaming-anime-geek-mobile-covers-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
+				$data['prod_1_title'] = 'Tees';
+				$data['prod_2_title'] = 'Coffee Mugs';
+				$data['header_title'] = "Mobile Covers";
+				$this->_browse($data, 'mobilecover', $sorting);
+				break;
+
+			case 'gaming-anime-geek-coffee-mugs-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_1_title'] = 'Tees';
+				$data['prod_2_title'] = 'Mobile Covers';
+				$data['header_title'] = "Coffee Mugs";
+				$this->_browse($data, 'mugs', $sorting);
+				break;
+
 			default:
 				# code...
 				break;
 		}
+	}
+
+	function _browse($data, $prod_type, $sorting, $game_name = 'all')
+	{
+		$data['products'] = $this->database->GetProducts($prod_type, $sorting, $game_name);
+		if($sorting == 'latest')
+		{
+			$data['latest_link_state'] = 'active';
+			$data['popular_link_state'] = 'disabled';			
+		}
+		else if($sorting == 'popular')
+		{
+			$data['latest_link_state'] = 'disabled';
+			$data['popular_link_state'] = 'active';
+		}
+	
+		$params['tag_name'] = 'psychofamous';
+		notify_event('instafeed', $params);
+
+		display('browse', $data);
+
 	}
 
 	function product($id, $url = null)
@@ -180,8 +226,8 @@ class Pages extends CI_controller
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
 			$data['restock_date'] = $this->config->item('restock_date');
-
-			$this->_setup_stock_info($result, $data);
+			
+			$data['details_view'] = $this->_generate_product_details_view($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
 			notify_event('instafeed', $params);
@@ -202,6 +248,27 @@ class Pages extends CI_controller
 		}
 	}
 
+	function _generate_product_details_view($product, &$data)
+	{
+		$this->_setup_stock_info($product, $data);
+
+		switch ($product['product_type'])
+		{
+			case 'tshirt':
+				return $this->load->view('view_sized_details', $data, true);
+				break;
+
+			case 'mobilecover':
+			case 'mugs':
+				return $this->load->view('view_no_size_details', $data, true);
+				break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
 	function _setup_stock_info($product, &$data)
 	{
 		switch ($product['product_type'])
@@ -210,11 +277,30 @@ class Pages extends CI_controller
 				$this->_setup_tshirt_stock_info($product, $data);
 				break;
 			
+			case 'mugs':
+				$this->_setup_tshirt_stock_info($product, $data);
+				break;
+			
+			case 'mobilecovers':
+				$this->_setup_tshirt_stock_info($product, $data);
+				break;
+
 			default:
 				# code...
 				break;
 		}
 	}
+
+	function _setup_mugs_stock_info($product, &$data)
+	{
+		//nothing for now
+	}
+
+	function _setup_mobilecovers_stock_info($product, &$data)
+	{
+		//nothing for now
+	}
+
 
 	function _setup_tshirt_stock_info($product, &$data)
 	{
@@ -257,7 +343,7 @@ class Pages extends CI_controller
 		$params['tag_name'] = 'psychofamous';
 		notify_event('instafeed', $params);
 
-		display('browse', $data);
+		display('home', $data);
 	}
 
 	function popular()
@@ -268,7 +354,7 @@ class Pages extends CI_controller
 		$params['tag_name'] = 'psychofamous';
 		notify_event('instafeed', $params);
 
-		display('browse', $data);
+		display('home', $data);
 	}
 	
 	//Removes spaces from a url
@@ -286,11 +372,11 @@ class Pages extends CI_controller
 		$data['search_text'] = $name;
 		$data['products'] = array();
 		if(strlen($name))
-		{			
+		{
 			$result = $this->database->GetProducts('all','latest', $name);
 			$count = count($result);
 			$data['search_result'] = $count;
-
+			
 			if($result)
 				$data['products'] = $result;			
 		}		

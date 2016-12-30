@@ -365,13 +365,16 @@ function _live($page, $data)
 	{
 		case 'search':
 			$body = $ci->load->view('view_search', $data, true);
-		break;
+			break;
 		case 'browse':
-			$body = $ci->load->view('home', $data, true);	
-		break;
+			$body = $ci->load->view('browse', $data, true);	
+			break;
+		case 'home':
+			$body = $ci->load->view('home', $data, true);
+			break;
 		case 'product':	
 			$body = $ci->load->view('view_product', $data, true);
-		break;
+			break;
 		case 'feedback_wall':
 			$body = $ci->load->view('feedback_wall', $data, true);
 			break;

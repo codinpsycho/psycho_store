@@ -11,6 +11,8 @@
 						<select class= "form-control " name="type">
 							<option value = "tshirt">Tshirt</option>
 							<option value = "hoodie">Hoodie</option>
+							<option value = "mobilecover">Mobile Covers</option>
+							<option value = "mugs">Coffee Mugs</option>
 						</select>
 					</div>
 					<div class="col-md-2">

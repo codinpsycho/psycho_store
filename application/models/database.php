@@ -152,11 +152,27 @@ class Database extends CI_Model
 			case 'tshirt':
 				$this->AddTshirtDetails($product['product_details']);
 				break;
-			
+			case 'mugs':
+				$this->AddMugsDetails($product['product_details']);
+				break;
+			case 'mobilecover':
+				$this->AddMobileCoverDetails($product['product_details']);
+				break;
+						
 			default:
 				# code...
 				break;
 		}
+	}
+
+	function AddMobileCoverDetails($prod_details)
+	{
+		$this->db->insert('mobilecover_details',$product_details);	
+	}	
+
+	function AddMugsDetails($prod_details)
+	{
+		$this->db->insert('mugs_details',$product_details);	
 	}
 
 	function AddTshirtDetails($product_details)
