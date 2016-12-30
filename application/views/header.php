@@ -36,13 +36,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li class="nav-pills">
-          <a target="_blank" href="https://www.facebook.com/psychostorein"><i class=" fa fa-facebook"></i></a>
+          <a target="_blank" href="https://www.facebook.com/psychostorein">Tees</i></a>
         </li>
         <li class="nav-pills">
-          <a target="_blank" href="https://twitter.com/psychostorein"><i class=" fa fa-twitter"></i></a>
+          <a target="_blank" href="https://twitter.com/psychostorein">Mobile Covers</i></a>
         </li>
         <li class="nav-pills">
-          <a target="_blank" href="http://instagram.com/psychostore.in"><i class=" fa fa-instagram"></i></a>
+          <a target="_blank" href="http://instagram.com/psychostore.in">Mugs</i></a>
         </li>       
         <li class="dropdown">
           <form class="navbar-form" role="search" method = "post" action=<?php echo site_url("like");?>>
