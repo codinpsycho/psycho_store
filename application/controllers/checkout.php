@@ -161,23 +161,10 @@ class checkout extends CI_controller
 			$prod_id = $items['id'];
 			$product = $this->database->GetProductById($prod_id);
 
-			//Check stock and set stock info
-			$data['products'][$items['rowid'].'stock_state'] = "";
+			$out_of_stock = $this->_is_out_of_stock($product, $items);
 
-			if( $product['product_type'] == "tshirt" || $product['product_type'] == "hoodie")
+			if($out_of_stock == true)
 			{
-				$size = $items['options']['Size'];
-				$size_in_stock = $product['product_details'][strtolower($size).'_qty'];
-				$size_preorder_allowed = $product['product_details']['size_preorder'];
-			}
-			else
-			{
-				//For product woth no size info like action figures .. later on
-			}
-
-			if($size_preorder_allowed == false && $items['qty'] > $size_in_stock)
-			{
-				$out_of_stock = true;
 				break;
 			}
 		}
@@ -186,6 +173,27 @@ class checkout extends CI_controller
 		{			
 			redirect('cart/');
 		}		
+	}
+
+	function _is_out_of_stock($product, $cart_item)
+	{
+
+		switch ($product['product_type'])
+		{
+			case 'hoodie':
+			case 'tshirt':
+				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['size']).'_qty'];
+				
+				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
+					return true;
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		return false;
 	}
 
 	function _validate_user()

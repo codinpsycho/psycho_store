@@ -26,34 +26,29 @@ class cart extends CI_controller
 	//make sure user cant enter more than available stock qty
 	function _set_stock_info(&$data)
 	{
-		foreach ($this->cart->contents() as $items)
+		foreach ($this->cart->contents() as $item)
 		{
-			$prod_id = $items['id'];
+			$prod_id = $item['id'];
 			$product = $this->database->GetProductById($prod_id);
 
 			//Check stock and set stock info
-			$data['products'][$items['rowid'].'stock_state'] = "";
-			
-			$stock_vars = $this->_set_stock_vars_for_prod($product, $items);
-			
-			if($stock_vars['preorder_allowed'] == false && $items['qty'] > $stock_vars['size_in_stock'])
-				$data['products'][$items['rowid'].'stock_state'] = "Out Of Stock";
+			$data['products'][$item['rowid'].'stock_state'] = $this->_set_stock_state($product, $item);
 
 			$data['products'][$prod_id] = $product;
 		}
 	}
 
-	function _set_stock_vars_for_prod($product, $item)
+	function _set_stock_state($product, $cart_item)
 	{
-		$stock_vars = array();
-		
+
 		switch ($product['product_type'])
 		{
 			case 'hoodie':
 			case 'tshirt':
-				$stock_vars['size'] = $item['options']['Size'];
-				$stock_vars['preorder_allowed'] = $product['product_details']['size_preorder'];
-				$stock_vars['size_in_stock'] = $product['product_details'][strtolower($stock_vars['size']).'_qty'];
+				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['size']).'_qty'];
+				
+				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
+					return "Out Of Stock";
 				break;
 			
 			default:
@@ -61,7 +56,8 @@ class cart extends CI_controller
 				break;
 		}
 
-		return $stock_vars;
+		return "";
+
 	}
 
 	//Show items in cart
@@ -76,7 +72,7 @@ class cart extends CI_controller
 
 		if($num_items)
 		{
-			$this->_show_cheat_code_after_timeout(5000);
+			//$this->_show_cheat_code_after_timeout(5000);
 		}
 
 		$data['cheat_hints'] = $this->load->view('cheatcode_hints', null, true);
@@ -101,52 +97,48 @@ class cart extends CI_controller
 	}
 
 	function instant_checkout($product_id)
-	{		
+	{
 		//Get the product using id
 		$product = $this->database->getProductbyId($product_id);
+
 		if($product)
 		{
-			$size = $this->input->post('size');
-			if($size)
-			{
-				$cart_item = array
-					(
-						'id' 	=> $product_id,
-						'qty'	=> '1',
-						'price' => $product['product_price'],
-						'name'  => $product['product_name'],
-						'options'=> array('Size' => $size),
-					);
-				
-				$row_id = $this->cart->insert($cart_item);
-			}
-		}
+			$this->_add_to_cart($product);
+		}		
 
 		
 		redirect('checkout/');
-	}	
+	}
+
+	function _add_to_cart($product)
+	{
+		$cart_item = array
+				(
+					'id' 	=> $product['product_id'],
+					'qty'	=> '1',
+					'price' => $product['product_price'],
+					'name'  => $product['product_name'],						
+				);
+						
+		$size = $this->input->post('size');
+		if($size)
+		{
+			$cart_item['options']['size'] =  $size;
+		}
+
+		$row_id = $this->cart->insert($cart_item);
+
+	}
 
 	function add($product_id)
-	{		
+	{
 		//Get the product using id
 		$product = $this->database->getProductbyId($product_id);
+
 		if($product)
 		{
-			$size = $this->input->post('size');
-			if($size)
-			{
-				$cart_item = array
-					(
-						'id' 	=> $product_id,
-						'qty'	=> '1',
-						'price' => $product['product_price'],
-						'name'  => $product['product_name'],
-						'options'=> array('Size' => $size),
-					);
-				
-				$row_id = $this->cart->insert($cart_item);
-			}
-		}
+			$this->_add_to_cart($product);
+		}		
 
 		show_alert($product['add_to_cart_comment']);
 		
