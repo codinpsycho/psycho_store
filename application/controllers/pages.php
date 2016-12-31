@@ -150,7 +150,7 @@ class Pages extends CI_controller
 
 	function explore($url = null, $sorting = 'latest')
 	{
-		$data['base_url'] = $url;		
+		$data['base_url'] = "explore/$url";
 		switch ($url)
 		{
 			case 'gaming-anime-geek-t-shirts-india':
