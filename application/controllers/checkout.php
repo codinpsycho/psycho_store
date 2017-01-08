@@ -74,8 +74,8 @@ class checkout extends CI_controller
 							'txn_id'		=>	$txn_id,
 							'product_id'	=> 	$item['id'],
 							'count'			=> 	$item['qty'],
-							'size'			=> 	$item['options']['Size'],
-						);			
+							'option'		=> 	$item['options']['extra'],
+						);
 			
 			$this->database->SaveCartItemOnCheckout($checkout_item);
 		}
@@ -182,7 +182,7 @@ class checkout extends CI_controller
 		{
 			case 'hoodie':
 			case 'tshirt':
-				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['size']).'_qty'];
+				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
 				
 				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
 					return true;
@@ -612,12 +612,12 @@ class checkout extends CI_controller
 							'txn_id'		=>	$order_info['txn_id'],
 							'product_id'	=> 	$item['product_id'],
 							'count'			=> 	$item['count'],
-							'size'			=> 	$item['size'],
+							'option'		=> 	$item['option'],
 						);
 			
 
 			//Update database
-			$this->_update_product_info($product, $item);
+			$this->_update_product_info($item);
 			$this->database->AddOrderItem($order_item);
 
 			//Consume code
@@ -635,16 +635,17 @@ class checkout extends CI_controller
 		$this->database->CheckoutDone($order_info['txn_id']);
 	}
 
-	function _update_product_info($product, $checkout_item)
+	function _update_product_info($checkout_item)
 	{
-		$product = $this->database->GetProductById($item['product_id']);
-		$product['product_qty_sold'] += $item['count'];
+		$product = $this->database->GetProductById($checkout_item['product_id']);
+		$product['product_qty_sold'] += $checkout_item['count'];
 		
 		//Update product info
 		switch ($product['product_type'])
 		{
+			case 'hoodie':
 			case 'tshirt':
-				$size = $checkout_item['size'];
+				$size = $checkout_item['option'];
 				$size = strtolower($size).'_qty';
 				$product['product_details'][$size] -= $checkout_item['count'];
 				$this->database->ModifyProduct($product);

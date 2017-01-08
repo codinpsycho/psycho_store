@@ -35,7 +35,7 @@ qfunction update_btn_text_on_size_select(size_select)
   </div>
   <div class="col-md-4 col-sm-12 col-xs-12">
     <form id="cart_form" method = "post" action = <?php echo site_url("cart/instant_checkout/{$product['product_id']}")?> role="form">
-      <select id="size_selection" required class="form-control" name="size" onchange="update_btn_text_on_size_select(this)">
+      <select id="size_selection" required class="form-control" name="extra" onchange="update_btn_text_on_size_select(this)">
         <option disabled selected value="">Select Size</option>  
         <option <?php echo $small_stock; ?> value ="Small">Small 
         <?php if($small_stock == 'disabled') echo '(Out Of Stock)';

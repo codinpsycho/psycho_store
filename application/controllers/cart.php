@@ -45,7 +45,7 @@ class cart extends CI_controller
 		{
 			case 'hoodie':
 			case 'tshirt':
-				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['size']).'_qty'];
+				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
 				
 				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
 					return "Out Of Stock";
@@ -120,10 +120,10 @@ class cart extends CI_controller
 					'name'  => $product['product_name'],						
 				);
 						
-		$size = $this->input->post('size');
-		if($size)
+		$extra = $this->input->post('extra');
+		if($extra)
 		{
-			$cart_item['options']['size'] =  $size;
+			$cart_item['options']['extra'] =  $extra;
 		}
 
 		$row_id = $this->cart->insert($cart_item);

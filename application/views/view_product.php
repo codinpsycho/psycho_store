@@ -11,7 +11,7 @@ function update_btn_text_on_addtocart(cb)
   var btn = document.getElementById('add_to_cart');
   var selected = "Nothing";
   var size_select = document.getElementById('size_selection');
-  console.log(size_select);
+  
   if(size_select != null)
   {
     var selected = size_select.options[size_select.selectedIndex].text;
