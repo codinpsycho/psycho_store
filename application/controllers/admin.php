@@ -1050,7 +1050,19 @@ class admin extends CI_controller
 			$prod_name_cell = anchor($prod_url, $prod['product_name']);
 			$prod_details = $prod['product_details'];
 
-			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $prod_details['small_qty'], $prod_details['medium_qty'], $prod_details['large_qty'], $prod_details['xl_qty'], $prod['product_qty_sold']);
+			//Stock info
+			$small_qty = $med_qty = $lrg_qty = $xl_qty = 0;
+
+			if($prod['product_source'] == 'inhouse')
+			{
+				$small_qty = $prod_details['small_qty'];
+				$med_qty = $prod_details['medium_qty'];
+				$lrg_qty = $prod_details['large_qty'];
+				$xl_qty = $prod_details['xl_qty'];
+
+			}
+
+			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $small_qty, $med_qty, $lrg_qty, $xl_qty, $prod['product_qty_sold']);
 		}
 
 		return $this->table->generate();
