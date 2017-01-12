@@ -227,7 +227,8 @@ class Pages extends CI_controller
 			$data['hashtag'] = $result['hashtag'];
 			$data['restock_date'] = $this->config->item('restock_date');
 			
-			$data['details_view'] = $this->_generate_product_details_view($result, $data);
+			//$data['details_view'] = $this->_generate_product_details_view($result, $data);
+			$this->_generate_product_specific_views($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
 			notify_event('instafeed', $params);
@@ -248,19 +249,28 @@ class Pages extends CI_controller
 		}
 	}
 
-	function _generate_product_details_view($product, &$data)
+	function _generate_product_specific_views($product, &$data)
 	{
 		$this->_setup_stock_info($product, $data);
 
+		$data['img_alt'] = $product['product_intro'];
+
 		switch ($product['product_type'])
 		{
-			case 'tshirt':
-				return $this->load->view('view_sized_details', $data, true);
+			case 'hoodies':
+			case 'tshirt':				
+				$data['product_img_view'] = $this->load->view('view_product_image', $data, true);
+				$data['details_view'] = $this->load->view('view_tshirt_option_details', $data, true);
 				break;
 
 			case 'mobilecover':
+				$data['product_img_view'] = $this->load->view('view_mobile_cover_image', $data, true);
+				$data['details_view'] = $this->load->view('view_mobile_cover_option_details', $data, true);
+				break;
+			
 			case 'mugs':
-				return $this->load->view('view_no_size_details', $data, true);
+				$data['product_img_view'] = $this->load->view('view_product_image', $data, true);
+				$data['details_view'] = $this->load->view('view_product_no_option_details', $data, true);
 				break;
 
 			default:
@@ -273,16 +283,17 @@ class Pages extends CI_controller
 	{
 		switch ($product['product_type'])
 		{
+			case 'hoodies':
 			case 'tshirt':
-				$this->_setup_tshirt_stock_info($product, $data);
+				$this->_setup_tshirt_options_info($product, $data);
 				break;
 			
 			case 'mugs':
-				$this->_setup_tshirt_stock_info($product, $data);
+				$this->_setup_mugs_stock_info($product, $data);
 				break;
 			
-			case 'mobilecovers':
-				$this->_setup_tshirt_stock_info($product, $data);
+			case 'mobilecover':
+				$this->_setup_mobilecovers_options_info($product, $data);
 				break;
 
 			default:
@@ -296,13 +307,13 @@ class Pages extends CI_controller
 		//nothing for now
 	}
 
-	function _setup_mobilecovers_stock_info($product, &$data)
+	function _setup_mobilecovers_options_info($product, &$data)
 	{
-		//nothing for now
+		$data['supported_models'] = $this->database->GetSupportedMobileModels();
 	}
 
 
-	function _setup_tshirt_stock_info($product, &$data)
+	function _setup_tshirt_options_info($product, &$data)
 	{
 		$data['small_stock']="";
 		$data['medium_stock']="";

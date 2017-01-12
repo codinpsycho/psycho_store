@@ -117,10 +117,11 @@ class cart extends CI_controller
 					'id' 	=> $product['product_id'],
 					'qty'	=> '1',
 					'price' => $product['product_price'],
-					'name'  => $product['product_name'],						
+					'name'  => $product['product_name'],
+					'source'=> $product['product_source'],
 				);
 						
-		$extra = $this->input->post('extra');
+		$extra = urldecode($this->input->post('extra'));
 		if($extra)
 		{
 			$cart_item['options']['extra'] =  $extra;

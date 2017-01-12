@@ -1,5 +1,5 @@
 <script type="text/javascript">
-qfunction update_btn_text_on_size_select(size_select)
+function update_btn_text_on_size_select(size_select)
 {
   <?php if($show_size_preorder_info): ?>
   

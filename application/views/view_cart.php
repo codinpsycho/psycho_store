@@ -70,7 +70,7 @@ $(function () {
 										<form class="form" method="post" action=<?php echo site_url('cart/update/')?> >
 						                    <div class="input-group">
 						                      <input type="number" min ='0' 
-						                      <?php if ($this->cart->has_options($items['rowid']) == TRUE): ?>
+						                      <?php if ($items['source'] == 'inhouse'): ?>
 						                      max = <?php echo $product['product_details'][strtolower($items['options']['extra']).'_qty'] ?>
 						                  		<?php endif; ?>
 						                      name=<?php echo $items['rowid']?> class="form-control input-sm" value=<?php echo $items['qty']?> >

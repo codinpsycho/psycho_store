@@ -88,9 +88,13 @@ class Database extends CI_Model
 
 		//Add Product Details based on what type it is
 		switch ($prod_type)
-		{
+		{			
 			case 'tshirt':
 				$prod_details = $this->GetTshirtDetails($product_id);
+				break;
+
+			case 'mobilecover':
+				$prod_details = $this->GetMobileCoverDetails($product_id);
 				break;
 			
 			default:
@@ -102,6 +106,19 @@ class Database extends CI_Model
 
 		return $prod_details;
 	}
+
+	function GetSupportedMobileModels()
+	{		
+		$query = $this->db->get('mobile_models');
+		return $query->result_array();
+	}
+
+	function GetMobileCoverDetails($product_id)
+	{
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('mobile_cover_details');
+		return $query->row_array();
+	}	
 
 	function GetTshirtDetails($product_id)
 	{

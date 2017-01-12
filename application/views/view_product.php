@@ -60,7 +60,7 @@ function update_btn_text_on_addtocart(cb)
         </ul>
       </div>      
       <div class="col-md-6 text-center">
-        <?php $data['img_alt'] = $product['product_intro']; echo $this->load->view('view_product_image', $data)?>
+        <?php echo $product_img_view; ?>
         <?php echo $this->load->view('view_product_social', null); ?>
       </div>
       <div class="col-md-4">
