@@ -1,9 +1,31 @@
 <script type="text/javascript">
+//Helper Functions
+function load_image_async(url)
+{
+  request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.onload = function()
+  {
+    update_image(url);
+  };
+
+  request.onprogress = function()
+  {
+  	//gif
+  	var path_prefix = "<?php echo site_url() ?>"
+	var img_path = path_prefix + '/images/ellipses.svg';
+    update_image(img_path);
+  };
+  
+  request.send();
+}
+
 function update_prod_image_on_size_select(size_select)
 {	
 	var selected = size_select.options[size_select.selectedIndex].text.toLowerCase();
-	var img_path = 'http://localhost/psycho_store/images/product/2/' + selected.replace(/ /g, '_') + '.png';	
-	update_image( img_path  );
+	var path_prefix = "<?php echo site_url() ?>"
+	var img_path = path_prefix + '/images/product/<?php echo $product['product_id'] ?>/models/' + selected.replace(/ /g, '_') + '.png';	
+	load_image_async( img_path );
 }
 
 function update_image(path)
@@ -11,10 +33,10 @@ function update_image(path)
 	prod_img = document.getElementById('prod_img');
 	if(prod_img)
 	{
-
 	  prod_img.setAttribute("src", path);
 	}
 }
+
 
 </script>
 <div class="row">
