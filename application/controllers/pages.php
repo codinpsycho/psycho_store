@@ -227,7 +227,6 @@ class Pages extends CI_controller
 			$data['hashtag'] = $result['hashtag'];
 			$data['restock_date'] = $this->config->item('restock_date');
 			
-			//$data['details_view'] = $this->_generate_product_details_view($result, $data);
 			$this->_generate_product_specific_views($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
