@@ -144,11 +144,14 @@ function get_product_image($prod_id)
 {
 	$ci = &get_instance();
 	$ci->load->helper('directory');
-	$images = directory_map("images/product/$prod_id");
+	$images = directory_map("images/product/$prod_id");	
 		
 	foreach ($images as $key => $img)
 	{
-		$final_images[] = "images/product/$prod_id/$img";
+		if(is_array($img) == false)
+		{
+			$final_images[] = "images/product/$prod_id/$img";
+		}		
 	}
 	
 	return $final_images;
