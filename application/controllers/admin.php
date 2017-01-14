@@ -1015,7 +1015,8 @@ class admin extends CI_controller
 			foreach ($order['order_items'] as $key => $item) 
 			{
 				$product = $item['product'];
-				$product_name = array('data'=> $product['product_name'], 'colspan'=>4, 'align'=>'right');
+				$prod_info = $product['product_name']." {". $product['product_type']." }";
+				$product_name = array('data'=> $prod_info, 'colspan'=>4, 'align'=>'right');
 				$size = array('data' => $item['size'], 'colspan'=>2, 'align'=>'right');
 				$count = array('data' => $item['count'], 'colspan'=>2, 'align'=>'right');
 				$this->table->add_row( $product_name, $size, $count);
