@@ -9,10 +9,14 @@
 				<div class='form-group' >					
 					<div class='col-md-2'>
 						<select class= "form-control " name="type">
+							<?php if($type != ''):?>
+								<option value = <?php echo $type ?> ><?php echo $type ?></option>
+							<?php else: ?>
 							<option value = "tshirt">Tshirt</option>
 							<option value = "hoodie">Hoodie</option>
 							<option value = "mobilecover">Mobile Covers</option>
 							<option value = "mugs">Coffee Mugs</option>
+							<?php endif;?>
 						</select>
 					</div>
 					<div class="col-md-2">

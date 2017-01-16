@@ -890,10 +890,10 @@ class admin extends CI_controller
 		$this->form_validation->set_rules('desc', 'Product Desc', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('image_path', 'Image Path', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('price', 'Product Price', 'is_numeric|trim|required|xss_clean');
-		$this->form_validation->set_rules('s_qty', 'Small Qty', 'is_numeric|trim|required|xss_clean');
-		$this->form_validation->set_rules('m_qty', 'Medium Qty', 'is_numeric|trim|required|xss_clean');
-		$this->form_validation->set_rules('l_qty', 'Large Qty', 'is_numeric|trim|required|xss_clean');
-		$this->form_validation->set_rules('xl_qty', 'XL Qty', 'is_numeric|trim|required|xss_clean');
+		$this->form_validation->set_rules('s_qty', 'Small Qty', 'is_numeric|trim|xss_clean');
+		$this->form_validation->set_rules('m_qty', 'Medium Qty', 'is_numeric|trim|xss_clean');
+		$this->form_validation->set_rules('l_qty', 'Large Qty', 'is_numeric|trim|xss_clean');
+		$this->form_validation->set_rules('xl_qty', 'XL Qty', 'is_numeric|trim|xss_clean');
 	}
 
 	function _fill_data_var_for_view($product)
@@ -1056,10 +1056,20 @@ class admin extends CI_controller
 
 			if($prod['product_source'] == 'inhouse')
 			{
-				$small_qty = $prod_details['small_qty'];
-				$med_qty = $prod_details['medium_qty'];
-				$lrg_qty = $prod_details['large_qty'];
-				$xl_qty = $prod_details['xl_qty'];
+				switch ($prod['product_type'])
+				{
+					case 'hoodie':
+					case 'tshirt':
+						$small_qty = $prod_details['small_qty'];
+						$med_qty = $prod_details['medium_qty'];
+						$lrg_qty = $prod_details['large_qty'];
+						$xl_qty = $prod_details['xl_qty'];
+						break;
+					
+					default:
+						# code...
+						break;
+				}
 
 			}
 
