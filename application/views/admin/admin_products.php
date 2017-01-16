@@ -17,6 +17,8 @@
                         <option value="all"> All </option>
                         <option value="tshirt"> Tshirt </option>
                         <option value="hoodie"> Hoodie </option>
+                        <option value="mugs"> Mugs </option>
+                        <option value="mobilecover"> Mobile Cover </option>                        
                     </select>
                     <label>Like </label>
                     <select class="form-control" name="game">
