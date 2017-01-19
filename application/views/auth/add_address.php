@@ -29,7 +29,7 @@ $address1 = array(
 	'value' => set_value('address1'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
-	'placeholder'	=> 'Where you want us to ship',
+	'placeholder'	=> 'Where will you be available during daytime?',
 	'class' => "form-control"
 );
 $address2 = array(
@@ -38,6 +38,7 @@ $address2 = array(
 	'value' => set_value('address2'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
+	'placeholder'	=> 'Near by landmark',
 	'class' => "form-control"
 );
 $city = array(
