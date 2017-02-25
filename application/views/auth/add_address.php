@@ -29,7 +29,7 @@ $address1 = array(
 	'value' => set_value('address1'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
-	'placeholder'	=> 'Where will you be available during daytime?',
+	'placeholder'	=> 'House no. / Flat no. / Buiilding no.',
 	'class' => "form-control"
 );
 $address2 = array(
@@ -38,7 +38,16 @@ $address2 = array(
 	'value' => set_value('address2'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
-	'placeholder'	=> 'Near by landmark',
+	'placeholder'	=> 'Society / Locality / Road',
+	'class' => "form-control"
+);
+$address3 = array(
+	'name'	=> 'address3',
+	'id'	=> 'address3',
+	'value' => set_value('address2'),
+	'maxlength'	=> 90,
+	'size'	=> 30,
+	'placeholder'	=> 'Landmark',
 	'class' => "form-control"
 );
 $city = array(
@@ -113,7 +122,7 @@ $number = array(
 					</div>
 					<div class="col-md-12">
 						<div class="form-group">
-								<?php echo ('Address'); ?>
+								<?php echo ('Address (where you will be available during daytime)'); ?>
 								<?php echo form_input($address1); ?>
 								<?php echo form_error($address1['name']); ?>
 						</div>
@@ -125,6 +134,13 @@ $number = array(
 								<?php echo form_error($address2['name']); ?>
 						</div>
 					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+								<?php echo ('A little more'); ?>
+								<?php echo form_input($address3); ?>
+								<?php echo form_error($address3['name']); ?>
+						</div>
+					</div>					
 					<div class="col-md-4">
 						<div class="form-group">
 								<?php echo ('City'); ?>

@@ -466,7 +466,8 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
+			$this->form_validation->set_rules('address2', 'Address2', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
 			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
 			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
@@ -483,6 +484,7 @@ class Auth extends CI_Controller
 					'last_name' => $this->form_validation->set_value('last_name'),
 					'address_1' => $this->form_validation->set_value('address1'),
 					'address_2' => $this->form_validation->set_value('address2'),
+					'address_3' => $this->form_validation->set_value('address3'),
 					'city' => $this->form_validation->set_value('city'),
 					'state' => $this->form_validation->set_value('state'),
 					'country' => 'India',	//$this->form_validation->set_value('country'),
