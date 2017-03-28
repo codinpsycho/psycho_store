@@ -207,11 +207,26 @@ class Pages extends CI_controller
 
 	}
 
+	function _get_other_products_for_design($design_id)
+	{
+		$other_types_of_prods = $this->database->GetSupportedProductsForDesign($result['design_id']);
+
+		foreach ($other_types_of_prods as $key => $prod)
+		{
+			if($prod['product_type'] == $result['product_type'])
+				unset($other_types_of_prods[$key]);
+		}
+
+		return $other_types_of_prods;
+	}
+
+
 	function product($id, $url = null)
 	{
 		$total_products = $this->database->GetMaxProductID();
 		$url = $this->beautify($url,'_');
 		$result = $this->database->GetProductById($id);
+		$other_types_of_prods = $this->_get_other_products_for_design($result['design_id']);
 
 		if($result)
 		{
@@ -226,6 +241,7 @@ class Pages extends CI_controller
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
 			$data['restock_date'] = $this->config->item('restock_date');
+			$data['other_prod_types'] = $other_types_of_prods;
 			
 			$this->_generate_product_specific_views($result, $data);
 
@@ -233,7 +249,7 @@ class Pages extends CI_controller
 			notify_event('instafeed', $params);
 
 			//Generate Suggestions
-			$data['suggested_products'] = $this->GenerateSuggestions($result, 3);
+			$data['suggested_products'] = $this->GenerateSuggestions($result, 6);
 
 			$data['recently_viewed'] = $this->GetRecentlyViewed();
 			$this->AddToRecentlyViewed($result);

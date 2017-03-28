@@ -45,7 +45,7 @@ function update_btn_text_on_addtocart(cb)
 <div class="container">
     <div class="row top-bottom-space">
       <div class="col-md-12">
-        <h1 id="product_name" class="text-left"><?php echo $product['product_name'] ?> 
+        <h1 id="product_name" class="text-left"><?php echo $product['product_name'] ?>
         <span class="pull-right"> <i class="fa fa-rupee"></i> <?php echo $product['product_price']?> </span> </h1>
         <hr>
       </div>
@@ -53,12 +53,11 @@ function update_btn_text_on_addtocart(cb)
         <ul class="pager">
           <li class="previous">
             <?php echo anchor("$prev_id", "Previous");?>
-          </li>
           <li class="next">
             <?php echo anchor("$next_id", "Next");?>
           </li>
         </ul>
-      </div>      
+      </div>     
       <div class="col-md-6 text-center">
         <?php echo $product_img_view; ?>
         <?php echo $this->load->view('view_product_social', null); ?>
@@ -69,35 +68,22 @@ function update_btn_text_on_addtocart(cb)
             <p> <?php echo $product['product_intro']; ?></p>
             <a href="#prod_desc"><i class="fa fa-caret-down"></i> read more</a>
             <hr>
-          </div>
+          </div>          
         </div>
-        <?php echo $details_view?>
-        <hr>
+        <?php echo $details_view?>        
+        <hr>        
         <div class="row ">
           <div class="col-md-12">
             <h5>Inspired by&nbsp;<span class="h4 molot"><a href=<?php $game = url_title($product['product_game']); echo site_url("like/$game")?>> <?php echo $product['product_game']?></a> </span></h5>
+            <hr>
           </div>
           <div class="col-md-12">
-            <hr>
-            <?php
-            foreach($suggested_products as $product_item):
-              $prod_url = product_url($product_item); 
-              $path = "/".$product_item['product_image_path'];
-              $image_properties = array(
-                      'src' => "$path",
-                      'class' => 'img-responsive',
-            );
-            ?>
-              <div class="product-link-sm col-md-4 col-sm-4 col-xs-4">
-                  <?php echo anchor($prod_url, img($image_properties));?>      
-              </div>
-
-            <?php endforeach ?>
+            <?php echo $this->load->view('view_product_type', null); ?>
           </div>
         </div>
       </div>
-    </div>  
-
+    </div>
+  <?php $data['suggested_products'] = $suggested_products; echo $this->load->view('product_suggestions', $data); ?>
   <div id='prod_desc'>
     <?php echo $this->load->view('view_product_desc'); ?>
   </div>

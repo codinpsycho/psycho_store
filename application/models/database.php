@@ -39,7 +39,7 @@ class Database extends CI_Model
 		return $row['product_id'];
 	}
 
-	function GetproductCount()
+	function GetProductCount()
 	{
 		return $this->db->count_all('products');
 	}
@@ -127,6 +127,13 @@ class Database extends CI_Model
 		return $query->row_array();
 	}
 
+	function GetSupportedProductsForDesign($design_id)
+	{
+		$this->db->where('design_id', $design_id);
+		$query = $this->db->get('products');
+		return $query->result_array();
+	}
+
 	function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an array with exception values*/)
 	{	
 		$prods = $this->GetProducts($type,'latest',$game_name);
@@ -156,18 +163,28 @@ class Database extends CI_Model
 	}
 
 	function AddProduct($product)
-	{
-		$this->AddProductDetails($product);
+	{		
+		$product_with_details = $product['product_details'];
 		unset($product['product_details']);			//Unset it here in the last step
 		$this->db->insert('products',$product);
+		$product_with_details['product_id'] = $this->GetProductCount() + 1;
+
+		//To get the latest product_id
+		$sql = "Select product_id From products
+		ORDER BY product_id desc
+		LIMIT 1";
+		$query = $this->db->query($sql);
+		$last_id = $query->row_array();
+		$product_with_details['product_id'] = $last_id['product_id'];
+		$this->AddProductDetails($product_with_details,$product['product_type'] );
 	}
 
-	function AddProductDetails($product)
+	function AddProductDetails($product, $type)
 	{
-		switch ($product['product_type'])
+		switch ($type)
 		{
 			case 'tshirt':
-				$this->AddTshirtDetails($product['product_details']);
+				$this->AddTshirtDetails($product);
 				break;
 			case 'mugs':
 				$this->AddMugsDetails($product['product_details']);

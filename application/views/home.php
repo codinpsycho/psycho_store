@@ -23,9 +23,9 @@ $(function () {
 			<span class="pull-right">
 				<a class="molot" data-toggle="tooltip" target="_blank" title="Kingdom of gamers geeks and otaku kinights" data-placement="top" href= 'http://psychostore.in/blog' > Psycho Realm </a> 
 	            	<small>/</small>
-	            	<a class="molot" data-toggle="tooltip" title="see what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
+	            	<a class="molot" data-toggle="tooltip" title="See what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
 	            	<small>/</small>
-	            	<a class="molot" data-toggle="tooltip" title="gaming in india" data-placement="right" href= <?php echo site_url('insights')?> > Statistics </a>
+	            	<a class="molot" data-toggle="tooltip" title="Gaming in India" data-placement="right" href= <?php echo site_url('insights')?> > Statistics </a>
             </span>
         </h4>
 		</div>

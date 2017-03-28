@@ -897,7 +897,7 @@ class admin extends CI_controller
 	}
 
 	function _fill_data_var_for_view($product)
-	{		
+	{
 		$data['type'] = is_null($product) ? '' : $product['product_type'];
 		$data['game'] = is_null($product) ? '' : $product['product_game'];
 		$data['name'] = is_null($product) ? '' : $product['product_name'];
