@@ -20,13 +20,13 @@
 						</select>
 					</div>
 					<div class="col-md-2">
-						<input class='form-control' type="text" placeholder="Game Name" name="game_name" value = '<?php echo $game ?>' ></input>
-					</div>
+						<input class='form-control' type="text" placeholder="Game Name" name="game_name" value = "<?php echo $game ?>" ></input>
+					</div>					
 					<div class='col-md-3'>
-						<input class='form-control' type="text" placeholder="Product Name" name="product_name" value = '<?php echo $name ?>'></input>
+						<input class='form-control' type="text" placeholder="Product Name" name="product_name" value = "<?php echo $name ?>"></input>
 					</div>
 					<div class='col-md-5'>
-						<input class='form-control' type="text" placeholder="URL Keywords" name="url" value = '<?php echo $product_url ?>'></input>
+						<input class='form-control' type="text" placeholder="URL Keywords" name="url" value = "<?php echo $product_url ?>"></input>
 					</div>
 				</div>
 				<div class='form-group '>
@@ -41,7 +41,7 @@
 				</div>
 				<div class='form-group '>
 					<div class="col-md-4">
-						<input class='form-control' type="text" placeholder="Image path with '/'" name="image_path" value = '<?php echo $image_path ?>'></input>
+						<input class='form-control' type="text" placeholder="Image path with '/'" name="image_path" value = "<?php echo $image_path ?>"></input>
 					</div>
 					<div class="col-md-2">
 						<input class='form-control' type="number" placeholder="Price" name="price" value = '<?php echo $price ?>'></input>
