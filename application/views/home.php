@@ -11,16 +11,21 @@ $(function () {
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="molot" >Shop&nbsp;<small>By</small> <a class = <?php echo $latest_link_state ?> href="latest">Latest</a><small>&nbsp;/&nbsp;</small><a class = <?php echo $popular_link_state ?> href="popular">Popularity</a>
+<form class="form-inline">
+  <div class="form-group">
+    			<h4 class="molot" ><a href= <?php echo site_url("explore/gaming-anime-geek-t-shirts-india") ?> >Tees</a><small>&nbsp;/&nbsp;</small><a href= <?php echo site_url("explore/gaming-anime-geek-mobile-covers-india") ?> >Mobile Covers</a><small>&nbsp;/&nbsp;</small><a href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Mugs</a>
+                	</h4>
+  </div>
+</form>
 		</div>
 		<div class="col-md-6">
 		<h4>
 			<span class="pull-right">
 				<a class="molot" data-toggle="tooltip" target="_blank" title="Kingdom of gamers geeks and otaku kinights" data-placement="top" href= 'http://psychostore.in/blog' > Psycho Realm </a> 
 	            	<small>/</small>
-	            	<a class="molot" data-toggle="tooltip" title="see what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
+	            	<a class="molot" data-toggle="tooltip" title="See what people are saying about us" data-placement="top" href= <?php echo site_url('feedback')?> > Reviews </a>
 	            	<small>/</small>
-	            	<a class="molot" data-toggle="tooltip" title="gaming in india" data-placement="right" href= <?php echo site_url('insights')?> > Statistics </a>
+	            	<a class="molot" data-toggle="tooltip" title="Gaming in India" data-placement="right" href= <?php echo site_url('insights')?> > Statistics </a>
             </span>
         </h4>
 		</div>

@@ -54,6 +54,15 @@ color: #fff;
     float: none;
 }
 
+.center
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
 .circular-pic
 {
     border-radius: 50%;
@@ -242,6 +251,12 @@ border-color: #09f;
 {
     margin-top: 10px;
     margin-bottom: 30px;
+}
+
+.top-bottom-space-xs
+{
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 footer

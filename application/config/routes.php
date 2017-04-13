@@ -41,6 +41,7 @@ $route['default_controller'] = "pages";
 $route['product/(:any)'] = 'pages/product/$1';
 $route['like'] = 'pages/like';
 $route['like/(:any)'] = 'pages/like/$1';
+$route['explore/(:any)'] = 'pages/explore/$1';
 $route['latest'] = 'pages/latest/';
 $route['subscribe'] = 'pages/subscribe/';
 $route['shipping_returns'] = 'pages/shipping_returns/';

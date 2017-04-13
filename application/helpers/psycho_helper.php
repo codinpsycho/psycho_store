@@ -108,10 +108,10 @@ if(!function_exists('format_address'))
 {
 	function format_address($address)
 	{
-		$complete_add = $address['first_name'].' '.$address['last_name'].'<br>'.$address['address_1'] .'<br>';
-				if(isset($address['address_2']) &&  $address['address_2'] != NULL)
+		$complete_add = $address['first_name'].' '.$address['last_name'].'<br>'.$address['address_1'] .'<br>'.$address['address_2'] .'<br>';
+				if(isset($address['address_3']) &&  $address['address_3'] != NULL)
 				{
-					$complete_add = $complete_add.$address['address_2'].', ';
+					$complete_add = $complete_add.$address['address_3'].', ';
 				}				 	
 				 $complete_add = $complete_add.$address['city'].' '.$address['pincode'].',<br>'.$address['state'].', '.$address['country'].'<br>'. $address['phone_number'];
 
@@ -144,11 +144,14 @@ function get_product_image($prod_id)
 {
 	$ci = &get_instance();
 	$ci->load->helper('directory');
-	$images = directory_map("images/product/$prod_id");
+	$images = directory_map("images/product/$prod_id");	
 		
 	foreach ($images as $key => $img)
 	{
-		$final_images[] = "images/product/$prod_id/$img";
+		if(is_array($img) == false)
+		{
+			$final_images[] = "images/product/$prod_id/$img";
+		}		
 	}
 	
 	return $final_images;
@@ -365,13 +368,16 @@ function _live($page, $data)
 	{
 		case 'search':
 			$body = $ci->load->view('view_search', $data, true);
-		break;
+			break;
 		case 'browse':
-			$body = $ci->load->view('home', $data, true);	
-		break;
+			$body = $ci->load->view('browse', $data, true);	
+			break;
+		case 'home':
+			$body = $ci->load->view('home', $data, true);
+			break;
 		case 'product':	
 			$body = $ci->load->view('view_product', $data, true);
-		break;
+			break;
 		case 'feedback_wall':
 			$body = $ci->load->view('feedback_wall', $data, true);
 			break;

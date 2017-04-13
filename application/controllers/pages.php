@@ -21,7 +21,12 @@ class Pages extends CI_controller
 
 	function index()
 	{
-		$this->latest('all');
+		$this->home();
+	}
+
+	function home()
+	{
+		$this->latest();
 	}
 
 	function launch_signup()
@@ -143,11 +148,85 @@ class Pages extends CI_controller
 		display('feedback_wall', $data);
 	}
 
+	function explore($url = null, $sorting = 'latest')
+	{
+		$data['base_url'] = "explore/$url";
+		switch ($url)
+		{
+			case 'gaming-anime-geek-t-shirts-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
+				$data['prod_1_title'] = 'Mobile Covers';
+				$data['prod_2_title'] = 'Coffee Mugs';
+				$data['header_title'] = "T-Shirts";
+				$this->_browse($data, 'tshirt', $sorting);
+				break;
+			
+			case 'gaming-anime-geek-mobile-covers-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
+				$data['prod_1_title'] = 'Tees';
+				$data['prod_2_title'] = 'Coffee Mugs';
+				$data['header_title'] = "Mobile Covers";
+				$this->_browse($data, 'mobilecover', $sorting);
+				break;
+
+			case 'gaming-anime-geek-coffee-mugs-india':
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_1_title'] = 'Tees';
+				$data['prod_2_title'] = 'Mobile Covers';
+				$data['header_title'] = "Coffee Mugs";
+				$this->_browse($data, 'mugs', $sorting);
+				break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function _browse($data, $prod_type, $sorting, $game_name = 'all')
+	{
+		$data['products'] = $this->database->GetProducts($prod_type, $sorting, $game_name);
+		if($sorting == 'latest')
+		{
+			$data['latest_link_state'] = 'active';
+			$data['popular_link_state'] = 'disabled';			
+		}
+		else if($sorting == 'popular')
+		{
+			$data['latest_link_state'] = 'disabled';
+			$data['popular_link_state'] = 'active';
+		}
+	
+		$params['tag_name'] = 'psychofamous';
+		notify_event('instafeed', $params);
+
+		display('browse', $data);
+
+	}
+
+	function _get_other_products_for_design($product)
+	{
+		$other_types_of_prods = $this->database->GetSupportedProductsForDesign($product['design_id']);
+
+		foreach ($other_types_of_prods as $key => $prod)
+		{
+			if($prod['product_type'] == $product['product_type'])
+				unset($other_types_of_prods[$key]);
+		}
+
+		return $other_types_of_prods;
+	}
+
+
 	function product($id, $url = null)
 	{
 		$total_products = $this->database->GetMaxProductID();
 		$url = $this->beautify($url,'_');
-		$result = $this->database->GetProductById($id);
+		$result = $this->database->GetProductById($id);		
+
 		if($result)
 		{
 			$next = $prev = 0;
@@ -157,22 +236,20 @@ class Pages extends CI_controller
 			$data['product_state'] = $result['product_state'];
 			$data['next_id'] = product_url( $this->database->GetProductById($next) );
 			$data['prev_id'] = product_url( $this->database->GetProductById($prev) );
-			$data['small_stock']="";
-			$data['medium_stock']="";
-			$data['large_stock']="";
-			$data['xl_stock']="";
 			$data['size_chart'] = site_url($this->config->item('size_chart'));
 			$data['images'] = get_product_image($result['product_id']);
 			$data['hashtag'] = $result['hashtag'];
 			$data['restock_date'] = $this->config->item('restock_date');
-
-			$this->_setup_stock_info($result, $data);
+			$other_types_of_prods = $this->_get_other_products_for_design($result);
+			$data['other_prod_types'] = $other_types_of_prods;
+			
+			$this->_generate_product_specific_views($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
 			notify_event('instafeed', $params);
 
 			//Generate Suggestions
-			$data['suggested_products'] = $this->GenerateSuggestions($result, 3);
+			$data['suggested_products'] = $this->GenerateSuggestions($result, 5);
 
 			$data['recently_viewed'] = $this->GetRecentlyViewed();
 			$this->AddToRecentlyViewed($result);
@@ -187,29 +264,100 @@ class Pages extends CI_controller
 		}
 	}
 
+	function _generate_product_specific_views($product, &$data)
+	{
+		$this->_setup_stock_info($product, $data);
+
+		$data['img_alt'] = $product['product_intro'];
+
+		switch ($product['product_type'])
+		{
+			case 'hoodies':
+			case 'tshirt':				
+				$data['product_img_view'] = $this->load->view('view_product_image', $data, true);
+				$data['details_view'] = $this->load->view('view_tshirt_option_details', $data, true);
+				break;
+
+			case 'mobilecover':
+				$data['product_img_view'] = $this->load->view('view_mobile_cover_image', $data, true);
+				$data['details_view'] = $this->load->view('view_mobile_cover_option_details', $data, true);
+				break;
+			
+			case 'mugs':
+				$data['product_img_view'] = $this->load->view('view_product_image', $data, true);
+				$data['details_view'] = $this->load->view('view_product_no_option_details', $data, true);
+				break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
 	function _setup_stock_info($product, &$data)
 	{
+		switch ($product['product_type'])
+		{
+			case 'hoodies':
+			case 'tshirt':
+				$this->_setup_tshirt_options_info($product, $data);
+				break;
+			
+			case 'mugs':
+				$this->_setup_mugs_stock_info($product, $data);
+				break;
+			
+			case 'mobilecover':
+				$this->_setup_mobilecovers_options_info($product, $data);
+				break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function _setup_mugs_stock_info($product, &$data)
+	{
+		//nothing for now
+	}
+
+	function _setup_mobilecovers_options_info($product, &$data)
+	{
+		$data['supported_models'] = $this->database->GetSupportedMobileModels();
+	}
+
+
+	function _setup_tshirt_options_info($product, &$data)
+	{
+		$data['small_stock']="";
+		$data['medium_stock']="";
+		$data['large_stock']="";
+		$data['xl_stock']="";
+
+		$prod_details = $product['product_details'];
+
 		$data['show_size_preorder_info'] = false;
 
-		if($product['product_count_small'] <= 0)
+		if($prod_details['small_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['small_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['small_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_medium'] <= 0)
+		if($prod_details['medium_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['medium_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['medium_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_large'] <= 0)
+		if($prod_details['large_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['large_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['large_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
-		if($product['product_count_xl'] <= 0)
+		if($prod_details['xl_qty'] <= 0)
 		{
-			$data['show_size_preorder_info'] = $product['size_preorder'] ? TRUE : false;
-			$data['xl_stock'] = $product['size_preorder'] ? "preorder" : 'disabled';
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['xl_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
 	}
 
@@ -221,7 +369,7 @@ class Pages extends CI_controller
 		$params['tag_name'] = 'psychofamous';
 		notify_event('instafeed', $params);
 
-		display('browse', $data);
+		display('home', $data);
 	}
 
 	function popular()
@@ -232,7 +380,7 @@ class Pages extends CI_controller
 		$params['tag_name'] = 'psychofamous';
 		notify_event('instafeed', $params);
 
-		display('browse', $data);
+		display('home', $data);
 	}
 	
 	//Removes spaces from a url
@@ -242,19 +390,19 @@ class Pages extends CI_controller
 	}
 
 
-	function like($game = "")
+	function like($like_what = "")
 	{
-		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($game,'-');		
+		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($like_what,'-');
 
 		$data['search_result'] = 0;
 		$data['search_text'] = $name;
 		$data['products'] = array();
 		if(strlen($name))
-		{			
+		{
 			$result = $this->database->GetProducts('all','latest', $name);
 			$count = count($result);
 			$data['search_result'] = $count;
-
+			
 			if($result)
 				$data['products'] = $result;			
 		}		

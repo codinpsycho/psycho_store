@@ -77,8 +77,8 @@ class checkout extends CI_controller
 							'txn_id'		=>	$txn_id,
 							'product_id'	=> 	$item['id'],
 							'count'			=> 	$item['qty'],
-							'size'			=> 	$item['options']['Size'],
-						);			
+							'option'		=> 	$item['options']['extra'],
+						);
 			
 			$this->database->SaveCartItemOnCheckout($checkout_item);
 		}
@@ -164,24 +164,10 @@ class checkout extends CI_controller
 			$prod_id = $items['id'];
 			$product = $this->database->GetProductById($prod_id);
 
-			//Check stock and set stock info
-			$data['products'][$items['rowid'].'stock_state'] = "";
+			$out_of_stock = $this->_is_out_of_stock($product, $items);
 
-			if( $product['product_type'] == "Tshirt" || $product['product_type'] == "Hoodie")
+			if($out_of_stock == true)
 			{
-				$size = $items['options']['Size'];
-				$size_in_stock = $product['product_count_'.strtolower($size)];
-			}
-			else
-			{
-				//For product woth no size info like action figures .. later on
-			}
-
-			$size_preorder_allowed = $product['size_preorder'];
-
-			if($size_preorder_allowed == false && $items['qty'] > $size_in_stock)
-			{
-				$out_of_stock = true;
 				break;
 			}
 		}
@@ -190,6 +176,27 @@ class checkout extends CI_controller
 		{			
 			redirect('cart/');
 		}		
+	}
+
+	function _is_out_of_stock($product, $cart_item)
+	{
+
+		switch ($product['product_type'])
+		{
+			case 'hoodie':
+			case 'tshirt':
+				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
+				
+				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
+					return true;
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		return false;
 	}
 
 	function _validate_user()
@@ -213,7 +220,7 @@ class checkout extends CI_controller
 	}
 
 	function _is_address_valid_for_current_user($address_id)
-	{		
+	{
 		$address = $this->database->GetAddressById($address_id);
 
 		//We also need to make sure address belongs to the currently signed-in user		
@@ -272,11 +279,12 @@ class checkout extends CI_controller
 		$checkout_order = $this->_get_active_checkout_order();
 		$user = $this->database->GetUserById($checkout_order['user_id']);
 
+		$user = $this->database->GetUserById($checkout_order['user_id']);
+
 		if( is_null($checkout_order['address_id'] ))
 		{
 			redirect('checkout/');
 		}
-
 
 		$address = $this->database->GetAddressById($checkout_order['address_id']);		
 		$shipping_details = $this->database->GetShippingDetails($address['pincode']);
@@ -293,6 +301,7 @@ class checkout extends CI_controller
 			}	
 		}
 
+<<<<<<< HEAD
 		$data['txn_id'] = $checkout_order['txn_id'];
 		$data['email'] = $user['email'];
  		$data['raw_address'] = $address;
@@ -300,6 +309,16 @@ class checkout extends CI_controller
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
 		$data['cod_charges'] = $this->config->item('cod_charge');		
+=======
+		//Add 'notes' for Razorpay
+		$data['txn_id'] = $checkout_order['txn_id'];
+
+		$data['shipping_available'] = $shipping_available;
+		$data['cod_available'] = $cod_available;
+		$data['email'] = $user['email'];
+		$data['raw_address'] = $address;
+		$data['formatted_address'] = format_address($address);
+>>>>>>> refs/remotes/origin/Multiple-Products
 		
 		display('review', $data);
 	}
@@ -341,7 +360,11 @@ class checkout extends CI_controller
 	{
 		$ok_to_place_order = false;
 
+<<<<<<< HEAD
 		$order_info_params = array();
+=======
+		$order_info_params = array();		
+>>>>>>> refs/remotes/origin/Multiple-Products
 
 		//Verify checksum (not sure abt this, might be unnecessary)
 		if($this->input->post( 'key' ) != (string)false )
@@ -358,7 +381,11 @@ class checkout extends CI_controller
 			if($this->input->post( 'status' ) === "success")
 			{
 				$ok_to_place_order = true;
+<<<<<<< HEAD
 				$order_info_params = $this->input->post();
+=======
+				$order_info_params = $this->input->post();	//For PayU
+>>>>>>> refs/remotes/origin/Multiple-Products
 			}
 		}
 		else
@@ -569,7 +596,123 @@ class checkout extends CI_controller
 		//This is to be sent for each order
 		$params = mg_create_mail_params('order', $data);
 		mg_send_mail($user['email'], $params);
+<<<<<<< HEAD
 	}	
+=======
+	}
+
+	function _payment_gateway($post_params)
+	{
+		switch ($this->config->item('payment_gateway'))
+		{
+			case 'razorpay':
+				$this->_process_razorpay($post_params);
+				break;
+			
+			case 'payu':
+				$this->_process_payu();
+				break;				
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
+	function _process_razorpay($post_params)
+	{
+		//Need to capture the payment using the payment id
+		$checkout_order = $this->_get_active_checkout_order();
+
+		$rzp_key = $this->config->item('rzp_merchant_key');
+		$rzp_payment_id = $post_params['rzp_payment_id'];
+		$url = "https://api.razorpay.com/v1/payments/$rzp_payment_id/capture";
+
+		$ch = curl_init($url);
+
+		$params['amount'] = $checkout_order['order_amount']*100; 	//Amount in paisa
+
+		// Form post string
+		$postString = http_build_query($params);
+
+		// Setting our options
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_USERPWD, 'rzp_test_5jy8dWlhijqi9d:cJbH1ngDWIuY0y45v0QjH89Y');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+
+		$res = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+   		
+   		//Captured, now just redirect like we do in COD orders
+		$this->session->set_flashdata('ok_to_order', true);
+		$this->session->set_flashdata('rzp_payment_id', $rzp_payment_id);
+		redirect('checkout/place_order');
+
+	}
+
+	function process_payu()
+	{
+		$gateway_params = array();
+		
+		$checkout_order = $this->_get_active_checkout_order();
+
+		//Gateway config
+		$gateway_params['key'] = $this->config->item('merchant_key');
+		$gateway_params['salt'] = $this->config->item('salt');			
+		$gateway_params['surl'] = $this->config->item('success_url');
+		$gateway_params['furl'] = $this->config->item('failure_url');
+		$gateway_params['txnid'] = $checkout_order['txn_id'];
+		$gateway_params['service_provider'] = $this->config->item('service_provider');
+
+		//Site specific info				
+		$address = $this->database->GetAddressById($checkout_order['address_id']);
+		$user = $this->database->GetUserById($checkout_order['user_id']);
+
+		$gateway_params['amount'] = $checkout_order['order_amount'];
+		$gateway_params['firstname'] = $address['first_name'];
+		$gateway_params['lastname'] = $address['last_name'];
+		$gateway_params['address1'] = $address['address_1'];
+		$gateway_params['address2'] = $address['address_2'];
+		$gateway_params['city'] = $address['city'];
+		$gateway_params['state'] = $address['state'];
+		$gateway_params['country'] = $address['country'];
+		$gateway_params['zipcode'] = $address['pincode'];
+		$gateway_params['email'] = $user['email'];
+		$gateway_params['phone'] = $address['phone_number'];
+		$gateway_params['productinfo'] = "Psycho Store Merchandise";	//To be added
+
+
+		//Generate hash
+		//key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10
+		$hash_string = $gateway_params['key'].'|'.$gateway_params['txnid'].'|'.$gateway_params['amount'].'|'.$gateway_params['productinfo'].'|'.$gateway_params['firstname'].'|'.$gateway_params['email'].'|'.'||||||||||'.$gateway_params['salt'];
+
+		$gateway_params['hash'] = strtolower(hash('sha512', $hash_string));
+
+		//Do a post request
+		$url = $this->config->item('gateway_url');
+		
+		// Create a connection
+		$ch = curl_init($url);
+
+		// Form post string
+		$postString = http_build_query($gateway_params);
+
+		// Setting our options
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+
+		// Get the response
+		$res = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+
+		redirect($info['redirect_url']);		
+
+	}
+>>>>>>> refs/remotes/origin/Multiple-Products
 
 	function _place_order($order_info)
 	{
@@ -594,18 +737,12 @@ class checkout extends CI_controller
 							'txn_id'		=>	$order_info['txn_id'],
 							'product_id'	=> 	$item['product_id'],
 							'count'			=> 	$item['count'],
-							'size'			=> 	$item['size'],
+							'option'		=> 	$item['option'],
 						);
-
-			//Update product info
-			$size = $item['size'];
-			$size = 'product_count_'.strtolower($size);
-			$product = $this->database->GetProductById($item['product_id']);
-			$product['product_qty_sold'] += $item['count'];
-			$product[$size] -= $item['count'];	//To be done for products with no size
+			
 
 			//Update database
-			$this->database->ModifyProduct($product);
+			$this->_update_product_info($item);
 			$this->database->AddOrderItem($order_item);
 
 			//Consume code
@@ -623,12 +760,34 @@ class checkout extends CI_controller
 		$this->database->CheckoutDone($order_info['txn_id']);
 	}
 
+	function _update_product_info($checkout_item)
+	{
+		$product = $this->database->GetProductById($checkout_item['product_id']);
+		$product['product_qty_sold'] += $checkout_item['count'];
+		
+		//Update product info
+		switch ($product['product_type'])
+		{
+			case 'hoodie':
+			case 'tshirt':
+				$size = $checkout_item['option'];
+				$size = strtolower($size).'_qty';
+				$product['product_details'][$size] -= $checkout_item['count'];
+				$this->database->ModifyProduct($product);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
+
 	function _generate_orderinfo($post_back_params)
 	{
 		$order_info = array();
 
 		//Payment Mode
-		if( isset($post_back_params['mode']) )
+		if( isset($post_back_params['mode']) )	//For PayU
 		{
 			$order_info['payment_mode'] = 'pre-paid';
 
@@ -647,7 +806,10 @@ class checkout extends CI_controller
 			$order_info['payment_mode'] = 'cod';
 			$checkout_order = $this->_get_active_checkout_order();
 			$checkout_order['order_amount'] += $this->config->item('cod_charge') ;
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/Multiple-Products
 		}		
 
 		$order_info['txn_id'] = $checkout_order['txn_id'];

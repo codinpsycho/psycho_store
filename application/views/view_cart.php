@@ -48,28 +48,43 @@ $(function () {
 							<nav>
 								<ul class='nav nav-pills navbar-left'>
 									<li>
-										<h4 class="navbar-text ">
-											<?php echo $items['name']; ?>
+										<h4 class="navbar-text ">											
+											<div class="col-md-12">
+												<p class="text-center">
+													<?php echo $items['name']; ?>
+												</p>
+											</div>
 											<?php if ($this->cart->has_options($items['rowid']) == TRUE): ?>
 											<?php foreach ($this->cart->product_options($items['rowid']) as $option_name => $option_value): ?>
-											<small><?php echo $option_name; ?>: </small><?php echo $option_value; ?>
+												<div class="">
+													<div class="col-md-12">
+														<p class="text-center"><small><?php echo $option_value; ?> </small></p>
+													</div>
+												</div>											
 											<?php endforeach; ?>
 											<?php endif; ?>
 										</h4>
 									</li>
-									<div class="col-md-3 navbar-btn">
+									<div class="col-md-3 col-sm-12 col-xs-12 navbar-btn">
 										<li>
 										<form class="form" method="post" action=<?php echo site_url('cart/update/')?> >
 						                    <div class="input-group">
-						                      <input type="number" min ='0' max = <?php echo $product['product_count_'.strtolower($items['options']['Size'])] ?> name=<?php echo $items['rowid']?> class="form-control input-sm" value=<?php echo $items['qty']?> >
+						                      <input type="number" min ='0' 
+						                      <?php if ($items['source'] == 'inhouse'): ?>
+						                      max = <?php echo $product['product_details'][strtolower($items['options']['extra']).'_qty'] ?>
+						                  		<?php endif; ?>
+						                      name=<?php echo $items['rowid']?> class="form-control input-sm" value=<?php echo $items['qty']?> >
 						                      <span class="input-group-btn"><button class="btn btn-default btn-sm" type="submit">Update</button></span>
 						                    </div>
 				                  		</form>
 				                  	</li>
 									</div>
-									<li>
-										<h3 class="navbar-text play"><small><i class="fa fa-times"> <i class="fa fa-rupee"> </i> </i> <?php echo $items['price']; ?> = </small><i class="fa fa-rupee"> </i> <?php echo $items['subtotal']; ?></h3>
-									</li>
+									<div class="col-md-3 col-sm-12 col-xs-12">
+										<li>
+											<h3 class="navbar-text play"><small><i class="fa fa-times"> <i class="fa fa-rupee"> </i> </i> <?php echo $items['price']; ?> = </small><i class="fa fa-rupee"> </i> <?php echo $items['subtotal']; ?></h3>
+										</li>										
+									</div>
+
 								</ul>
 							<h4 class="text-right text-primary"><?php echo $products[$items['rowid'].'stock_state'];?></h4>
 							</nav>
