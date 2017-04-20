@@ -36,13 +36,10 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li class="nav-pills">
-          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-t-shirts-india") ?> >Tees</i></a>
+          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-t-shirts-india") ?> >T-Shirts</i></a>
         </li>
         <li class="nav-pills">
-          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-mobile-covers-india") ?> >Mobile Covers</i></a>
-        </li>
-        <li class="nav-pills">
-          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Mugs</i></a>
+          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Coffee Mugs</i></a>
         </li>       
         <li class="dropdown">
           <form class="navbar-form" role="search" method = "post" action=<?php echo site_url("like");?>>
