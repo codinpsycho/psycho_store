@@ -26,7 +26,7 @@ class Pages extends CI_controller
 
 	function home()
 	{
-		$this->latest();
+		$this->show_featured_prods();
 	}
 
 	function launch_signup()
@@ -359,6 +359,18 @@ class Pages extends CI_controller
 			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
 			$data['xl_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
+	}
+
+	function show_featured_prods()
+	{
+		//For now only tees, later on featured prods
+		$data['products'] = $this->database->GetProducts('tshirt', 'latest', 'all');
+		$data['latest_link_state'] = 'active';
+		$data['popular_link_state'] = 'none';
+		$params['tag_name'] = 'psychofamous';
+		notify_event('instafeed', $params);
+
+		display('home', $data);
 	}
 
 	function latest()
