@@ -29,10 +29,7 @@
 		header_price.innerHTML = "Order Review <span class='pull-right'> <i class='fa fa-rupee'></i> <span id='price'>" +  price;
 		var final_price = document.getElementById('final_price');
 		final_price.innerHTML = "Final Price : <i class='fa fa-rupee'></i> " +  price;
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/Multiple-Products
 		var button_price = document.getElementById('place_order_btn');
 		button_price.innerHTML = "Place Order | <i class='fa fa-rupee'></i> " +  price + " <i class='fa fa-arrow-right'>";
 	}
@@ -113,21 +110,14 @@ var options = {
         "color": "#09f"
     }
 };
-<<<<<<< HEAD
-document.getElementById('place_order_btn').onclick = process_order_payment
-=======
 
 document.getElementById('place_order_btn').onclick = process_order_payment
 
->>>>>>> refs/remotes/origin/Multiple-Products
 function process_order_payment()
 {
 	
 	select = document.getElementById('payment_mode_select');
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/Multiple-Products
 	if(select.options[select.selectedIndex].value == 'cod')
 	{
 		document.getElementById('payment_mode_form').submit();
@@ -138,28 +128,16 @@ function process_order_payment()
 		rzp.open();
 	}
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/Multiple-Products
 function payment_authorized(response)
 {
 	// Form reference:
 	var the_form = document.getElementById('payment_mode_form');
-<<<<<<< HEAD
 	// Add rzp_payment_id
 	addHidden(the_form, 'rzp_payment_id', response.razorpay_payment_id);
 	the_form.submit();
 }
-=======
 
-	// Add rzp_payment_id
-	addHidden(the_form, 'rzp_payment_id', response.razorpay_payment_id);
-
-	the_form.submit();
-}
-
->>>>>>> refs/remotes/origin/Multiple-Products
 function addHidden(theForm, key, value)
 {
     // Create a hidden input element, and append it to the form:
@@ -169,9 +147,5 @@ function addHidden(theForm, key, value)
     input.value = value;
     theForm.appendChild(input);
 }
-<<<<<<< HEAD
-</script>
-=======
 
 </script>
->>>>>>> refs/remotes/origin/Multiple-Products
