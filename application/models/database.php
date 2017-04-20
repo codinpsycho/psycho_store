@@ -186,11 +186,11 @@ class Database extends CI_Model
 			case 'tshirt':
 				$this->AddTshirtDetails($product);
 				break;
-			case 'mugs':
-				$this->AddMugsDetails($product['product_details']);
-				break;
-			case 'mobilecover':
-				$this->AddMobileCoverDetails($product['product_details']);
+			// case 'mugs':
+			// 	$this->AddMugsDetails($product['product_details']);
+			// 	break;
+			// case 'mobilecover':
+			// 	$this->AddMobileCoverDetails($product['product_details']);
 				break;
 						
 			default:
