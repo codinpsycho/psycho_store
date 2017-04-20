@@ -104,8 +104,7 @@ class cart extends CI_controller
 		if($product)
 		{
 			$this->_add_to_cart($product);
-		}		
-
+		}
 		
 		redirect('checkout/');
 	}
@@ -118,13 +117,13 @@ class cart extends CI_controller
 					'qty'	=> '1',
 					'price' => $product['product_price'],
 					'name'  => $product['product_name'],
-					'source'=> $product['product_source'],
+					'type'	=> $product['product_type'],
 				);
 						
 		$extra = urldecode($this->input->post('extra'));
 		if($extra)
 		{
-			$cart_item['options']['extra'] =  $extra;
+			$cart_item['options']['extra'] = $extra;
 		}
 
 		$row_id = $this->cart->insert($cart_item);
