@@ -301,24 +301,17 @@ class checkout extends CI_controller
 			}	
 		}
 
-<<<<<<< HEAD
 		$data['txn_id'] = $checkout_order['txn_id'];
 		$data['email'] = $user['email'];
  		$data['raw_address'] = $address;
  		$data['formatted_address'] = format_address($address);
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
-		$data['cod_charges'] = $this->config->item('cod_charge');		
-=======
+		$data['cod_charges'] = $this->config->item('cod_charge');
+
 		//Add 'notes' for Razorpay
 		$data['txn_id'] = $checkout_order['txn_id'];
-
-		$data['shipping_available'] = $shipping_available;
-		$data['cod_available'] = $cod_available;
-		$data['email'] = $user['email'];
-		$data['raw_address'] = $address;
-		$data['formatted_address'] = format_address($address);
->>>>>>> refs/remotes/origin/Multiple-Products
+		
 		
 		display('review', $data);
 	}
@@ -360,11 +353,7 @@ class checkout extends CI_controller
 	{
 		$ok_to_place_order = false;
 
-<<<<<<< HEAD
 		$order_info_params = array();
-=======
-		$order_info_params = array();		
->>>>>>> refs/remotes/origin/Multiple-Products
 
 		//Verify checksum (not sure abt this, might be unnecessary)
 		if($this->input->post( 'key' ) != (string)false )
@@ -381,11 +370,8 @@ class checkout extends CI_controller
 			if($this->input->post( 'status' ) === "success")
 			{
 				$ok_to_place_order = true;
-<<<<<<< HEAD
-				$order_info_params = $this->input->post();
-=======
+
 				$order_info_params = $this->input->post();	//For PayU
->>>>>>> refs/remotes/origin/Multiple-Products
 			}
 		}
 		else
@@ -596,9 +582,6 @@ class checkout extends CI_controller
 		//This is to be sent for each order
 		$params = mg_create_mail_params('order', $data);
 		mg_send_mail($user['email'], $params);
-<<<<<<< HEAD
-	}	
-=======
 	}
 
 	function _payment_gateway($post_params)
@@ -712,7 +695,6 @@ class checkout extends CI_controller
 		redirect($info['redirect_url']);		
 
 	}
->>>>>>> refs/remotes/origin/Multiple-Products
 
 	function _place_order($order_info)
 	{
@@ -806,10 +788,6 @@ class checkout extends CI_controller
 			$order_info['payment_mode'] = 'cod';
 			$checkout_order = $this->_get_active_checkout_order();
 			$checkout_order['order_amount'] += $this->config->item('cod_charge') ;
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/Multiple-Products
 		}		
 
 		$order_info['txn_id'] = $checkout_order['txn_id'];
