@@ -1245,7 +1245,7 @@ class admin extends CI_controller
 				{
 					$product = $item['product'];
 					$product_name = array('data'=> $product['product_name'], 'colspan'=>4, 'align'=>'right');
-					$size = array('data' => $item['size'], 'colspan'=>2, 'align'=>'right');
+					$size = array('data' => $item['option'], 'colspan'=>2, 'align'=>'right');
 					$count = array('data' => $item['count'], 'colspan'=>2, 'align'=>'right');
 					$this->table->add_row( $product_name, $size, $count);
 				}
