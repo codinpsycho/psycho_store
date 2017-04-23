@@ -364,7 +364,7 @@ class Pages extends CI_controller
 	function show_featured_prods()
 	{
 		//For now only tees, later on featured prods
-		$data['products'] = $this->database->GetProducts('tshirt', 'latest', 'all');
+		$data['products'] = $this->database->GetProducts('all', 'popular', 'all', true);
 		$data['latest_link_state'] = 'active';
 		$data['popular_link_state'] = 'none';
 		$params['tag_name'] = 'psychofamous';
@@ -411,7 +411,7 @@ class Pages extends CI_controller
 		$data['products'] = array();
 		if(strlen($name))
 		{
-			$result = $this->database->GetProducts('all','latest', $name);
+			$result = $this->database->GetProducts('all','popular', $name);
 			$count = count($result);
 			$data['search_result'] = $count;
 			
