@@ -53,7 +53,7 @@ class Database extends CI_Model
 		return $query->result_array();
 	}
 
-	function GetProducts($type, $sort, $game_name = 'all')
+	function GetProducts($type, $sort, $game_name = 'all', $featured = false)
 	{	
 		if($type != 'all')
 			$this->db->where('product_type', $type);
@@ -64,6 +64,9 @@ class Database extends CI_Model
 			$this->db->order_by('product_id', 'desc');
 		else if($sort =='popular')				
 			$this->db->order_by('product_qty_sold', 'desc');	//Sort by selling amount
+
+		if($featured)	//Gets only featured products
+			$this->db->where('featured', 1);
 
 		//Dont get hidden products
 		$this->db->where('product_state !=', 'hidden');
