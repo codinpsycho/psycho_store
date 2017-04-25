@@ -40,7 +40,10 @@
         </li>
         <li class="nav-pills">
           <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Coffee Mugs</i></a>
-        </li>       
+        </li>
+        <li class="nav-pills">
+          <a target="_blank" href= <?php echo site_url("explore/gaming-anime-geek-posters-india") ?> >Posters</i></a>
+        </li>        
         <li class="dropdown">
           <form class="navbar-form" role="search" method = "post" action=<?php echo site_url("like");?>>
           <div class="btn-group">

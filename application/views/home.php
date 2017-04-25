@@ -13,7 +13,7 @@ $(function () {
 		<div class="col-md-6">
 <form class="form-inline">
   <div class="form-group">
-    			<h4 class="molot" ><a href= <?php echo site_url("explore/gaming-anime-geek-t-shirts-india") ?> >T-Shirts</a><small>&nbsp;/&nbsp;</small></small><a href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Coffee Mugs</a>
+    			<h4 class="molot" ><a href= <?php echo site_url("explore/gaming-anime-geek-t-shirts-india") ?> >Tees</a><small>&nbsp;/&nbsp;</small><a href= <?php echo site_url("explore/gaming-anime-geek-coffee-mugs-india") ?> >Coffee Mugs</a><small>&nbsp;/&nbsp;</small><a href= <?php echo site_url("explore/gaming-anime-geek-posters-india") ?> >Posters</a>
                 	</h4>
   </div>
 </form>

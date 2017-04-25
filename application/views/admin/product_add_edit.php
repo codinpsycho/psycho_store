@@ -16,6 +16,7 @@
 							<option value = "hoodie">Hoodie</option>
 							<option value = "mobilecover">Mobile Covers</option>
 							<option value = "mugs">Coffee Mugs</option>
+							<option value = "posters">Poster</option>
 							<?php endif;?>
 						</select>
 					</div>

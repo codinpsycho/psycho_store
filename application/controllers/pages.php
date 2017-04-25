@@ -154,28 +154,28 @@ class Pages extends CI_controller
 		switch ($url)
 		{
 			case 'gaming-anime-geek-t-shirts-india':
-				$data['prod_1_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_1_url'] = 'explore/gaming-anime-geek-posters-india';
 				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
-				$data['prod_1_title'] = 'Mobile Covers';
+				$data['prod_1_title'] = 'Posters';
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "T-Shirts";
 				$this->_browse($data, 'tshirt', $sorting);
 				break;
 			
-			case 'gaming-anime-geek-mobile-covers-india':
+			case 'gaming-anime-geek-posters-india':
 				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
 				$data['prod_2_url'] = 'explore/gaming-anime-geek-coffee-mugs-india';
 				$data['prod_1_title'] = 'Tees';
 				$data['prod_2_title'] = 'Coffee Mugs';
-				$data['header_title'] = "Mobile Covers";
-				$this->_browse($data, 'mobilecover', $sorting);
+				$data['header_title'] = "Posters";
+				$this->_browse($data, 'posters', $sorting);
 				break;
 
 			case 'gaming-anime-geek-coffee-mugs-india':
 				$data['prod_1_url'] = 'explore/gaming-anime-geek-t-shirts-india';
-				$data['prod_2_url'] = 'explore/gaming-anime-geek-mobile-covers-india';
+				$data['prod_2_url'] = 'explore/gaming-anime-geek-posters-india';
 				$data['prod_1_title'] = 'Tees';
-				$data['prod_2_title'] = 'Mobile Covers';
+				$data['prod_2_title'] = 'Poster';
 				$data['header_title'] = "Coffee Mugs";
 				$this->_browse($data, 'mugs', $sorting);
 				break;
@@ -283,6 +283,7 @@ class Pages extends CI_controller
 				$data['details_view'] = $this->load->view('view_mobile_cover_option_details', $data, true);
 				break;
 			
+			case'posters':
 			case 'mugs':
 				$data['product_img_view'] = $this->load->view('view_product_image', $data, true);
 				$data['details_view'] = $this->load->view('view_product_no_option_details', $data, true);
