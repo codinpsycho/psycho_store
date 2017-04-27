@@ -61,6 +61,9 @@
               </li>
               <li>
                 <a href= <?php echo site_url('coupon_partners')?> >Coupon Partners</a>
+              </li>
+              <li>
+                <a href= <?php echo site_url('student_discount')?> >Student Discount</a>
               </li>              
             </ul>
           </div>
