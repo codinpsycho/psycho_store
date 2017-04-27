@@ -494,6 +494,13 @@ class Pages extends CI_controller
 		display('contact', $data);
 	}
 
+	function student_discount()
+	{
+		$data['heading'] = "Student Discount";
+		$data['content'] = $this->load->view('view_student', null, true);
+		display('basic', $data);
+	}
+
 	function media()
 	{
 		$data['heading'] = "Who's talking about us";

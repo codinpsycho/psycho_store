@@ -48,6 +48,7 @@ $route['shipping_returns'] = 'pages/shipping_returns/';
 $route['contact'] = 'pages/contact/';
 $route['about'] = 'pages/about/';
 $route['media'] = 'pages/media/';
+$route['student_discount'] = 'pages/student_discount/';
 $route['popular'] = 'pages/popular/';
 $route['feedback'] = 'pages/feedback/';
 $route['giveaways'] = 'pages/giveaways/';
