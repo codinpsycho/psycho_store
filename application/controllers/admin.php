@@ -1054,23 +1054,19 @@ class admin extends CI_controller
 			//Stock info
 			$small_qty = $med_qty = $lrg_qty = $xl_qty = 0;
 
-			if($prod['product_source'] == 'inhouse')
+			switch ($prod['product_type'])
 			{
-				switch ($prod['product_type'])
-				{
-					case 'hoodie':
-					case 'tshirt':
-						$small_qty = $prod_details['small_qty'];
-						$med_qty = $prod_details['medium_qty'];
-						$lrg_qty = $prod_details['large_qty'];
-						$xl_qty = $prod_details['xl_qty'];
-						break;
-					
-					default:
-						# code...
-						break;
-				}
-
+				case 'hoodie':
+				case 'tshirt':
+					$small_qty = $prod_details['small_qty'];
+					$med_qty = $prod_details['medium_qty'];
+					$lrg_qty = $prod_details['large_qty'];
+					$xl_qty = $prod_details['xl_qty'];
+					break;
+				
+				default:
+					# code...
+					break;
 			}
 
 			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $small_qty, $med_qty, $lrg_qty, $xl_qty, $prod['product_qty_sold']);
