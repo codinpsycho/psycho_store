@@ -62,7 +62,7 @@ if(!function_exists('generate_product_table_for_email'))
 
 		$ci->load->library('table');
 		$ci->load->model('database');
-		$ci->table->set_heading('Name','Size','Qty','Price', 'Total');
+		$ci->table->set_heading('Name','Option','Qty','Price', 'Total');
 		$final_total = 0;
 		$order = $ci->database->GetOrderById($order_id);
 
@@ -70,11 +70,11 @@ if(!function_exists('generate_product_table_for_email'))
 		{
 			$product = $item['product'];
 			$name = $product['product_name'];
-			$size = $item['size'];
+			$option = $item['option'];
 			$qty = $item['count'];
 			$price = $product['product_price'];
 			$total = $price * $qty;
-			$ci->table->add_row($name,$size,$qty,$price,$total );
+			$ci->table->add_row($name,$option,$qty,$price,$total );
 			$final_total += $total;
 		}
 		
