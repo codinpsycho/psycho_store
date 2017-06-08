@@ -38,7 +38,7 @@
 	  			<canvas id='sales_chart'></canvas>
 	  			<h4 class="text-center">Total Num Orders 	: <?php echo $num_orders?> </h4>
 	  			<h4 class="text-center">Total Products 	: <?php echo $total_products?> </h4>
-				<h4 class="text-center">Avg Order per Day 	: <?php echo ($num_orders /count($dates)) ?> </h4>
+				<h4 class="text-center">Avg Order per Day 	: <?php echo ($num_orders /date('d')) ?> </h4>
 			</div>
 		</div>
 		<div class="row">
@@ -46,7 +46,7 @@
 				<h3 class="text-center"> Monthly Revenue For <?php echo $month?></h3>
   				<canvas id='revenue_chart'></canvas>
 	  			<h4 class="text-center">Total Revenue 	: <?php echo $total_revenue?> </h4>
-				<h4 class="text-center">Avg Revenue per Day 	: <?php echo ($total_revenue /count($dates)) ?> </h4>
+				<h4 class="text-center">Avg Revenue per Day 	: <?php echo ($total_revenue /date('d')) ?> </h4>
 			</div>
 		</div>
 		<div class="row">
