@@ -62,7 +62,7 @@
 				<?php foreach ($latest_order as $key => $order): ?>
 					<?php foreach ($order['order_items'] as $key => $items): ?>
 						<?php $url = product_url($items['product']); ?>
-						<a href= <?php echo $url ?> ><?php echo $items['product']['product_name'] ?></a>,
+						<a href= <?php echo $url ?> ><?php echo $items['product']['product_name']." {".$items['product']['product_type']."}" ?></a>,
 					<?php endforeach; ?>
 				<?php endforeach; ?>
 				<?php echo $latest_order[0]['address']['city'].", ". $latest_order[0]['address']['state'] ?>
