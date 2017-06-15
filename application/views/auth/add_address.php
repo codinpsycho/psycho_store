@@ -47,7 +47,7 @@ $address3 = array(
 	'value' => set_value('address2'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
-	'placeholder'	=> 'Landmark',
+	'placeholder'	=> "Near Master Roshi's island",
 	'class' => "form-control"
 );
 $city = array(
