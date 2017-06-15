@@ -6,7 +6,7 @@
 <br>
 <h3>Order Id : <?php echo $order_id; ?></h3>
 <h3>Payment Mode : <?php echo $payment_mode; ?></h3>
-<p>Thank you for shopping at Psycho Store. Our very efficient minions are onto the task of processing your order. So sit back and relax. Orders are usually shipped within 3-5 buisness days unless G-Man gets involved somehow.</p>
+<p>Thank you for shopping at Psycho Store. Our very efficient minions are onto the task of processing your order. So sit back and relax. Depending on the design(s)/product(s) ordered, your order might be coming in parts, so don't worry if there's some items missing from your order, they will be coming soon in the next parcel.  Your order should reach you in next 5-8 buisness days unless G-Man gets involved somehow.</p>
 <h2>This awesomeness</h2>
 <?php echo $product_table; ?>
 <br>
