@@ -214,7 +214,7 @@ class cart extends CI_controller
 				$this->cart->apply_discount($coupon, $discount_percentage);				
 			}
 
-			$this->_notify_discount_applied($discount_percentage, $coupon);
+			$this->_notify_discount_applied($discount_percentage, $coupon_info);
 		}
 
 		redirect('cart');
@@ -244,7 +244,8 @@ class cart extends CI_controller
 					$check_result = true;
 				}
 				break;
-
+			case 'easter_egg':
+			case 'iddqdfrapp':
 			case 'psychoness15':
 				//Should be applied on purchase of 2 or 3 tshirts
 				if($this->cart->total_items() > 1)
@@ -269,7 +270,7 @@ class cart extends CI_controller
 		return $check_result;
 	}
 
-	function _notify_discount_applied($discount_percentage, $coupon)
+	function _notify_discount_applied($discount_percentage, $coupon_info)
 	{
 		$username = $this->tank_auth->get_username() ? $this->tank_auth->get_username() : 'creature';
 		$domain_discount = get_current_user_discount_domain_info();
@@ -277,10 +278,13 @@ class cart extends CI_controller
 		//Notify event for modal pop up
 		if($discount_percentage == 0)
 		{
-			$params['title'] = "wrong cheat code";
-			$params['type'] = "error";
 
-			$params['body'] = "<strong>$username</strong>, either there is no such cheat code like this or it cannot be applied right now.<br>Anyway, we strongly encourage playing games with no cheat codes applied.<br>But here is a hint just for you.<br><br><strong>Hint : Google \"What is the Konami code\"</strong>. " ;
+			$params['title'] = "Uh Oh!";
+			$params['type'] = "error";			
+
+			$body = strlen($coupon_info['error_text']) > 0 ? $coupon_info['error_text'] : "<strong>$username</strong>, either there is no such cheat code like this or it cannot be applied right now.<br>Anyway, we strongly encourage playing games with no cheat codes applied.<br>But here is a hint just for you.<br><br><strong>Hint : Google \"What is the Konami code\"</strong>. ";
+
+			$params['body'] = $body;
 		}
 		else if(count($domain_discount))
 		{
@@ -293,7 +297,7 @@ class cart extends CI_controller
 		{
 			$params['type'] = "success";
 			//Personalised message depending on cheat code applied
-			switch ($coupon)
+			switch ($coupon_info['coupon'])
 			{
 				case 'frapp_mode':
 					$params['title'] = "Cheat Code Applied $discount_percentage% off";
