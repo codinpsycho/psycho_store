@@ -159,6 +159,7 @@ class Pages extends CI_controller
 				$data['prod_1_title'] = 'Posters';
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "T-Shirts";
+				$data['meta_id'] = 2;
 				$this->_browse($data, 'tshirt', $sorting);
 				break;
 			
@@ -168,6 +169,7 @@ class Pages extends CI_controller
 				$data['prod_1_title'] = 'Tees';
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "Posters";
+				$data['meta_id'] = 3;
 				$this->_browse($data, 'posters', $sorting);
 				break;
 
@@ -177,6 +179,7 @@ class Pages extends CI_controller
 				$data['prod_1_title'] = 'Tees';
 				$data['prod_2_title'] = 'Poster';
 				$data['header_title'] = "Coffee Mugs";
+				$data['meta_id'] = 4;
 				$this->_browse($data, 'mugs', $sorting);
 				break;
 
