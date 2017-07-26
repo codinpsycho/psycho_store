@@ -32,26 +32,60 @@ if(!function_exists('generate_header'))
 		//Meta tags
 		$data['url'] = current_url();
 		$data['favico'] = site_url($ci->config->item('favico'));
+				
+		generate_metainfo($data);
+
+	}
+
+}
+
+
+if(!function_exists('generate_metainfo'))
+{	
+	function generate_metainfo(&$data)
+	{
+		$ci = &get_instance();
+
 		if(isset($data['product']))
 		{			
 			//Title
-			$data['title'] = $data['product']['product_name'].' '.$data['product']['product_game'].' '.$data['product']['product_type'].' | Psycho Store';
+			$data['title'] = $data['product']['product_name'].' '.$data['product']['product_game'].' '.$data['product']['category'].' '.$data['product']['product_type'].' India | Psycho Store';
 			//Description			
-			$data['description'] = 'Psycho Store | '.$data['product']['product_intro'];
+			$data['description'] = $data['product']['product_intro'].' | Psycho Store';
 			//Keywords
 			$data['keywords'] = $ci->config->item('keywords').str_replace(' ', ', ', $data['product']['product_url']);
 
 			$data['image'] = site_url($data['product']['product_image_path']);
 		}
 		else
-		{
+		{		
 			$data['title'] = $ci->config->item('title');
 			$data['description'] = $ci->config->item('description');
 			$data['keywords'] = $ci->config->item('keywords');
 			$data['image'] = base_url($ci->config->item('favico'));
 		}
-	}
 
+		if(isset($data['meta_id']))
+		{
+			//Override Meta Title and description
+			$meta_info = load_metainfo($data['meta_id']);			
+			$data['title'] = $meta_info['title'];
+			$data['description'] = $meta_info['description'];
+			
+		}
+	}
+}
+
+
+if(!function_exists('load_metainfo'))
+{
+	function load_metainfo($meta_id)
+	{
+		$ci =& get_instance();		
+		$ci->load->model('database');
+		$meta_info = $ci->database->GetMetaInfo($meta_id);
+		return $meta_info;		
+	}
 }
 
 if(!function_exists('generate_product_table_for_email'))

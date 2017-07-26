@@ -797,5 +797,14 @@ class Database extends CI_Model
 	}
 
 	//-------------------------- XXX --------------------------------------- 
+
+	//-------------------------- Meta Info ---------------------------------
+
+	function GetMetaInfo($meta_id)
+	{
+		$this->db->where('metainfo_id', $meta_id);
+		$query = $this->db->get('metainfo');
+		return $query->row_array();
+	}
 }
 ?>
