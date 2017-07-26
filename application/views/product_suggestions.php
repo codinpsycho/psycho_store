@@ -14,7 +14,10 @@
     );
     ?>
       <div class="product-link-sm col-md-2 col-sm-4 col-xs-4">
-          <?php echo anchor($prod_url, img($image_properties));?>
+        <a href= <?php echo $prod_url?> >
+          <?php echo img($image_properties);?>
+          <p  class="text-center"><?php echo $product_item['product_name']?></p>
+        </a>
       </div>
 
     <?php endforeach ?>            
