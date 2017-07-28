@@ -491,6 +491,7 @@ class Pages extends CI_controller
 		$data['heading'] = "Shipping and Returns";
 		$data['ret_address'] = format_address($this->config->item('return_address'));
 		$data['content'] = $this->load->view('view_shipping', $data, true);
+		$data['meta_id'] = 34;
 		display('basic', $data);
 	}
 
@@ -498,12 +499,14 @@ class Pages extends CI_controller
 	{
 		$data['heading'] = "Coupon Partners";		
 		$data['content'] = $this->load->view('view_coupon_partners', $data, true);
+		$data['meta_id'] = 36;
 		display('basic', $data);	
 	}
 
 	function contact()
 	{
 		$data['return_address'] = format_address($this->config->item('return_address'));
+		$data['meta_id'] = 32;
 		display('contact', $data);
 	}
 
@@ -518,6 +521,7 @@ class Pages extends CI_controller
 	{
 		$data['heading'] = "Who's talking about us";
 		$data['content'] = $this->load->view('view_media', null, true);
+		$data['meta_id'] = 35;
 		display('basic', $data);
 	}
 
@@ -525,6 +529,7 @@ class Pages extends CI_controller
 	{
 		$data['heading'] = "Who are We";
 		$data['content'] = $this->load->view('view_about', null, true);
+		$data['meta_id'] = 33;
 		display('basic', $data);
 	}
 }
