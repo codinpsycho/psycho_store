@@ -83,7 +83,7 @@ if(!function_exists('load_metainfo'))
 	{
 		$ci =& get_instance();		
 		$ci->load->model('database');
-		$meta_info = $ci->database->GetMetaInfo($meta_id);
+		$meta_info = $ci->database->GetMetaInfoById($meta_id);
 		return $meta_info;		
 	}
 }

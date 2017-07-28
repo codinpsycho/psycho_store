@@ -800,11 +800,19 @@ class Database extends CI_Model
 
 	//-------------------------- Meta Info ---------------------------------
 
-	function GetMetaInfo($meta_id)
+	function GetMetaInfoById($meta_id)
 	{
 		$this->db->where('metainfo_id', $meta_id);
 		$query = $this->db->get('metainfo');
 		return $query->row_array();
 	}
+
+	function GetMetaInfoByName($name)
+	{
+		$this->db->like('page_name', $name);
+		$query = $this->db->get('metainfo');
+		return $query->row_array();
+	}
+
 }
 ?>
