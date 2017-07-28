@@ -144,6 +144,7 @@ class Pages extends CI_controller
 		$feedback = array_reverse($feedback);
 		
 		$data['feedbacks'] = $feedback;
+		$data['meta_id'] = 6;
 		
 		display('feedback_wall', $data);
 	}
@@ -420,8 +421,17 @@ class Pages extends CI_controller
 			$data['search_result'] = $count;
 			
 			if($result)
-				$data['products'] = $result;			
-		}		
+				$data['products'] = $result;
+		}
+
+		//Get Unique MetaInfo for the page with respect to 
+
+		$meta_info = $this->database->GetMetaInfoByName($name);
+
+		if(sizeof($meta_info))
+		{
+			$data['meta_id'] = $meta_info['metainfo_id'];
+		}
 
 		display('search', $data);
 	}

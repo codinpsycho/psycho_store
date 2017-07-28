@@ -71,6 +71,8 @@ class insights extends CI_Controller
 			$data['all_games'][] = $value['product_game'];
 		}
 
+		$data['meta_id'] = 5;
+
 		display('insights', $data);
 	}
 

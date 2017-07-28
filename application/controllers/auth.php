@@ -166,6 +166,7 @@ class Auth extends CI_Controller
 				}
 			}
 			//$this->load->view('auth/login_form', $data);
+			$data['meta_id'] = 7;
 			display('login',$data);
 		}
 	}
@@ -431,6 +432,7 @@ class Auth extends CI_Controller
 			$data['captcha_registration'] = $captcha_registration;
 			$data['use_recaptcha'] = $use_recaptcha;
 			//$this->load->view('auth/register_user_address', $data);
+			$data['meta_id'] = 8;
 			display('register_user_address', $data);
 		}
 	}
@@ -496,7 +498,7 @@ class Auth extends CI_Controller
 				redirect('checkout/address');
 			}
 			//$this->load->view('auth/add_address');
-			$data = array();
+			$data['meta_id'] = 9;
 			display('add_address',$data);
 		}
 	}
