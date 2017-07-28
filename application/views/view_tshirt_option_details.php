@@ -58,7 +58,7 @@ function update_btn_text_on_size_select(size_select)
     </div>
   </form> 
   <div class="col-md-12 col-sm-12 col-xs-12">
-     <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >5-8 days delivery + easy returns</a>
+     <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >free shipping + 365 days return</a>
      <a class="pull-right" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> </h5>
   </div>
 </div>
