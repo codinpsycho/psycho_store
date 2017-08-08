@@ -69,8 +69,11 @@ if(!function_exists('generate_metainfo'))
 		{
 			//Override Meta Title and description
 			$meta_info = load_metainfo($data['meta_id']);			
-			$data['title'] = $meta_info['title'];
-			$data['description'] = $meta_info['description'];
+			if(count($meta_info))
+			{
+				$data['title'] = $meta_info['title'];
+				$data['description'] = $meta_info['description'];	
+			}
 			
 		}
 	}
@@ -497,6 +500,9 @@ function _live($page, $data)
 		case 'insights':
 			$body = $ci->load->view('view_insights', $data, true);
 			break;
+		case 'offers':
+			$body = $ci->load->view('view_offers', $data, true);
+			break;			
 		default:
 			show_404();
 		break;

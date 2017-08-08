@@ -40,6 +40,7 @@
 $route['default_controller'] = "pages";
 $route['product/(:any)'] = 'pages/product/$1';
 $route['like'] = 'pages/like';
+$route['psycho_offers'] = 'pages/psycho_offers';
 $route['like/(:any)'] = 'pages/like/$1';
 $route['explore/(:any)'] = 'pages/explore/$1';
 $route['latest'] = 'pages/latest/';

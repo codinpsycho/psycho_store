@@ -517,6 +517,12 @@ class Pages extends CI_controller
 		display('basic', $data);
 	}
 
+	function psycho_offers()
+	{
+		$data['meta_id'] = 37;
+		display('offers', $data);
+	}
+
 	function media()
 	{
 		$data['heading'] = "Who's talking about us";

@@ -254,6 +254,46 @@ class cart extends CI_controller
 				}
 				break;
 
+			case 'p2psycho':
+				//Check if there are minimum 2 posters in cart
+				if($this->cart->total_items() > 1)
+				{
+					$check_result = true;
+					foreach ($this->cart->contents() as $items)
+					{					
+						if($items['type'] != 'posters')
+						{
+							$check_result = false;
+							break;
+						}
+					}
+				}				
+				break;
+
+			case 'p3psycho':
+				//Check if there are minimum 3 posters in cart
+				if($this->cart->total_items() > 2)
+				{
+					$check_result = true;
+					foreach ($this->cart->contents() as $items)
+					{
+						if($items['type'] != 'posters')
+						{
+							$check_result = false;
+							break;
+						}
+					}
+				}				
+				break;
+
+			case 'powerup':
+				//Should be applied on purchase of 3 or more products
+				if($this->cart->total_items() > 2)
+				{
+					$check_result = true;
+				}
+				break;				
+
 			case 'godmode_psycho':
 				//Should be applied on purchase of 4 or more tshirts
 				if($this->cart->total_items() > 3)
