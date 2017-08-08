@@ -498,7 +498,6 @@ class Auth extends CI_Controller
 				redirect('checkout/address');
 			}
 			//$this->load->view('auth/add_address');
-			$data['meta_id'] = 9;
 			display('add_address',$data);
 		}
 	}
