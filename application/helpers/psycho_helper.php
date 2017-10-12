@@ -420,7 +420,10 @@ function _live($page, $data)
 			break;
 		case 'view_giveaway':
 			$body = $ci->load->view('view_giveaway', $data, true);
-			break;						
+			break;
+		case 'pay':
+			$body = $ci->load->view('view_pay', $data, true);
+			break;			
 		case 'contact':
 			$body = $ci->load->view('view_contact', $data, true);
 			break;
