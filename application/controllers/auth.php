@@ -498,7 +498,7 @@ class Auth extends CI_Controller
 				redirect('checkout/address');
 			}
 			//$this->load->view('auth/add_address');
-			display('add_address',$data);
+			display('add_address',null);
 		}
 	}
 
