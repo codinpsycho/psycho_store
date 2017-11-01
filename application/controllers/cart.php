@@ -72,7 +72,7 @@ class cart extends CI_controller
 
 		if($num_items)
 		{
-			//$this->_show_cheat_code_after_timeout(5000);
+			$this->_show_cheat_code_after_timeout(5000);
 		}
 
 		$data['cheat_hints'] = $this->load->view('cheatcode_hints', null, true);
@@ -90,7 +90,7 @@ class cart extends CI_controller
 			//Show cheat code hint after some seconds for hesistant buyers
 			$params['timeout'] = $timeout;
 			$params['title'] = "$username, Anything Wrong?";
-			$params['body'] = " Allow us to make it right. Apply this konami cheat code and the world around you will burn with jealousy, seeing you with this geeky awesomeness and yes you can thank us later.<br><br> <strong>upupdowndownleftrightleftrightba</strong> <br><br>Happy gaming/debugging!" ;
+			$params['body'] = " Allow us to make it right. Apply this konami cheat code and the world around you will burn with jealousy, seeing you with this geeky awesomeness and yes you can thank us later.<br><br> <strong>uuddlrlrba</strong> <br><br>Happy gaming/debugging!" ;
 
 			notify_event('show_cheat_code', $params);
 		}
@@ -238,13 +238,10 @@ class cart extends CI_controller
 		switch ($coupon)
 		{			
 			case 'psychoness10':
-				//Should be applied on purchase of only one tshirt
-				if($this->cart->total_items() >= 1)
-				{
-					$check_result = true;
-				}
-				break;
 			case 'easter_egg':
+			case 'uuddlrlrba':
+			case 'upupdowndownleftrightleftrightba':
+			case 'wwssadadba':
 			case 'iddqdfrapp':
 			case 'psychoness15':
 				//Should be applied on purchase of 2 or 3 tshirts
