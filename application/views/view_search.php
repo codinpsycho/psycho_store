@@ -1,7 +1,8 @@
 <div class="container">  
     <div class="row">
-      <div class="col-md-12">
-        <h2 class=""><?php echo $search_result ?>&nbsp;<small>product(s) found for</small> <?php echo $search_text;?> </h2>
+      <div class="col-md-12 top-bottom-space-s">
+        <h1 class="text-center"><?php echo $search_text;?> T-Shirts/Merchandise</h1>
+        <h5 class="text-center grey-text"><?php echo $search_result ?>&nbsp;product(s) found to satisfy your inner geek!</h5>
       </div>
     </div>  
     <div class="row well">
