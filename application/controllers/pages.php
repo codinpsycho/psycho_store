@@ -466,6 +466,7 @@ class Pages extends CI_controller
 			$data['content'] = "Just dont disappoint this time, try again";
 		}
 
+		$data['meta_id'] = 41;
 		display('basic', $data);
 	}
 
@@ -514,6 +515,7 @@ class Pages extends CI_controller
 	{
 		$data['heading'] = "Student Discount";
 		$data['content'] = $this->load->view('view_student', null, true);
+		$data['meta_id'] = 43;
 		display('basic', $data);
 	}
 
