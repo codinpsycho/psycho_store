@@ -3,8 +3,8 @@
 
 //Default meta tags info
 
-$config['title'] = 'Buy Cool Designer T shirts and Merchandise Online In India | Psycho Store';
-$config['description'] = 'Buy designer gaming, anime, geek t shirts and other merchandises like gaming posters, geek coffee mugs, designer mobile covers online in India. Satisfy your inner geek! ';
+$config['title'] = 'Gaming Geek Anime T shirts and Merchandise Online India | Psycho Store';
+$config['description'] = 'Buy gaming, geek, anime t shirts and other merchandises like gaming and anime posters, geek coffee mugs, designer mobile covers online in India. Satisfy your inner geek! ';
 $config['keywords'] = 't-shirt, tshirt, t shirt, shirt, tee, t, t-shirts, tshirts, t shirts, shirts, tees, ts, clothing, clothes, threads, wear, gift, gifts, hats, hat, beanies, beanie, gear, sweatshirt, hoodie, sweatshirts, hoodies, gamer, geek, hacker, nerd, computer, gamers, geeks, hackers, nerds, coder, coders, psychostore, psycho, store, psycho store, india, ';
 
 $config['favico'] = 'images/favico.png';
