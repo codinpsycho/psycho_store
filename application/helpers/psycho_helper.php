@@ -49,7 +49,7 @@ if(!function_exists('generate_metainfo'))
 		if(isset($data['product']))
 		{			
 			//Title
-			$data['title'] = $data['product']['product_name'].' '.$data['product']['product_game'].' '.$data['product']['category'].' '.$data['product']['product_type'].' India | Psycho Store';
+			$data['title'] = $data['product']['product_game'].' '.$data['product']['category'].' '.$data['product']['product_type'].' India | '.$data['product']['product_name'];
 			//Description			
 			$data['description'] = $data['product']['product_intro'].' | Psycho Store';
 			//Keywords
