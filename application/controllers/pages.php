@@ -425,13 +425,7 @@ class Pages extends CI_controller
 		}
 
 		//Get Unique MetaInfo for the page with respect to 
-
-		$meta_info = $this->database->GetMetaInfoByName($name);
-
-		if(sizeof($meta_info))
-		{
-			$data['meta_id'] = $meta_info['metainfo_id'];
-		}
+		$data['meta_id'] = get_metaid_by_name($name);
 
 		display('search', $data);
 	}
@@ -442,7 +436,7 @@ class Pages extends CI_controller
 		$data = array();
 
 		if(valid_email($email_id))
-		{			
+		{
 			if($this->database->Subscribe($email_id))
 			{
 				$data['site_name'] = 'Psycho Store';

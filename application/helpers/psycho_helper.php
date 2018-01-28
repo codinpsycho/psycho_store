@@ -79,6 +79,23 @@ if(!function_exists('generate_metainfo'))
 	}
 }
 
+if(!function_exists('get_metaid_by_name'))
+{
+	function get_metaid_by_name($name)
+	{
+		$ci =& get_instance();
+		$ci->load->model('database');
+		$meta_info = $ci->database->GetMetaInfoByName($name);
+
+		$meta_id = 1; //General meta id for fail safe
+		if(sizeof($meta_info))
+		{
+			$meta_id = $meta_info['metainfo_id'];
+		}
+		
+		return $meta_id;		
+	}
+}
 
 if(!function_exists('load_metainfo'))
 {
