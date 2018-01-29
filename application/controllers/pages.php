@@ -161,6 +161,11 @@ class Pages extends CI_controller
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "T-Shirts";
 				$data['meta_id'] = 2;
+				$data['seotext_header'] = "Gaming Anime Geek T-shirts";
+				$data['seotext_content'] = "Psycho store vows to bring you the rarest and the geekiest loot you can add to your inventory (online in India) in the form of a medium which is loved by everyone, as it gives one the ability to express his/her true inner self in a very subtle way.
+					Check out our collection of premium cotton t-shirts with unique designs from the world of gaming, anime and various other fandoms that are guaranted to satisfy your inner geek.<br><br>
+					Select from a wide array of designs ranging from everyones favorite dragon ball z, naruto, CS GO, pokemon to the extreme niche world of dark souls, nier : automata, half-life and halo. For now we are focusing on the gaming anime and geek community of earth (other planets can wait for now). We will let you know when we start our inter-planetory logistic service.<br><br>
+					So no matter where your heart belongs, we should have you covered and hey if not, just drop us a comment about your favorite game, anime or whatever and we will ask our wizardary artists to do their magic and get you a dose of your favorite fandom's merchandise. After all, that's what we are here for, to satify your inner geek!<br><br>";
 				$this->_browse($data, 'tshirt', $sorting);
 				break;
 			
@@ -171,6 +176,12 @@ class Pages extends CI_controller
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "Posters";
 				$data['meta_id'] = 3;
+				$data['seotext_header'] = "Gaming Anime Geek Posters";
+				$data['seotext_content'] = "Posters have always been a very personal medium to show where your heart truly belongs and that has always been the case with us personally since childhood. So here we are with our varied collection of high quality posters available online in India for you to satisfy your inner geek.<br><br>
+				Doesn't matter if you want to go over 9000 or just be happy seeing your favorite pokemon, we have something to quench your geeky thirst. Decorate your room or office with these high quality posters and give your place some personality of yours. After all people should know where your heart truly is.
+					<br><br>
+					So if you are looking for some really geeky, gaming or anime posters online in india, psycho store has your back with their high quality 250 gsm glossy finished posters. We ship our posters in highly durable tubes so that you get your loot undamaged and we also add a spell on it so that it is kept safe from the hands of evil forces lurking in the darkness.<br><br>   
+					So no matter which fandom you belong to, we should have you covered and hey if not, just drop us a comment about your favorite game, anime or whatever and we will ask our wizardary artists to do their magic and get you a dose of your favorite fandom's merchandise. After all, that's what we are here for, to satify your inner geek!<br><br>";				
 				$this->_browse($data, 'posters', $sorting);
 				break;
 
@@ -181,6 +192,9 @@ class Pages extends CI_controller
 				$data['prod_2_title'] = 'Poster';
 				$data['header_title'] = "Coffee Mugs";
 				$data['meta_id'] = 4;
+				$data['seotext_header'] = "Gaming Anime Geek Coffee Mugs";
+				$data['seotext_content'] = "Psycho store, in continuing it's vow to satisfy your inner geek brings you their collection of designer and unique coffee mugs to give your mundane mornings a geeky boost. Make sure taking a sip of your favorite drink is the first thing you do in the morning from your psycho store coffee mug. These high quality mugs are printed with uqniue designs from your favorite fandom ranging from everyones favorite animes like dragon ball z, one piece, naruto to everyones favorite games like cs go, dota, assassins creed, overwatch etc. For now we are focusing on the gaming anime and geek community of earth (other planets can wait for now). We will let you know when we start our inter-planetory logistic service.<br><br>
+					So no matter where your heart belongs, we should have you covered and hey if not, just drop us a comment about your favorite game, anime or whatever and we will ask our wizardary artists to do their magic and get you a dose of your favorite fandom's merchandise. After all, that's what we are here for, to satify your inner geek!<br><br>";				
 				$this->_browse($data, 'mugs', $sorting);
 				break;
 

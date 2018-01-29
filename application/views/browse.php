@@ -30,6 +30,14 @@ $(function () {
 			<?php $data['products'] = $products; $this->load->view('catalog',$data);?>
 		</div>
 	</div>
+	<div class="row  top-bottom-space-s">
+		<div class="col-md-12">
+			<h1><?php echo $seotext_header?></h1>
+		</div>
+		<div class="col-md-12 well">
+			<p><?php echo $seotext_content?></p>
+		</div>
+	</div>
 
 	
 
