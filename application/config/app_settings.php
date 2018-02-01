@@ -27,12 +27,12 @@ $config['campaign_id'] = 'psycho_campaign';
 $config['return_address'] = array(
 									'first_name' => 'Ishkaran',
 									'last_name' => 'Singh',
-									'address_1' 	=> '#35, Mane Building, 7th Main Road',
-									'address_2' => 'ST Bed Layout',
+									'address_1' 	=> 'B274, Ranka Colony, Bannerghatta Road',
+									'address_2' => 'Bilekahalli',
 									'city' 	=> 'Bengaluru',
 									'country' => 'India',
 									'phone_number' 	=> '7387045828',
-									'pincode' 	=> '560034',
+									'pincode' 	=> '560076',
 									'state' 	=> 'Karnataka'
 									);
 
