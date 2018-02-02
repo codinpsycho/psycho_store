@@ -392,6 +392,7 @@ class Database extends CI_Model
 	{
 		$this->db->select('txn_id');
 		$this->db->where('order_state =', $state);
+		$this->db->limit(500);
 		$query = $this->db->get('orders');
 		$orders = array();
 

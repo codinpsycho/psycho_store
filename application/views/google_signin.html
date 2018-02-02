@@ -1,11 +1,18 @@
 <html>
 <head>
+  <meta name="google-signin-scope" content="profile email">
   <meta name="google-signin-client_id" content="858976915070-f2higqaj6iu3gpuijmddhqs973ihlf9m.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js?onload=start_login" async defer></script>
 </head>
 <body>
-<a class="btn btn-social btn-google" id="google_signin">
+<a href="<?php echo $gauth_url;?>" class="btn btn-social btn-google" id="google_signin">
   <i class="fa fa-google-plus"></i> Continue with google  
 </a>
+
+<!-- 
+//Old implementation, using JS which fails if 3rd party cookies are enabled.
+Hence implementation shifted to server side (php)
+
 <script>
 
 function post(path, params, method)
@@ -55,13 +62,12 @@ function start_login()
   {
     // Retrieve the singleton for the GoogleAuth library and set up the client.
     auth2 = gapi.auth2.init({
-      client_id: '858976915070-f2higqaj6iu3gpuijmddhqs973ihlf9m.apps.googleusercontent.com'
+      client_id: '858976915070-f2higqaj6iu3gpuijmddhqs973ihlf9m.apps.googleusercontent.com',
       // Request scopes in addition to 'profile' and 'email'
       //scope: 'additional_scope'
     });
 
     auth2.attachClickHandler(document.getElementById('google_signin'), {}, onSignIn, onFailure );
-
   });
 }
 
@@ -72,7 +78,25 @@ function onFailure(error)
 
 </script>
 
-<script src="https://apis.google.com/js/platform.js?onload=start_login" async defer></script>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
 
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+    </script>
+
+
+ -->
 </body>
 </html>

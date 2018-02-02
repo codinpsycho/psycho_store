@@ -19,18 +19,6 @@
 					<?php echo $this->load->view('view_password.php') ?>
 				</div>	
 			</div>
-<!-- 			<div class="col-md-1 col-xs-12 vcenter">
-		        <h1 class=" text-center play"><small>or</small></h1>
-		    </div>
-		    <div class="col-md-4 col-xs-12 vcenter">
-	          <div class="text-center">
-	             <?php echo $this->load->view('google_signin.html')?>
-	          </div>
-	          <hr>
-	          <div class="text-center">
-	              <?php echo $this->load->view('fb_login.html')?>
-	          </div>
-			</div> -->
 		</div>
 	</div>
 	<button class="btn btn-primary" type="submit">Register</button>

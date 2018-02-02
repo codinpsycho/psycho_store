@@ -71,7 +71,7 @@
   	FB.login(function(response)
     {
       statusChangeCallback(response);
-    }, {scope : 'user_friends,email'});
+    }, {scope : 'email'});
   }
 
 function post(path, params, method)
@@ -108,10 +108,10 @@ function post(path, params, method)
   	var redirect_url = form_url.split('?');
     var uri_string = '<?php echo uri_string(); ?>';
     var base_url = uri_string.includes('auth') ? "external_auth" : "auth/external_auth";
-  	var post_url = base_url + "?" + redirect_url[1];    
+  	var post_url = base_url + "?" + redirect_url[1];  
 
     FB.api('/me', { fields : 'friends, email'}, function(response)
-    {    	
+    {
     	post(post_url, {username: response.email, email: response.email} );
     });
   }

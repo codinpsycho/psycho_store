@@ -16,6 +16,7 @@ class Auth extends CI_Controller
 		$this->load->library('cart');
 		$this->load->helper('psycho_helper');
 		$this->load->helper('mailgun_helper');
+		$this->load->helper('auth_helper');
 	}
 
 	function index()
@@ -32,15 +33,42 @@ class Auth extends CI_Controller
 		}
 	}
 
+	//Checks for user info either in POST or GET(google)
+	function _process_user_info()
+	{
+		$user_info = null;
+		$code = $this->input->get('code');
+
+		//Google redirects with code insead of post
+		if( $code )
+		{
+			$user_info = get_user_info( $this->input->get('code') );
+
+		}
+		else
+		{
+
+			$user_info['email'] = trim($this->input->post('email'));
+			$user_info['username'] = trim($this->input->post('username'));
+		}
+
+		return $user_info;
+	}
+
 	function external_auth()
 	{
 		/*Improvements to do 
 		1. Check for valid email_id, notify otherwise
 		2. Check for unique username, if not then ask for a username
 		*/
-		
-		$email = trim($this->input->post('email'));
-		$username = trim($this->input->post('username'));
+		//Check for get(google auth) as most of the logins should be that only
+		//If not, check for post(fb and normal)
+
+		$user_info = $this->_process_user_info();
+		//var_dump($this->input->get('code'));
+			
+		$email =  $user_info['email'];//trim($this->input->post('email'));
+		$username = $user_info['username']; //trim($this->input->post('username'));
 		
 		if($this->users->is_email_available($email))
 		{
@@ -65,27 +93,28 @@ class Auth extends CI_Controller
 		
 		$this->users->update_login_info( $user_id, $this->config->item('login_record_ip', 'tank_auth'), 
 										 $this->config->item('login_record_time', 'tank_auth'));
-		
-		$this->_redirect($this->input->get('redirect_url'));
+
+		$this->_redirect();
 	}
 
-	function _external_register($email, $username)
+	function _external_register($_email, $_username)
 	{
-		$username   =   trim($this->input->post('username'));
-		$email      =   trim($this->input->post('email'));
+		$username   =   $_username;//trim($this->input->post('username'));
+		$email      =   $_email;//trim($this->input->post('email'));
 		
 		$password = $this->_generate_password(9, 8);
 		$user = $this->tank_auth->create_user($username, $email, $password, false);
 
 		//Add it to subscribers list
-		add_subscriber($email, $username);
+		//add_subscriber($email, $username);
 
 		return $user;
 	}
 
-	function _redirect($url)
+	function _redirect()
 	{
-		$redirect_url = $url != (string)FALSE ? $redirect_url = $url : '';
+		$redirect_url = clear_and_get_redirect_url();
+		//$redirect_url = $url != (string)FALSE ? $redirect_url = $url : '';
 
 		$this->_post_login($redirect_url);
 	}
@@ -139,7 +168,7 @@ class Auth extends CI_Controller
 						$data['login_by_username'],
 						$data['login_by_email'])) 
 						{
-							$this->_redirect($this->input->get('redirect_url'));
+							$this->_redirect();
 				}
 				else
 				{
@@ -167,15 +196,25 @@ class Auth extends CI_Controller
 			}
 			//$this->load->view('auth/login_form', $data);
 			$data['meta_id'] = 7;
+
+			//required for  google auth flow ----
+			$gclient = init_google_client();
+			$data['gauth_url'] = $gclient->createAuthUrl();
+			//till here ----
+
+			save_redirect_url($this->input->get('redirect_url'));
+			$sess_url = $this->session->userdata('redirect_url');
+
 			display('login',$data);
 		}
 	}
+
 
 	function _post_login($redirect_url)
 	{
 		$username = $this->tank_auth->get_username();
 		$params['title'] = "Greetings $username";		
-		notify_event('login_done', $params);	
+		notify_event('login_done', $params);
 		redirect($redirect_url);
 	}
 
@@ -222,7 +261,7 @@ class Auth extends CI_Controller
 		//Unset required session vars
 		//$this->session->unset_userdata('txn_id');
 		$this->cart->remove_discount();
-		$this->_redirect($this->input->get('redirect_url'));
+		$this->_redirect();
 		//$this->_show_message($this->lang->line('auth_message_logged_out'));
 	}
 

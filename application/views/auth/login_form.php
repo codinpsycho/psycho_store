@@ -45,7 +45,7 @@ $(function () {
         </div>
         <div class="col-md-4 col-xs-12 vcenter">
           <div class="text-center">
-             <?php echo $this->load->view('google_signin.html')?>
+             <?php echo $this->load->view('google_signin.html', array("gauth_url" => $gauth_url ) ) ?>
           </div>
           <hr>
           <div class="text-center">
