@@ -563,9 +563,13 @@ function _travelling()
 
 function _validate_user()
 {
-	$current_user = $this->database->GetUserById($this->tank_auth->get_user_id());
+	$ci = &get_instance();
+	$ci->load->library('tank_auth');	
+	$ci->load->model('database');
+
+	$current_user = $ci->database->GetUserById($ci->tank_auth->get_user_id());
 	$valid_user = false;
-	$admin_emails = $this->config->item('admin_email');
+	$admin_emails = $ci->config->item('admin_email');
 
 	foreach ($admin_emails as $key => $email)
 	{
