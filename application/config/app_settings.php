@@ -41,7 +41,10 @@ Possible Status :
 LIVE
 DOWN
 TRAVELLING*/
-$config['current_site_status'] = 'LIVE'
+$config['current_site_status'] = 'LIVE';
+
+$config['gstin'] = '29AAICP0480E1ZF';
+$config['gstin_state'] = 'Karnataka';
 
 
 ?>
