@@ -50,21 +50,8 @@ class sales extends CI_controller
 
 	function  get_gst_invoice_data($orders)
 	{
-		//Get orders data for this month
-
-
-		$arrayData = array(
-							    array(NULL, 2010, 2011, 2012),
-							    array('Q1',   12,   15,   21),
-							    array('Q2',   56,   73,   86),
-							    array('Q3',   52,   61,   69),
-							    array('Q4',   30,   32,    0),
-							);		
-
-		$spreadsheet_data = array();
 		_add_address_and_user_to_orders($orders);
-		//var_dump($orders[0]);
-		//var_dump($orders[0]['order_items']);
+
 		//Traverse each order and input a row in the excel sheet with details as in clartax template
 		foreach ($orders as $key => $order)
 		{
