@@ -526,6 +526,9 @@ function _live($page, $data)
 			break;
 		case 'offers':
 			$body = $ci->load->view('view_offers', $data, true);
+			break;
+		case 'sales':
+			$body = $ci->load->view('view_sales', $data, true);
 			break;			
 		default:
 			show_404();
@@ -556,6 +559,29 @@ function _travelling()
 
 	$data['num_of_gamers'] = $ci->database->GetNumOfSubscribers();
 	$ci->load->view('view_travelling', $data);
+}
+
+function _validate_user()
+{
+	$current_user = $this->database->GetUserById($this->tank_auth->get_user_id());
+	$valid_user = false;
+	$admin_emails = $this->config->item('admin_email');
+
+	foreach ($admin_emails as $key => $email)
+	{
+		if($current_user)
+		{
+			if( $current_user['email'] == $email )
+			{
+				$valid_user = true;
+			}
+		}
+	}
+
+	if($valid_user == false)
+	{
+		redirect('');
+	}
 }
 
 ?>

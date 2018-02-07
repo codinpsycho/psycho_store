@@ -34,32 +34,9 @@ class admin extends CI_controller
 		$this->orders();
 	}
 
-	function _validate_user()
-	{
-		$current_user = $this->database->GetUserById($this->tank_auth->get_user_id());
-		$valid_user = false;
-		$admin_emails = $this->config->item('admin_email');
-
-		foreach ($admin_emails as $key => $email)
-		{
-			if($current_user)
-			{
-				if( $current_user['email'] == $email )
-				{
-					$valid_user = true;
-				}
-			}
-		}
-
-		if($valid_user == false)
-		{
-			redirect('');
-		}
-	}
-
 	function checkouts()
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		$checkout_orders = $this->database->GetCheckoutOrder(null);
 		$checkout_orders = array_reverse($checkout_orders);
@@ -93,7 +70,7 @@ class admin extends CI_controller
 
 	function labels($waybill)
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		$waybill = trim($waybill);
 		$data = null;
@@ -135,7 +112,7 @@ class admin extends CI_controller
 
 	function logistics()
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		$data['delhivery_waybills'] = $this->database->NumWaybills();
 		$data['delhivery_pincodes'] = $this->database->NumPincodes();
@@ -189,7 +166,7 @@ class admin extends CI_controller
 
 	function users($id = null)
 	{
-		$this->_validate_user();
+		_validate_user();
 				
 		if(is_null($id) == false)
 		{
@@ -222,7 +199,7 @@ class admin extends CI_controller
 
 	function discounts($id = null)
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		/*Two type of discounts : 
 		1. Domain discounts
@@ -356,7 +333,7 @@ class admin extends CI_controller
 
 	function mails()
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		$data['site_name'] = "Psycho Store";
 		$data['username'] = 'codinpsycho';
@@ -508,7 +485,7 @@ class admin extends CI_controller
 
 	function feedback()
 	{
-		$this->_validate_user();
+		_validate_user();
 		//Get all feedbacks from the user, since a certain time
 		$feedbacks = $this->database->GetFeedback(false);
 		$feedbacks = array_reverse($feedbacks);
@@ -522,14 +499,14 @@ class admin extends CI_controller
 
 	function publish_state($id, $value)
 	{
-		$this->_validate_user();
+		_validate_user();
 		$this->database->SetPublishState($id,$value);
 		redirect('admin/feedback');
 	}
 
 	function request_pickup()
 	{
-		$this->_validate_user();
+		_validate_user();
 		$packaged_shipments = $this->session->flashdata('packaged_shipments');
 		
 		if(is_null($packaged_shipments))
@@ -575,7 +552,7 @@ class admin extends CI_controller
 	{
 		always_refresh();
 
-		$this->_validate_user();
+		_validate_user();
 
 		//Get all packaged and requested orders
 		$packaged_shipments = $this->database->GetOrdersByState(OrderState::Packaging);
@@ -608,7 +585,7 @@ class admin extends CI_controller
 
 	function update_order($id, $status)
 	{
-		$this->_validate_user();
+		_validate_user();
 
 		switch ($status)
 		{
@@ -711,7 +688,7 @@ class admin extends CI_controller
 
 	function shipped_orders()
 	{
-		$this->_validate_user();
+		_validate_user();
 		$orders = array();
 		
 		$shipped_orders = $this->database->GetOrdersByState(OrderState::Shipped);
@@ -732,7 +709,7 @@ class admin extends CI_controller
 	
 	function orders($order_id = null)
 	{
-		$this->_validate_user();
+		_validate_user();
 		$orders = array();
 		
 		if($order_id)
@@ -767,7 +744,7 @@ class admin extends CI_controller
 
 	function products($product_id = null)
 	{
-		$this->_validate_user();
+		_validate_user();
 		$products = null;
 		$data['supported_games'] = $this->database->GetAllSuportedGames();	
 
