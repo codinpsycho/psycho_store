@@ -1,8 +1,6 @@
 <?php 
-
 require APPPATH.'third_party/phpspreadsheet/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-
 class sales extends CI_controller
 {
 	function __construct()
@@ -51,6 +49,8 @@ class sales extends CI_controller
 	function  get_gst_invoice_data($orders)
 	{
 		_add_address_and_user_to_orders($orders);
+
+		$spreadsheet_data = array();
 
 		//Traverse each order and input a row in the excel sheet with details as in clartax template
 		foreach ($orders as $key => $order)
@@ -119,7 +119,7 @@ class sales extends CI_controller
 		}
 			//How to write to excel file
 		$spreadsheet = new Spreadsheet();
-		$spreadsheet->getActiveSheet()->fromArray($spreadsheet_data);
+		$spreadsheet->getActiveSheet()->fromArray($spreadsheet_data);		
 
 		//Download it
 		$this->_download($spreadsheet);
@@ -157,9 +157,9 @@ class sales extends CI_controller
 		{
 			case 'intra':
 				$gst_values['cgst_percent'] = $percentage/2;
-				$gst_values['cgst_amount'] = $value/2;
+				$gst_values['cgst_amount'] = round($value/2, 2);;
 				$gst_values['sgst_percent'] = $percentage/2;
-				$gst_values['sgst_amount'] = $value/2;
+				$gst_values['sgst_amount'] = round($value/2, 2);;;
 				$gst_values['igst_percent'] = 0;
 				$gst_values['igst_amount'] = 0;
 				break;
@@ -170,7 +170,7 @@ class sales extends CI_controller
 				$gst_values['sgst_percent'] = 0;
 				$gst_values['sgst_amount'] = 0;
 				$gst_values['igst_percent'] = $percentage;
-				$gst_values['igst_amount'] = $value;
+				$gst_values['igst_amount'] = round($value, 2);;;
 				break;
 		}
 
@@ -182,7 +182,7 @@ class sales extends CI_controller
 	function _download($spreadsheet)
 	{
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="01simple.xlsx"');
+		header('Content-Disposition: attachment;filename="simple.xlsx"');
 		header('Cache-Control: max-age=0');
 		// If you're serving to IE 9, then the following may be needed
 		header('Cache-Control: max-age=1');
@@ -193,6 +193,7 @@ class sales extends CI_controller
 		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 		header('Pragma: public'); // HTTP/1.0
 
+				
 		$writer = new PhpOffice\PhpSpreadsheet\writer\Xlsx($spreadsheet);
 		$writer->save('php://output');
 		exit;
