@@ -149,7 +149,7 @@ class Pages extends CI_controller
 		display('feedback_wall', $data);
 	}
 
-	function explore($url = null, $sorting = 'latest')
+	function explore($url = null, $sorting = 'popular')
 	{
 		$data['base_url'] = "explore/$url";
 		switch ($url)
@@ -383,7 +383,7 @@ class Pages extends CI_controller
 	function show_featured_prods()
 	{
 		//For now only tees, later on featured prods
-		$data['products'] = $this->database->GetProducts('all', 'popular', 'all', true);
+		$data['products'] = $this->database->GetProducts('all', 'latest', 'all', true);
 		$data['latest_link_state'] = 'active';
 		$data['popular_link_state'] = 'none';
 		$params['tag_name'] = 'psychofamous';
