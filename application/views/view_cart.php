@@ -91,7 +91,7 @@ $(function () {
 						</div>
 			        </div>
 			    <?php if(count($this->cart->contents()) - $num_plus > 1): ?>
-			    	<div class="col-md-12"> <h1 class="text-center"><strong>+</strong></h1></div>
+			    	<div class="col-md-12 col-sm-12 col-xs-12"> <h1 class="text-center"><strong>+</strong></h1></div>
 				<?php $num_plus++; endif;?>
 			<?php endforeach; 
 			if($this->cart->total_items() == 0)
