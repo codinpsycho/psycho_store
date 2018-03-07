@@ -23,8 +23,8 @@
 	}
 	function update_price_text(price)
 	{
-		var actual_price = document.getElementById('actual_price');
-		actual_price.innerHTML = "Actual Price : <i class='fa fa-rupee'></i> " + price;
+		// var actual_price = document.getElementById('actual_price');
+		// actual_price.innerHTML = "Actual Price : <i class='fa fa-rupee'></i> " + price;
 		var header_price = document.getElementById('header_price');
 		header_price.innerHTML = "Order Review <span class='pull-right'> <i class='fa fa-rupee'></i> <span id='price'>" +  price;
 		var final_price = document.getElementById('final_price');
