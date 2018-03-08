@@ -161,7 +161,7 @@ class Pages extends CI_controller
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "T-Shirts";
 				$data['meta_id'] = 2;
-				$data['seotext_header'] = "Gaming Anime Geek T-shirts";
+				$data['seotext_header'] = "Gaming Nerdy Anime T-shirts";
 				$data['seotext_content'] = "Psycho store vows to bring you the rarest and the geekiest loot you can add to your inventory (online in India) in the form of a medium which is loved by everyone, as it gives one the ability to express his/her true inner self in a very subtle way.
 					Check out our collection of premium cotton t-shirts with unique designs from the world of gaming, anime and various other fandoms that are guaranted to satisfy your inner geek.<br><br>
 					Select from a wide array of designs ranging from everyones favorite dragon ball z, naruto, CS GO, pokemon to the extreme niche world of dark souls, nier : automata, half-life and halo. For now we are focusing on the gaming anime and geek community of earth (other planets can wait for now). We will let you know when we start our inter-planetory logistic service.<br><br>
@@ -176,7 +176,7 @@ class Pages extends CI_controller
 				$data['prod_2_title'] = 'Coffee Mugs';
 				$data['header_title'] = "Posters";
 				$data['meta_id'] = 3;
-				$data['seotext_header'] = "Gaming Anime Geek Posters";
+				$data['seotext_header'] = "Gaming Geek Anime Posters";
 				$data['seotext_content'] = "Posters have always been a very personal medium to show where your heart truly belongs and that has always been the case with us personally since childhood. So here we are with our varied collection of high quality posters available online in India for you to satisfy your inner geek.<br><br>
 				Doesn't matter if you want to go over 9000 or just be happy seeing your favorite pokemon, we have something to quench your geeky thirst. Decorate your room or office with these high quality posters and give your place some personality of yours. After all people should know where your heart truly is.
 					<br><br>
@@ -243,9 +243,9 @@ class Pages extends CI_controller
 	{
 		$total_products = $this->database->GetMaxProductID();
 		$url = $this->beautify($url,'_');
-		$result = $this->database->GetProductById($id);		
+		$result = $this->database->GetProductById($id);
 
-		if($result)
+		if($result && $result['product_state'] != 'hidden')
 		{
 			$next = $prev = 0;
 			$this->GetNextPreviousIds($result['product_id'], $next, $prev, $total_products);
