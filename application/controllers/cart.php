@@ -3,8 +3,11 @@
 * 
 */
 class cart extends CI_controller
-{	
-	
+{
+	var $auto_disc_array = array(	'2' => array('percentage' => 5, 'coupon' => 'auto_disc_5', 'comment' =>" Btw, adding another item to your cart will give an instant 5% off"),
+								'3' => array('percentage' => 10, 'coupon' => 'auto_disc_10', 'comment' => " See, magic happens, now add another item for a 10% off."),
+							);	
+		
 	function __construct()
 	{
 		parent::__construct();
@@ -72,7 +75,12 @@ class cart extends CI_controller
 
 		if($num_items)
 		{
-			$this->_show_cheat_code_after_timeout(5000);
+			//$this->_show_cheat_code_after_timeout(5000);
+		}
+
+		if($this->config->item('auto_discounts'))
+		{
+			$this->_apply_auto_disc();
 		}
 
 		$data['cheat_hints'] = $this->load->view('cheatcode_hints', null, true);
@@ -94,6 +102,65 @@ class cart extends CI_controller
 
 			notify_event('show_cheat_code', $params);
 		}
+	}
+
+	//Should be called after an update or removal of an item from the cart
+	function _reconfirm_cheat_code()
+	{
+		//If discount is applied, do a conditional-check again
+		if($this->cart->is_discount_applied())
+		{
+			$coupon = $this->cart->discount_info();
+			if($this->_can_apply_code($coupon) == false)
+			{
+				$this->cart->remove_discount();
+			}
+		}
+	}
+
+	function _show_auto_disc_notifs($comment)
+	{
+		$num_items = $this->cart->total_items();
+
+		switch ($num_items)
+		{
+			case 1:
+				//5% off
+				show_alert($comment. " Btw, adding another item to your cart will give an instant 5% off");
+				break;
+			case 2:
+				//5% off
+				show_alert($comment. " See, magic happens, now add another item for a 10% off.");
+				break;
+			
+			default:
+				show_alert($comment);
+				break;
+		}		
+
+	}
+
+	function _apply_auto_disc()
+	{
+		//Check if there are x no. of products in the cart, apply an automated y% discount.
+		$num_items = $this->cart->total_items();
+		$auto_disc_info = null;
+
+		foreach ($this->auto_disc_array as $cart_items => $disc_info)
+		{
+			if($num_items >= $cart_items)
+			{
+				$auto_disc_info = $disc_info;
+			}
+		}
+
+		$applied_disc = $this->cart->discount_info();
+
+		//auto discount should be more than the applied disc (if any)
+		if($applied_disc['percentage'] < $auto_disc_info['percentage'])
+		{
+			$this->_apply_discount( $auto_disc_info['coupon'] );
+		}		
 	}
 
 	function instant_checkout($product_id)
@@ -138,17 +205,23 @@ class cart extends CI_controller
 		if($product)
 		{
 			$this->_add_to_cart($product);
-		}		
-
-		show_alert($product['add_to_cart_comment']);
+		}
+		
+		$this->_show_add_to_cart_comment($product['add_to_cart_comment']);
 		
 		redirect('cart');
+	}
+
+	function _show_add_to_cart_comment($comment)
+	{
+		$this->config->item('auto_discounts') == true ? $this->_show_auto_disc_notifs($comment) : show_alert($comment);
 	}
 
 	function remove($row_id)
 	{		
 		$data = array('rowid' => $row_id, 'qty' => 0);
 		$this->cart->update($data);
+		$this->_reconfirm_cheat_code();
 
 		redirect('cart');
 	}
@@ -168,15 +241,7 @@ class cart extends CI_controller
 			}
 		}
 
-		//If discount is applied, do a conditional-check again
-		if($this->cart->is_discount_applied())
-		{
-			$coupon = $this->cart->get_applied_discount_coupon();
-			if($this->_can_apply_code($coupon) == false)
-			{
-				$this->cart->remove_discount();
-			}
-		}		
+		$this->_reconfirm_cheat_code();
 
 		redirect('cart');
 	}
@@ -202,22 +267,28 @@ class cart extends CI_controller
 		
 		if($coupon != (string)FALSE)
 		{
-			//Log coupon to see people apply
-			$this->database->SaveCheatCode($coupon);			
-			$discount_percentage = 0;
-			$coupon_info = $this->database->GetDiscountCoupon($coupon);
-
-			//Run some conditional-check for code
-			if($this->_can_apply_code($coupon_info))
-			{
-				$discount_percentage = $this->_getDiscount($coupon);
-				$this->cart->apply_discount($coupon, $discount_percentage);				
-			}
-
-			$this->_notify_discount_applied($discount_percentage, $coupon_info);
+			$this->_apply_discount($coupon);
 		}
 
 		redirect('cart');
+	}
+
+	function _apply_discount($coupon)
+	{
+		//Log coupon to see people apply
+		$this->database->SaveCheatCode($coupon);
+		$discount_percentage = 0;
+		$coupon_info = $this->database->GetDiscountCoupon($coupon);
+
+		//Run some conditional-check for code
+		if($this->_can_apply_code($coupon_info))
+		{
+			$discount_percentage = $this->_getDiscount($coupon);
+			$this->cart->apply_discount($coupon, $discount_percentage);
+		}
+
+		$this->_notify_discount_applied($discount_percentage, $coupon_info);
+
 	}
 
 	function _can_apply_code($coupon_info)
@@ -239,9 +310,8 @@ class cart extends CI_controller
 		{			
 			case 'psychoness10':
 			case 'easter_egg':
-			case 'uuddlrlrba':
-			case 'upupdowndownleftrightleftrightba':
-			case 'wwssadadba':
+			case 'easteregg':			
+			case 'auto_disc_5':			
 			case 'iddqdfrapp':
 			case 'psychoness15':
 				//Should be applied on purchase of 2 or 3 tshirts
@@ -280,9 +350,10 @@ class cart extends CI_controller
 							break;
 						}
 					}
-				}				
+				}
 				break;
 
+			case 'auto_disc_10':
 			case 'powerup':
 				//Should be applied on purchase of 3 or more products
 				if($this->cart->total_items() > 2)

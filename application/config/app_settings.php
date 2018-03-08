@@ -12,6 +12,7 @@ $config['size_chart'] = 'images/size_chart.jpg';
 
 $config['restock_date'] = '20th June';
 $config['cod_charge'] = '60';
+$config['auto_discounts'] = true;
 
 //Admin Panel
 $config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com');
