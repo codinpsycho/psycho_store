@@ -1,7 +1,7 @@
 <div class="well">
 	<div class="row">
 		<div class="col-md-3 col-xs-3">
-			<?php $src = "http://www.facebook.com/plugins/like.php?href=$url&layout=button_count&action=like&show_faces=false&share=true&height=21&appId=601282446622582" ?>
+			<?php $src = "http://www.facebook.com/plugins/like.php?href=$url&layout=button_count&action=like&show_faces=false&share=false&height=21&appId=601282446622582" ?>
 			<iframe src="<?php echo $src ?>" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:135px;" allowTransparency="true">
 		    </iframe>
 	    </div>
