@@ -74,7 +74,7 @@ function update_btn_text_on_addtocart(cb)
         <hr>        
         <div class="row ">
           <div class="col-md-12">
-            <h5>Inspired by&nbsp;<span class="h4 molot"><a href=<?php $game = url_title($product['product_game']); echo site_url("like/$game")?>> <?php echo $product['product_game']?></a> </span></h5>
+            <h4 class="molot">More from<a href=<?php $game = url_title($product['product_game']); echo site_url("like/$game")?>> <?php echo $product['product_game']?></a>
             <hr>
           </div>
           <div class="col-md-12">
