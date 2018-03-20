@@ -58,21 +58,24 @@ class sales extends CI_controller
 			$order_items = $order['order_items'];
 			foreach ($order_items as $key => $item)
 			{
+				//Get GST values
+				$gst_values = $this->_calculate_gst_values($item, $order['address']);
+
 				$order_data = array();
 				//Start building xcl data, needs to happen for every item
 				$order_data[] = $order['date_created'];		//Invoice Date
 				$order_data[] = "INV-".$order['txn_id'];	//Invoice Num
 				$order_data[] = $order['address']['first_name'];	//Billing Name
-				$order_data[] = '-';	//Customer GSTIN
+				$order_data[] = '';	//Customer GSTIN
 				$order_data[] = $order['address']['state'];		//Place of supply
 				$order_data[] = 'G';	//Goods or Servie?
 				$order_data[] = $item['product']['product_type'];	//Descriptiom
-				$order_data[] = '-';	//HSN SAC
+				$order_data[] = '';	//HSN SAC
 				$order_data[] = $item['count'];	//Qty
-				$order_data[] = '-';	//Unit of measurement
+				$order_data[] = '';	//Unit of measurement
 				$order_data[] = $item['product']['product_price'];	//Price
-				$order_data[] = '-';	//Discount
-				$order_data[] = $item['product']['product_price'];	//taxabl Value
+				$order_data[] = '';	//Discount
+				$order_data[] = $item['product']['product_price'] - $gst_values['tax'];	//taxable Value
 				
 				//Get GST values
 				$gst_values = $this->_calculate_gst_values($item, $order['address']);
@@ -83,30 +86,31 @@ class sales extends CI_controller
 				$order_data[] = $gst_values['sgst_amount'];	//CGST Value
 				$order_data[] = $gst_values['igst_percent'];	//CGST Value
 				$order_data[] = $gst_values['igst_amount'];	//CGST Value
-				$order_data[] = '-';	//cess rate
-				$order_data[] = '-';	//cess amount
+				$order_data[] = '';	//cess rate
+				$order_data[] = '';	//cess amount
 				$order_data[] = 'N';	//Bill of supply?
 				$order_data[] = 'N';	//Nill rated?
 				$order_data[] = 'N';	//Reverse Charge?
-				$order_data[] = '-';	//Type of export
-				$order_data[] = '-';	//Shipping Port Code
-				$order_data[] = '-';	//Export Shipping bill num
-				$order_data[] = '-';	//Export Shipping bill date
-				$order_data[] = '-';	//Has GST/IDT TDS been deducted
+				$order_data[] = '';	//Type of export
+				$order_data[] = '';	//Shipping Port Code
+				$order_data[] = '';	//Export Shipping bill num
+				$order_data[] = '';	//Export Shipping bill date
+				$order_data[] = '';	//Has GST/IDT TDS been deducted
 				$order_data[] = $this->config->item('gstin');	//MY GSTIN
 				$order_data[] = format_address($order['address']);	//Customer address
 				$order_data[] = $order['address']['city'];	//Customer city
 				$order_data[] = $order['address']['state'];	//Customer state
-				$order_data[] = '-';	//Document cancelled?
-				$order_data[] = '-';	//Filing month?
-				$order_data[] = '-';	//Filing Quarter?
-				$order_data[] = '-';	//Original INV date
-				$order_data[] = '-';	//original inv number
-				$order_data[] = '-';	//original customer GSTIN
-				$order_data[] = '-';	//GSTIN of marketplace
-				$order_data[] = '-';	//date of linked advance
-				$order_data[] = '-';	//Voucher of linked advance something
-				$order_data[] = '-';	//Adjustment amount of linked advcance something
+				$order_data[] = '';	//Document cancelled?
+				$order_data[] = '';	//Is the customer a Composition dealer or UIN registered?
+				$order_data[] = '';	//Filing month?
+				$order_data[] = '';	//Filing Quarter?
+				$order_data[] = '';	//Original INV date
+				$order_data[] = '';	//original inv number
+				$order_data[] = '';	//original customer GSTIN
+				$order_data[] = '';	//GSTIN of marketplace
+				$order_data[] = '';	//date of linked advance
+				$order_data[] = '';	//Voucher of linked advance something
+				$order_data[] = '';	//Adjustment amount of linked advcance something
 				$order_data[] = $order['order_amount'];	//Final taxable value
 
 
@@ -138,7 +142,7 @@ class sales extends CI_controller
 				$percentage = 5;
 				break;
 			case 'mugs':
-				$percentage = 18;
+				$percentage = 12;
 				break;
 			case 'posters':
 				$percentage = 12;
@@ -162,6 +166,7 @@ class sales extends CI_controller
 				$gst_values['sgst_amount'] = round($value/2, 2);;;
 				$gst_values['igst_percent'] = 0;
 				$gst_values['igst_amount'] = 0;
+				$gst_values['tax'] = $gst_values['cgst_amount'] + $gst_values['sgst_amount'];
 				break;
 
 			case 'inter':
@@ -170,7 +175,8 @@ class sales extends CI_controller
 				$gst_values['sgst_percent'] = 0;
 				$gst_values['sgst_amount'] = 0;
 				$gst_values['igst_percent'] = $percentage;
-				$gst_values['igst_amount'] = round($value, 2);;;
+				$gst_values['igst_amount'] = round($value, 2);
+				$gst_values['tax'] = $gst_values['igst_amount'];
 				break;
 		}
 
