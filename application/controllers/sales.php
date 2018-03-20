@@ -150,7 +150,7 @@ class sales extends CI_controller
 		//Detect GST type based on address state
 		$state = $address['state'];
 
-		$type = ($state === $this->config->item('gst_state')) ? 'intra' : 'inter';
+		$type = ($state === $this->config->item('gstin_state')) ? 'intra' : 'inter';
 		$gst_values = null;
 
 		switch ($type)
@@ -194,7 +194,7 @@ class sales extends CI_controller
 		header('Pragma: public'); // HTTP/1.0
 
 				
-		$writer = new PhpOffice\PhpSpreadsheet\writer\Xlsx($spreadsheet);
+		$writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 		$writer->save('php://output');
 		exit;
 
