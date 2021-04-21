@@ -2,18 +2,18 @@
 /**
 * 
 */
-class cart extends CI_controller
+class Cart extends CI_controller
 {
 	var $auto_disc_array = array(	'2' => array('percentage' => 5, 'coupon' => 'auto_disc_5', 'comment' =>" Btw, adding another item to your cart will give an instant 5% off"),
-								'3' => array('percentage' => 10, 'coupon' => 'auto_disc_10', 'comment' => " See, magic happens, now add another item for a 10% off."),
-							);	
-		
+		'3' => array('percentage' => 10, 'coupon' => 'auto_disc_10', 'comment' => " See, magic happens, now add another item for a 10% off."),
+	);	
+
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('cart');
 		$this->load->model('database');
-		$this->load->helper('url');
+		// $this->load->helper('url');
 		$this->load->helper('html');		
 		$this->load->helper('form');
 		$this->load->helper('psycho_helper');
@@ -29,15 +29,17 @@ class cart extends CI_controller
 	//make sure user cant enter more than available stock qty
 	function _set_stock_info(&$data)
 	{
-		foreach ($this->cart->contents() as $item)
-		{
-			$prod_id = $item['id'];
-			$product = $this->database->GetProductById($prod_id);
+		if(!empty($this->cart->contents())) {
+			foreach ($this->cart->contents() as $item)
+			{
+				$prod_id = $item['id'];
+				$product = $this->database->GetProductById($prod_id);
 
 			//Check stock and set stock info
-			$data['products'][$item['rowid'].'stock_state'] = $this->_set_stock_state($product, $item);
+				$data['products'][$item['rowid'].'stock_state'] = $this->_set_stock_state($product, $item);
 
-			$data['products'][$prod_id] = $product;
+				$data['products'][$prod_id] = $product;
+			}
 		}
 	}
 
@@ -48,15 +50,15 @@ class cart extends CI_controller
 		{
 			case 'hoodie':
 			case 'tshirt':
-				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
-				
-				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
-					return "Out Of Stock";
-				break;
+			$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
+
+			if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
+				return "Out Of Stock";
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 
 		return "";
@@ -126,16 +128,16 @@ class cart extends CI_controller
 		{
 			case 1:
 				//5% off
-				show_alert($comment. " Btw, adding another item to your cart will give an instant 5% off");
-				break;
+			show_alert($comment. " Btw, adding another item to your cart will give an instant 5% off");
+			break;
 			case 2:
 				//5% off
-				show_alert($comment. " See, magic happens, now add another item for a 10% off.");
-				break;
+			show_alert($comment. " See, magic happens, now add another item for a 10% off.");
+			break;
 			
 			default:
-				show_alert($comment);
-				break;
+			show_alert($comment);
+			break;
 		}		
 
 	}
@@ -179,14 +181,14 @@ class cart extends CI_controller
 	function _add_to_cart($product)
 	{
 		$cart_item = array
-				(
-					'id' 	=> $product['product_id'],
-					'qty'	=> '1',
-					'price' => $product['product_price'],
-					'name'  => $product['product_name'],
-					'type'	=> $product['product_type'],
-				);
-						
+		(
+			'id' 	=> $product['product_id'],
+			'qty'	=> '1',
+			'price' => $product['product_price'],
+			'name'  => $product['product_name'],
+			'type'	=> $product['product_type'],
+		);
+
 		$extra = urldecode($this->input->post('extra'));
 		if($extra)
 		{
@@ -250,12 +252,15 @@ class cart extends CI_controller
 	{
 		$discount = $this->database->GetDiscountCoupon($coupon);
 		
-		if(count($discount) > 0)
-		{
-			//Make sure it hasnt expired yet
-			if( strtotime($discount['expiry']) > strtotime(date("Y-m-d")) )
+		if(!empty($discount)) {
+			
+			if(count($discount) > 0)
 			{
-				return $discount['how_much'];
+				//Make sure it hasnt expired yet
+				if( strtotime($discount['expiry']) > strtotime(date("Y-m-d")) )
+				{
+					return $discount['how_much'];
+				}
 			}
 		}
 		return 0;
@@ -295,8 +300,8 @@ class cart extends CI_controller
 	{
 		$check_result = false;
 		$coupon = $coupon_info['coupon'];
-		$use_limit = $coupon_info['use_limit'];
-		$use_count = $coupon_info['use_count'];
+		$use_limit = isset($coupon_info['use_limit']) ? $coupon_info['use_limit'] : null;
+		$use_count = isset($coupon_info['use_count']) ? $coupon_info['use_count'] : null;
 
 		$can_use = $use_limit ? ($use_count < $use_limit) : true;
 		
@@ -315,64 +320,64 @@ class cart extends CI_controller
 			case 'iddqdfrapp':
 			case 'psychoness15':
 				//Should be applied on purchase of 2 or 3 tshirts
-				if($this->cart->total_items() > 1)
-				{
-					$check_result = true;
-				}
-				break;
+			if($this->cart->total_items() > 1)
+			{
+				$check_result = true;
+			}
+			break;
 
 			case 'p2psycho':
 				//Check if there are minimum 2 posters in cart
-				if($this->cart->total_items() > 1)
-				{
-					$check_result = true;
-					foreach ($this->cart->contents() as $items)
-					{					
-						if($items['type'] != 'posters')
-						{
-							$check_result = false;
-							break;
-						}
+			if($this->cart->total_items() > 1)
+			{
+				$check_result = true;
+				foreach ($this->cart->contents() as $items)
+				{					
+					if($items['type'] != 'posters')
+					{
+						$check_result = false;
+						break;
 					}
-				}				
-				break;
+				}
+			}				
+			break;
 
 			case 'p3psycho':
 				//Check if there are minimum 3 posters in cart
-				if($this->cart->total_items() > 2)
+			if($this->cart->total_items() > 2)
+			{
+				$check_result = true;
+				foreach ($this->cart->contents() as $items)
 				{
-					$check_result = true;
-					foreach ($this->cart->contents() as $items)
+					if($items['type'] != 'posters')
 					{
-						if($items['type'] != 'posters')
-						{
-							$check_result = false;
-							break;
-						}
+						$check_result = false;
+						break;
 					}
 				}
-				break;
+			}
+			break;
 
 			case 'auto_disc_10':
 			case 'powerup':
 				//Should be applied on purchase of 3 or more products
-				if($this->cart->total_items() > 2)
-				{
-					$check_result = true;
-				}
-				break;				
+			if($this->cart->total_items() > 2)
+			{
+				$check_result = true;
+			}
+			break;				
 
 			case 'godmode_psycho':
 				//Should be applied on purchase of 4 or more tshirts
-				if($this->cart->total_items() > 3)
-				{
-					$check_result = true;
-				}
-				break;
+			if($this->cart->total_items() > 3)
+			{
+				$check_result = true;
+			}
+			break;
 
 			default:
-				$check_result = true;
-				break;
+			$check_result = true;
+			break;
 		}
 
 		return $check_result;
@@ -394,7 +399,8 @@ class cart extends CI_controller
 
 			$params['body'] = $body;
 		}
-		else if(count($domain_discount))
+		// else if(count($domain_discount))
+		else if(!empty($domain_discount))
 		{
 			$params['title'] = $username;
 			$params['type'] = "success";
@@ -408,19 +414,19 @@ class cart extends CI_controller
 			switch ($coupon_info['coupon'])
 			{
 				case 'frapp_mode':
-					$params['title'] = "Cheat Code Applied $discount_percentage% off";
-					$params['body'] = "<strong>$username</strong>, We all have been through student life and we all know how important discounts are, wish frapp was there in our times as well. Enjoy your <strong>$discount_percentage%</strong> discount. <br><br>Happy gaming/debugging!" ;
-					break;
+				$params['title'] = "Cheat Code Applied $discount_percentage% off";
+				$params['body'] = "<strong>$username</strong>, We all have been through student life and we all know how important discounts are, wish frapp was there in our times as well. Enjoy your <strong>$discount_percentage%</strong> discount. <br><br>Happy gaming/debugging!" ;
+				break;
 				
 				case 'bin_mode':
-					$params['title'] = "Cheat Code Applied $discount_percentage% off";
-					$params['body'] = "Hello, <strong>earthling</strong>, a big thank you from BinBag and Psycho Store for being a responsible creature of earth. For all your good deeds we have applied <strong>$discount_percentage%</strong> discount just for you. <br><br>Happy gaming/debugging!" ;
-					break;					
+				$params['title'] = "Cheat Code Applied $discount_percentage% off";
+				$params['body'] = "Hello, <strong>earthling</strong>, a big thank you from BinBag and Psycho Store for being a responsible creature of earth. For all your good deeds we have applied <strong>$discount_percentage%</strong> discount just for you. <br><br>Happy gaming/debugging!" ;
+				break;					
 				
 				default:
-					$params['title'] = "Cheat Code Applied $discount_percentage% off";
-					$params['body'] = "<strong>$username</strong>, we strongly oppose gaming with cheat codes applied. But anyway, we have made this game <strong>$discount_percentage%</strong> easier, just for you.<br><br>Happy gaming/debugging!" ;
-					break;
+				$params['title'] = "Cheat Code Applied $discount_percentage% off";
+				$params['body'] = "<strong>$username</strong>, we strongly oppose gaming with cheat codes applied. But anyway, we have made this game <strong>$discount_percentage%</strong> easier, just for you.<br><br>Happy gaming/debugging!" ;
+				break;
 			}			
 		}
 

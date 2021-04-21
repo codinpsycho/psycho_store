@@ -23,7 +23,7 @@ if ($this->config->item('use_username', 'tank_auth')) {
 		<td style="color: red;"><?php echo form_error($login['name']); ?><?php echo isset($errors[$login['name']])?$errors[$login['name']]:''; ?></td>
  -->
  <div class="form-group">
-    <?php echo $this->load->view('view_email') ?>
+    <?php echo $this->load->view('view_email', null, True) ?>
   </div>
 </div>
 <button class="btn btn-primary" type="submit">Get a New Password</button>

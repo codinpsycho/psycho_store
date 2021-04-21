@@ -4,4 +4,4 @@ Frankly speaking I don't even remember the taste of organically grown food, once
 
 The story continues on your next order!
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

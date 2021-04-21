@@ -30,6 +30,7 @@ $(function () {
 
 			<div class="row">
 				<?php $num_plus = 0;
+				if(!empty($this->cart->contents())) {
 				foreach ($this->cart->contents() as $items):
 				$product = $products["{$items['id']}"];
 				$path = "/".$product['product_image_path'];
@@ -94,6 +95,7 @@ $(function () {
 			    	<div class="col-md-12 col-sm-12 col-xs-12"> <h1 class="text-center"><strong>+</strong></h1></div>
 				<?php $num_plus++; endif;?>
 			<?php endforeach; 
+		}
 			if($this->cart->total_items() == 0)
 				echo heading('Empty Cart',3, 'class="text-center"');
 			?>

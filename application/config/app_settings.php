@@ -12,16 +12,16 @@ $config['size_chart'] = 'images/size_chart.jpg';
 
 $config['restock_date'] = '20th June';
 $config['cod_charge'] = '60';
-$config['auto_discounts'] = true;
+$config['auto_discounts'] = false;
 
 //Admin Panel
-$config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com');
+$config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com', 'pekoj@getairmail.com');
 
 //Partner Email
 $config['partner_email'] = array('ishkaran.fearme@gmail.com', 'abhishek@gamexs.in');
 
 //Mailgun and Newsletter
-$config['mailgun_key'] = 'key-0f80f2f05eb0cc5a7f733be72c8fb5c9';	//old one
+$config['mailgun_key'] = 'key-58a89ae28f19d2c9f072e26df633c80c';	//new one
 $config['newsletter_address'] = 'update@news.psychostore.in';
 $config['campaign_id'] = 'psycho_campaign';
 

@@ -18,7 +18,7 @@
 <br>
 <br />
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </div>
 </body>
 </html>

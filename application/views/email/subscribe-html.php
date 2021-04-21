@@ -22,7 +22,7 @@ For laymans : We will notify you of all the new loot and gears and discounts and
 <br />
 <br />
 <br />
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </td>
 </tr>
 </table>

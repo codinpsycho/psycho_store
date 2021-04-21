@@ -61,7 +61,7 @@
 		<a href= <?php echo site_url('') ?> ><h4 class='molot navbar-text'>Psycho Store</h4></a>    
     </ul>
     <ul class="nav nav-pills">
-      <form class='navbar-form' method = "post" action = <?php echo site_url("admin/search")?> role="form">
+      <form class='navbar-form' method = "post" action = "<?php echo site_url("admin/search")?>" role="form">
         <select class="form-control navbar-btn" name="search_option">
           <option value='orders'>Orders</option>
           <option value ='products'>Products</option>

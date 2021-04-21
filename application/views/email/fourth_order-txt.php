@@ -4,4 +4,4 @@ From the corner of my eye I could see some stoners munching on their burgers and
 
 The story continues on your next order!
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

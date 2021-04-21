@@ -10,13 +10,13 @@
         		<?php $attributes = array('id' => 'login_form');?>
 				<?php echo form_open($this->uri->uri_string().'?redirect_url='.$redirect_url, $attributes); ?>
 				<div class="form-group">
-					<?php echo $this->load->view('view_username') ?>	
+					<?php echo $this->load->view('view_username', null, True) ?>	
 				</div>
 				<div class="form-group">
-				    <?php echo $this->load->view('view_email.php') ?>
+				    <?php echo $this->load->view('view_email.php', null, True) ?>
 				</div>
 				<div class="form-group">
-					<?php echo $this->load->view('view_password.php') ?>
+					<?php echo $this->load->view('view_password.php', null, True) ?>
 				</div>	
 			</div>
 		</div>

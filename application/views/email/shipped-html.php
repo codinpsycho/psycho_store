@@ -9,7 +9,7 @@
 <p>Our delivery minions are on their way to your shipping address with super cool awesomeness in their hands. We have advised them to not let their guard down as there might be dark and evil forces lurking in the wilderness, looking for some loot.</p>
 <br>
 <p>Anyway we have added a tracker on them so that you can track their movements. Here take a look.</p>
-<strong><h2>Tracker Id : <a href="<?php echo $tracking_address ?>" style="color: #3366cc;"><?php echo $waybill ?></a></h2></strong>
+<strong><h2>Tracker Id : <a href="<?php echo $tracking_address ?>" style="color: #3366cc;"><?php echo $tracking_address ?></a></h2></strong>
 <br />
 <!--<big style="font: 16px/18px Arial, Helvetica, sans-serif;"><b><a href="<?php echo site_url(''); ?>" style="color: #3366cc;">Go to <?php echo $site_name; ?> now!</a></b></big><br />-->
 <br />
@@ -17,7 +17,7 @@
 <br />
 <br />
 <br />
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 
 </div>
 </body>

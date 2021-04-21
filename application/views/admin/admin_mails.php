@@ -21,7 +21,7 @@
 	    	<div class="col-md-12">
 	    		<form class='form-inline' method="post" action= <?php echo site_url('admin/mails') ?> >
                     <div class="form-group">
-                        <?php echo $this->load->view('view_email') ?>
+                        <?php echo $this->load->view('view_email', null, True) ?>
                         <label>Type </label>
                         <select class="form-control" name="mail_type">
                             <option value="activate"> Activate </option>

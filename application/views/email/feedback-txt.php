@@ -13,4 +13,4 @@ Leave the rest to us, we will make sure that you unlock some good discount on yo
 
 If there is any query/concern, do contact us at contact@psychostore.in
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

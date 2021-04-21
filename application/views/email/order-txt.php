@@ -16,4 +16,4 @@ Your email address: <?php echo $email; ?>
 
 */ ?>
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

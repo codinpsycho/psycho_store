@@ -1,4 +1,4 @@
-<?php echo $this->load->view('view_product_modals', null); ?>
+<?php echo $this->load->view('view_product_modals', null, True); ?>
 
 <script type="text/javascript">
   fbq('track', "ViewContent");  
@@ -60,7 +60,7 @@ function update_btn_text_on_addtocart(cb)
       </div>     
       <div class="col-md-6 text-center">
         <?php echo $product_img_view; ?>
-        <?php echo $this->load->view('view_product_social', null); ?>
+        <?php echo $this->load->view('view_product_social', null, True); ?>
       </div>
       <div class="col-md-4">
         <div class="row">
@@ -78,19 +78,19 @@ function update_btn_text_on_addtocart(cb)
             <hr>
           </div>
           <div class="col-md-12">
-            <?php echo $this->load->view('view_product_type', null); ?>
+            <?php echo $this->load->view('view_product_type', null, True); ?>
           </div>
         </div>
       </div>
     </div>
-  <?php $data['suggested_products'] = $suggested_products; echo $this->load->view('product_suggestions', $data); ?>
+  <?php $data['suggested_products'] = $suggested_products; echo $this->load->view('product_suggestions', $data, True); ?>
   <div id='prod_desc'>
-    <?php echo $this->load->view('view_product_desc'); ?>
+    <?php echo $this->load->view('view_product_desc', null, True); ?>
   </div>
 
-  <?php $data['tag_name'] = $hashtag; echo $this->load->view('view_product_instagram', $data); ?>
+  <?php $data['tag_name'] = $hashtag; echo $this->load->view('view_product_instagram', $data, True); ?>
   
-  <?php $data['product_name'] = $product['product_name']; echo $this->load->view('view_disqus', $data); ?>
+  <?php $data['product_name'] = $product['product_name']; echo $this->load->view('view_disqus', $data, True); ?>
 
-  <?php echo $this->load->view('view_product_recent'); ?>
+  <?php echo $this->load->view('view_product_recent', null, True); ?>
 </div>

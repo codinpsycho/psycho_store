@@ -5,7 +5,7 @@
 require APPPATH.'third_party/razorpay-php/Razorpay.php';
 use Razorpay\Api\Api;
 
-class checkout extends CI_controller
+class Checkout extends CI_controller
 {
 	
 	function __construct()
@@ -77,9 +77,9 @@ class checkout extends CI_controller
 							'txn_id'		=>	$txn_id,
 							'product_id'	=> 	$item['id'],
 							'count'			=> 	$item['qty'],
-							'option'		=> 	$item['options']['extra'],
+							'option'		=> 	isset($item['options']) ? $item['options']['extra'] : null,
 						);
-			
+
 			$this->database->SaveCartItemOnCheckout($checkout_item);
 		}
 	}
@@ -288,18 +288,22 @@ class checkout extends CI_controller
 
 		$address = $this->database->GetAddressById($checkout_order['address_id']);		
 		$shipping_details = $this->database->GetShippingDetails($address['pincode']);
-		$shipping_available = false;
-		$cod_available = false;
+		$shipping_available = true;
+		$cod_available = true;
 
-		if($shipping_details)
-		{
-			$shipping_available = true;
+
+		// $shipping_available = false;
+		// $cod_available = false;
+
+		// if($shipping_details)
+		// {
+		// 	$shipping_available = true;
 			
-			if($shipping_details['cod'] === 'Y')
-			{
-				$cod_available = true;
-			}	
-		}
+		// 	if($shipping_details['cod'] === 'Y')
+		// 	{
+		// 		$cod_available = true;
+		// 	}	
+		// }
 
 		$data['txn_id'] = $checkout_order['txn_id'];
 		$data['email'] = $user['email'];

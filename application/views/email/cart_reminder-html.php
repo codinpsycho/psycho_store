@@ -30,7 +30,7 @@ Awesomness is waiting for you in your <a href="http://psychostore.in/cart">cart<
 <p>If there is any query/concern, do contact us at contact@psychostore.in</p>
 <br>
 <br>
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </td>
 </tr>
 </table>

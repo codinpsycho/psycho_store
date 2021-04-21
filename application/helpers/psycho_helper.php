@@ -249,16 +249,20 @@ if(!function_exists('try_domain_discount'))
 		$ci->load->library('cart');
 
 		$user = $ci->database->GetUserById($ci->tank_auth->get_user_id());		
-		if(count($user))
+		// if(count($user))
+		if($user)
 		{
 			$user_email = $user['email'];
 			$email_info = explode('@', $user_email);
 			$domain = $email_info[1];
 			$discount_domain = $ci->database->GetDiscountDomain($domain);
 			
-			if(count($discount_domain))
-			{
-				$ci->cart->apply_discount($discount_domain['how_much']);
+			if(!empty($discount_domain)) {
+				if(count($discount_domain))
+				{
+					$ci->cart->apply_discount($discount_domain['how_much']);
+				}
+				
 			}
 		}
  	}
@@ -273,7 +277,8 @@ if(!function_exists('get_current_user_discount_domain_info'))
 		$ci->load->library('tank_auth');		
 		$discount_domain = null;
 		$user = $ci->database->GetUserById($ci->tank_auth->get_user_id());		
-		if(count($user))
+		// if(count($user))
+		if(!empty($user))
 		{
 			$user_email = $user['email'];
 			$email_info = explode('@', $user_email);
@@ -315,7 +320,8 @@ if(!function_exists('execute_events'))
 				{
 					case 'login_done':
 						$discount_domain = get_current_user_discount_domain_info();
-						if(count($discount_domain))
+						if(!empty($discount_domain))
+						// if(count($discount_domain))
 						{
 							$domain = $discount_domain['domain'];
 							$discount = $discount_domain['how_much'];

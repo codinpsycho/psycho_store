@@ -13,7 +13,9 @@ function init_google_client()
 
 	$clientId = '858976915070-f2higqaj6iu3gpuijmddhqs973ihlf9m.apps.googleusercontent.com'; //Google client ID
 	$clientSecret = 'OC_sWSagr5XX-Kapv8Tlb8Yx'; //Google client secret
-	$redirectURL = 'http://localhost/psycho_store/auth/external_auth'; //Callback URL
+	// $redirectURL = 'http://localhost/psycho_store/auth/external_auth'; //Callback URL
+	$redirectURL = base_url().'/auth/external_auth'; //Callback URL
+
 	//Call Google API
 	$google_client = new Google_Client();
 	$google_client->setApplicationName('Psycho Store Login');

@@ -53,7 +53,7 @@ class Database extends CI_Model
 		return $query->result_array();
 	}
 
-	function GetProducts($type, $sort, $game_name = 'all', $featured = false)
+	function GetProducts($type, $sort, $game_name = 'all', $featured = false, $search_filter = false)
 	{	
 		if($type != 'all')
 			$this->db->where('product_type', $type);
@@ -67,6 +67,14 @@ class Database extends CI_Model
 
 		if($featured)	//Gets only featured products
 			$this->db->where('featured', 1);
+
+		if($search_filter)
+		{
+			$this->db->like('product_name', $search_filter);
+			$this->db->or_like('product_game', $search_filter);
+			$this->db->or_like('product_type', $search_filter);
+			$this->db->or_like('product_url', $search_filter);
+		}
 
 		//Dont get hidden products
 		$this->db->where('product_state !=', 'hidden');
@@ -603,6 +611,7 @@ class Database extends CI_Model
 
 	function GetWaybills($count = 1)
 	{
+		$wb = null;
 		$this->db->where('state !=', 'dead');
 		$this->db->limit($count);
 		$query = $this->db->get('delhivery_waybills');

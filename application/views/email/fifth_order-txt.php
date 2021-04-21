@@ -4,4 +4,4 @@ Acme was pretty impressed but still she said "You know you are not the first per
 
 The story continues on your next order!
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

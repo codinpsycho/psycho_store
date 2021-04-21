@@ -13,7 +13,7 @@ From the corner of my eye I could see some stoners munching on their burgers and
 <br />
 <h2 style="font: normal 20px/23px Arial, Helvetica, sans-serif; margin: 0; padding: 0 0 18px; color: black;">The story continues on your next order!</h2>
 <br />
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </td>
 </tr>
 </table>

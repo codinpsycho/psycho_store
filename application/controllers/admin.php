@@ -9,7 +9,7 @@ class OrderState
 	const Returned = 'returned';
 }
 
-class admin extends CI_controller
+class Admin extends CI_controller
 {
 	function __construct()
 	{
@@ -92,7 +92,7 @@ class admin extends CI_controller
 		$label = create_shipping_label($waybill);
 		$label = $label['packages'][0];
 		$shipping_details = $this->database->GetShippingDetails($shipment['address']['pincode']);
-				
+
 		$data['company_logo'] = site_url($this->config->item('company_logo'));
 		$data['courier_logo'] = site_url($this->config->item('delhivery_logo'));
 		$data['wb_barcode'] = $label['barcode'];
@@ -134,14 +134,14 @@ class admin extends CI_controller
 			switch ($log_partner)
 			{
 				case 'delhivery':
-					$delhivery_waybills = fetch_delhivery_waybills($num_waybills);
-					$this->_insert_new_waybills($delhivery_waybills);
-					$redirect = true;
-					break;
+				$delhivery_waybills = fetch_delhivery_waybills($num_waybills);
+				$this->_insert_new_waybills($delhivery_waybills);
+				$redirect = true;
+				break;
 				
 				default:
 					# code...
-					break;
+				break;
 			}
 		}
 
@@ -167,7 +167,7 @@ class admin extends CI_controller
 	function users($id = null)
 	{
 		_validate_user();
-				
+
 		if(is_null($id) == false)
 		{
 			$user = $this->database->GetUserById($id);			
@@ -234,30 +234,30 @@ class admin extends CI_controller
 			switch ($discount_type)
 			{
 				case 'coupon':
-					$expiry_date = $this->input->post('expiry_date');
-					if($name != false && $discount_percentage != false && $expiry_date != false)
-					{
-						$coupon['coupon'] = $name;
-						$coupon['how_much'] = $discount_percentage;
-						$coupon['expiry'] = $expiry_date;
-						$this->database->AddDiscountCoupon($coupon);
-					}
-					break;
+				$expiry_date = $this->input->post('expiry_date');
+				if($name != false && $discount_percentage != false && $expiry_date != false)
+				{
+					$coupon['coupon'] = $name;
+					$coupon['how_much'] = $discount_percentage;
+					$coupon['expiry'] = $expiry_date;
+					$this->database->AddDiscountCoupon($coupon);
+				}
+				break;
 				case 'domain':
-					if($name != false)
+				if($name != false)
+				{
+					$domain_info['domain'] = $name;
+					if($discount_percentage != false)
 					{
-						$domain_info['domain'] = $name;
-						if($discount_percentage != false)
-						{
-							$domain_info['how_much'] = $discount_percentage;
-						}
-
-						$this->database->AddDiscountDomain($domain_info );
+						$domain_info['how_much'] = $discount_percentage;
 					}
-					break;			
+
+					$this->database->AddDiscountDomain($domain_info );
+				}
+				break;			
 				default:
 					# code...
-					break;
+				break;
 			}
 		}
 
@@ -272,16 +272,16 @@ class admin extends CI_controller
 		switch ($type)
 		{
 			case 'domain':
-				$this->database->RemoveDiscountDomain($name);
-				break;
+			$this->database->RemoveDiscountDomain($name);
+			break;
 
 			case 'coupon':
-				$this->database->RemoveDiscountCoupon($name);
-				break;
+			$this->database->RemoveDiscountCoupon($name);
+			break;
 
 			default:
 				# code...
-				break;
+			break;
 		}		
 
 		redirect('admin/discounts');
@@ -365,7 +365,7 @@ class admin extends CI_controller
 			$data['site_name'] = "Psycho Store";
 			$data['to'] = 'test@news.psychostore.in';
 			$data['subject'] = $this->input->post('subject');
-		
+
 			$this->_send_mass_mail($data);
 		}
 		else
@@ -381,7 +381,7 @@ class admin extends CI_controller
 			$data['site_name'] = "Psycho Store";
 			$data['to'] = 'update@news.psychostore.in';	//Newsletter alias address
 			$data['subject'] = $this->input->post('subject');
-		
+
 			$this->_send_mass_mail($data);
 		}
 		else
@@ -472,14 +472,14 @@ class admin extends CI_controller
 		switch ($mailgun_post['event'])
 		{
 			case 'unsubscribed':
-				$email = $mailgun_post['recipient'];
+			$email = $mailgun_post['recipient'];
 				//$this->database->Unsubscribe($email);	//Don't delete keep the mail id
-				mg_unsubscribe($email);
-				break;
+			mg_unsubscribe($email);
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 	}
 
@@ -590,20 +590,20 @@ class admin extends CI_controller
 		switch ($status)
 		{
 			case OrderState::Packaging:		
-				$this->_package($id);
-				break;
+			$this->_package($id);
+			break;
 			
 			case OrderState::Pending:
-				$this->_pending($id);
-				break;
+			$this->_pending($id);
+			break;
 
 			case OrderState::Shipped:
-				$this->_shipped($id);
-				break;
+			$this->_shipped($id);
+			break;
 
 			case OrderState::Returned:
-				$this->_returned($id);
-				break;				
+			$this->_returned($id);
+			break;				
 		}
 
 		redirect('admin/orders');
@@ -655,13 +655,14 @@ class admin extends CI_controller
 			//Mark as shipped
 			$this->database->UpdateOrderStatus($id, OrderState::Shipped);
 
-			if( strlen($order['waybill']) > 0 )
+			// if( strlen($order['waybill']) > 0 )
+			if( strlen($order['tracking_link']) > 0 )
 			{
 				//Mail User
 				$data['order_id'] = $order['txn_id'];
 				$data['username'] = $order['user']['username'];
 				$data['waybill'] = $order['waybill'];
-				$data['tracking_address'] = $this->config->item('delhivery_url')."/p/{$order['waybill']}";
+				$data['tracking_address'] = $order['tracking_link'];  // $this->config->item('delhivery_url')."/p/{$order['waybill']}";
 				$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 				$params = mg_create_mail_params('shipped', $data);
 				mg_send_mail($order['user']['email'], $params);
@@ -748,9 +749,19 @@ class admin extends CI_controller
 		$products = null;
 		$data['supported_games'] = $this->database->GetAllSuportedGames();	
 
-		if($product_id)
+		if(is_numeric($product_id))
 		{
 			$products[] = $this->database->GetProductById($product_id);
+		}
+		elseif(!empty($product_id))
+		{
+			$product_type = $this->input->post('type') != false ? $this->input->post('type') : 'all' ;
+			$game = $this->input->post('game') != false ? $this->input->post('game') : 'all' ;
+			$sort = $this->input->post('sort') != false ? $this->input->post('sort') : 'latest';
+
+			$search_string = trim($product_id);
+			
+			$products = $this->database->GetProducts($product_type, $sort, $game, false, $search_string);
 		}
 		else
 		{
@@ -760,6 +771,7 @@ class admin extends CI_controller
 			
 			$products = $this->database->GetProducts($product_type, $sort, $game);
 		}
+
 		
 		if( count($products) && ($products[0] != null) )
 		{
@@ -770,7 +782,12 @@ class admin extends CI_controller
 		}
 		else
 		{
-			display('404', null);
+			$data['products'] = $products;
+			$data['num_prods'] = count($products);
+			$data['products_table'] = $this->_generate_products_table($products);
+			display('admin_products', $data);
+
+			// display('404', null); // comment out by Dev. Sukamal on 19.04.2021
 		}
 	}
 
@@ -842,15 +859,15 @@ class admin extends CI_controller
 		switch ($input['type'])
 		{
 			case 'tshirt':
-				$product['product_details']['small_qty'] = $input['s_qty'];
-				$product['product_details']['medium_qty'] = $input['m_qty'];
-				$product['product_details']['large_qty'] = $input['l_qty'];
-				$product['product_details']['xl_qty'] = $input['xl_qty'];
-				break;
+			$product['product_details']['small_qty'] = $input['s_qty'];
+			$product['product_details']['medium_qty'] = $input['m_qty'];
+			$product['product_details']['large_qty'] = $input['l_qty'];
+			$product['product_details']['xl_qty'] = $input['xl_qty'];
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 
 
@@ -887,15 +904,15 @@ class admin extends CI_controller
 		switch ($product['product_type'])
 		{
 			case 'tshirt':
-				$data['s_qty'] = is_null($product) ? '' : $product['product_details']['small_qty'];
-				$data['m_qty'] = is_null($product) ? '' : $product['product_details']['medium_qty'];
-				$data['l_qty'] = is_null($product) ? '' : $product['product_details']['large_qty'];
-				$data['xl_qty'] = is_null($product) ? '' : $product['product_details']['xl_qty'];
-				break;
+			$data['s_qty'] = is_null($product) ? '' : $product['product_details']['small_qty'];
+			$data['m_qty'] = is_null($product) ? '' : $product['product_details']['medium_qty'];
+			$data['l_qty'] = is_null($product) ? '' : $product['product_details']['large_qty'];
+			$data['xl_qty'] = is_null($product) ? '' : $product['product_details']['xl_qty'];
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}		
 
 		return $data;
@@ -932,62 +949,64 @@ class admin extends CI_controller
 			$view_label_link = null;
 			$feedback_link	= null;
 			$order_ship_link = null;
+			$order_tracking_link = null;
 
 			switch ($status)
 			{
 				case OrderState::Pending:
-					$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
-					$order_process_link = "<a class ='btn btn-default' href=$process_link> Dehlivery </a>";
-					$ship_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
-					$order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
-					break;
+				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
+				$order_process_link = "<a class ='btn btn-default' href=$process_link> Dehlivery </a>";
+				$ship_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
+				$order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
+				break;
 				
 				case OrderState::Packaging:
-					$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Pending);
-					$order_process_link = "<a class ='btn btn-warning' href=$process_link> Don't Ship </a>";
-					break;
+				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Pending);
+				$order_process_link = "<a class='btn btn-warning' href=$process_link> Don't Ship </a>";
+				$order_tracking_link = "<a class='btn btn-success exampleModal' data-toggle='modal' data-target='#exampleModal' data-txnid=".$txn_id."> Enter Tracking Link </a>";
+				break;
 				
 				case OrderState::Returned:
-					$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
-					$order_process_link = "<a class ='btn btn-default' href=$process_link> Ship Today </a>";
-					break;
+				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
+				$order_process_link = "<a class ='btn btn-default' href=$process_link> Ship Today </a>";
+				break;
 
 				case OrderState::Requested:
-					$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
-					$label_link = site_url('admin/labels/'.$waybill);					
-					$view_label_link = "<a target='_blank' class ='btn btn-default' href=$label_link> View label</a>";
-					$order_process_link = "<a class ='btn btn-danger' href=$process_link> Shipped</a>";
-					break;
+				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
+				$label_link = site_url('admin/labels/'.$waybill);					
+				$view_label_link = "<a target='_blank' class ='btn btn-default' href=$label_link> View label</a>";
+				$order_process_link = "<a class ='btn btn-danger' href=$process_link> Shipped</a>";
+				break;
 
 				case OrderState::Shipped:
-					$user_id = $order['user']['id'];
-					$feedback_url = site_url("admin/feedback_mail/$user_id");
+				$user_id = $order['user']['id'];
+				$feedback_url = site_url("admin/feedback_mail/$user_id");
 
-					$feedback_link = "<a class ='btn btn-warning' href=$feedback_url> Get Feedback! </a>";
-					if($waybill)
-					{
-						$tracking_url = $this->config->item('delhivery_url');
-						$waybill_link = $tracking_url."/p/".$waybill;
-						$waybill = "<a target='_blank' href=$waybill_link>$waybill</a>";
-					}
-					else
-					{
-						$waybill = "Self-Shipped";
-					}
-					$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Returned);
-					$order_process_link = "<a class ='btn btn-danger' href=$process_link> Returned</a>";
-					break;
+				$feedback_link = "<a class ='btn btn-warning' href=$feedback_url> Get Feedback! </a>";
+				if($waybill)
+				{
+					$tracking_url = $this->config->item('delhivery_url');
+					$waybill_link = $tracking_url."/p/".$waybill;
+					$waybill = "<a target='_blank' href=$waybill_link>$waybill</a>";
+				}
+				else
+				{
+					$waybill = "Self-Shipped";
+				}
+				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Returned);
+				$order_process_link = "<a class ='btn btn-danger' href=$process_link> Returned</a>";
+				break;
 
 				default:
-					$order_process_link = null;
-					$view_label_link = null;
-					$feedback_link = null;
-					$order_ship_link = null;
+				$order_process_link = null;
+				$view_label_link = null;
+				$feedback_link = null;
+				$order_ship_link = null;
 					# code...
-					break;
+				break;
 			}	
 
-			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $waybill, $order_process_link, $order_ship_link, $view_label_link, $feedback_link);
+			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $waybill, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
 
 			foreach ($order['order_items'] as $key => $item) 
 			{
@@ -1035,15 +1054,15 @@ class admin extends CI_controller
 			{
 				case 'hoodie':
 				case 'tshirt':
-					$small_qty = $prod_details['small_qty'];
-					$med_qty = $prod_details['medium_qty'];
-					$lrg_qty = $prod_details['large_qty'];
-					$xl_qty = $prod_details['xl_qty'];
-					break;
+				$small_qty = $prod_details['small_qty'];
+				$med_qty = $prod_details['medium_qty'];
+				$lrg_qty = $prod_details['large_qty'];
+				$xl_qty = $prod_details['xl_qty'];
+				break;
 				
 				default:
 					# code...
-					break;
+				break;
 			}
 
 			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $small_qty, $med_qty, $lrg_qty, $xl_qty, $prod['product_qty_sold']);
@@ -1099,11 +1118,11 @@ class admin extends CI_controller
 			$form_url = site_url("admin/users/$id");
 			//Reward Link
 			$reward_link = "<form class='form-inline' method=\"post\" action= $form_url >
-				<div class=\"form-group\">
+			<div class=\"form-group\">
 
-					<input type='number' name=points  class=\"form-control\" placeholder=\"Points\">
-					<button type=\"submit\" class=\"btn btn-primary\">Reward</button>
-				</div>
+			<input type='number' name=points  class=\"form-control\" placeholder=\"Points\">
+			<button type=\"submit\" class=\"btn btn-primary\">Reward</button>
+			</div>
 			</form>";			
 
 			$this->table->add_row($user['id'], $user['created'], $user['username'], $user['email'], $user['points'],$reward_link);
@@ -1130,11 +1149,11 @@ class admin extends CI_controller
 			$update_url = site_url("admin/update_discount_domain/$domain_name");
 
 			$discount_link = "<form class='form-inline' method=\"post\" action=$update_url >
-				<div class=\"form-group\">
+			<div class=\"form-group\">
 
-					<input type='number' name=discount_percentage  class=\"form-control\" placeholder=\"Discount %\">
-					<button type=\"submit\" class=\"btn btn-primary\">Update</button>
-				</div>
+			<input type='number' name=discount_percentage  class=\"form-control\" placeholder=\"Discount %\">
+			<button type=\"submit\" class=\"btn btn-primary\">Update</button>
+			</div>
 			</form>";
 
 			$remove_url = site_url("admin/remove_discount/$domain_name/domain");
@@ -1184,34 +1203,40 @@ class admin extends CI_controller
 			$reminder_mail_link = null;
 			$email = "null";
 
-			if(count($order['address']))
+			if(!empty($order['address'])) 
 			{
-				$address = format_address($order['address']);
+				if(count($order['address']))
+				{
+					$address = format_address($order['address']);
+				}
 			}
 
-			if(count($order['user']))
+			if(!empty($order['user'])) 
 			{
-				$email = $order['user']['email'];
-				$email = $email;
-				$product_id = null;
-
-				foreach ($order['order_items'] as $key => $item)
+				if(count($order['user']))
 				{
-					$product_id[] = $item['product']['product_id'];
+					$email = $order['user']['email'];
+					$email = $email;
+					$product_id = null;
+
+					foreach ($order['order_items'] as $key => $item)
+					{
+						$product_id[] = $item['product']['product_id'];
+					}
+
+					$product_id = implode('-', $product_id);
+					$user_id = $order['user']['id'];
+					$remind_url = site_url("admin/remind/$user_id/$product_id");
+
+					$reminder_mail_link = "<a class ='btn btn-danger' href=$remind_url> Remind </a>";
 				}
-
-				$product_id = implode('-', $product_id);
-				$user_id = $order['user']['id'];
-				$remind_url = site_url("admin/remind/$user_id/$product_id");
-
-				$reminder_mail_link = "<a class ='btn btn-danger' href=$remind_url> Remind </a>";
 			}
 
 			$delete_url = site_url("admin/delete_checkout/$txn_id");
 			$delete_link = "<a class ='btn btn-warning' href=$delete_url> Delete Checkout </a>";
 
 			$this->table->add_row($num, $txn_id,  $date, $email, $address, $amount, $state, $reminder_mail_link, $delete_link);
-	
+
 			if(isset($order['order_items']))
 			{
 				foreach ($order['order_items'] as $key => $item) 
@@ -1238,18 +1263,51 @@ class admin extends CI_controller
 		switch ($search_option)
 		{
 			case 'orders':
-				redirect("admin/orders/$search_query");
-				break;
+			redirect("admin/orders/$search_query");
+			break;
 
 			case 'products':
-				redirect("admin/products/$search_query");
-				break;
+			redirect("admin/products/$search_query");
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 	}
+
+	function addTrackingDetail()
+	{
+		try {
+			
+			$txnid = trim($_POST['txnid']);
+			$tracking_link = trim($_POST['tracking_link']);
+
+
+			$order = $this->database->GetOrderById($txnid);
+
+			$this->db->set('tracking_link', $tracking_link);
+			$this->db->where('order_id', $order['order_id']);
+			$this->db->update('orders');
+
+			$this->update_order($txnid, 'shipped');
+
+
+			// print_r($this->db->last_query());  
+
+			$response = ['success' => true, 'message' => 'Order Tracking Detail Added Successful!'];
+			echo json_encode( $response );
+
+		} catch (Exception $e) {
+
+			$response = ['success' => false, 'message' => $e->getMessage()];
+			echo json_encode( $response );
+
+		}
+	}
+
+
+
 }
 
 ?>

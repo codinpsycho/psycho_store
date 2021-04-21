@@ -4,4 +4,4 @@ The sound was coming from the washroom, like someone was peeing which is infact 
 
 The story continues on your next order!
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

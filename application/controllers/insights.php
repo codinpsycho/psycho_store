@@ -1,6 +1,6 @@
 <?php 
 
-class insights extends CI_Controller
+class Insights extends CI_Controller
 {
 	function __construct()
 	{
@@ -18,7 +18,7 @@ class insights extends CI_Controller
 	{
 		$is_admin = $this->_is_user_admin();
 
-		$month = $this->input->post('month');
+		$month = !empty($this->input->post('month')) ? $this->input->post('month') : date("M"); // Coded on 19.04.2021
 		
 		if($month === false)
 		{

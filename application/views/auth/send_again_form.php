@@ -6,7 +6,7 @@
 	    	<div class="col-md-12">
 	    	 	<?php echo form_open($this->uri->uri_string()); ?>
 	    		<div class="form-group">
-					<?php echo $this->load->view('view_email') ?>
+					<?php echo $this->load->view('view_email', null, True) ?>
 				</div>
 			</div>
 		</div>	

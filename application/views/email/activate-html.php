@@ -26,7 +26,7 @@ Your email address: <?php echo $email; ?><br />
 <?php if (isset($password)) { /* ?>Your password: <?php echo $password; ?><br /><?php */ } ?>
 <br />
 <br />
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </td>
 </tr>
 </table>

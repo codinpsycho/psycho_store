@@ -20,4 +20,4 @@ Your password: <?php echo $password; ?>
 
 
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

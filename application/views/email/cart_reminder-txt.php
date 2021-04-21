@@ -8,4 +8,4 @@ Awesomness is waiting for your in you cart. Go and get it and dont forget to app
 
 http://psychostore.in/cart
 
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;

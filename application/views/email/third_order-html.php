@@ -13,7 +13,7 @@ Frankly speaking I don't even remember the taste of organically grown food, once
 <br />
 <h2 style="font: normal 20px/23px Arial, Helvetica, sans-serif; margin: 0; padding: 0 0 18px; color: black;">The story continues on your next order!</h2>
 <br />
-<?php  echo $this->load->view('email/signature') ?>;
+<?php  echo $this->load->view('email/signature', null, True) ?>;
 </td>
 </tr>
 </table>

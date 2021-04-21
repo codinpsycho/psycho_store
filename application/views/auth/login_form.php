@@ -27,10 +27,10 @@ $(function () {
         <?php $attributes = array('id' => 'login_form');?>
          <?php echo form_open($this->uri->uri_string().'?redirect_url='.$redirect_url, $attributes); ?>
          <div class="form-group">
-            <?php echo $this->load->view('view_email') ?>
+            <?php echo $this->load->view('view_email', null, True) ?>
           </div>
           <div class="form-group">
-            <?php echo $this->load->view('view_password') ?>
+            <?php echo $this->load->view('view_password', null, True) ?>
           </div>
           <div class="checkbox">
             <label>
@@ -45,11 +45,11 @@ $(function () {
         </div>
         <div class="col-md-4 col-xs-12 vcenter">
           <div class="text-center">
-             <?php echo $this->load->view('google_signin.html', array("gauth_url" => $gauth_url ) ) ?>
+             <?php echo $this->load->view('google_signin.html', array("gauth_url" => $gauth_url ), True ) ?>
           </div>
           <hr>
           <div class="text-center">
-             <?php echo $this->load->view('fb_login.html')?>
+             <?php echo $this->load->view('fb_login.html', null, True)?>
           </div>          
         </div>
       </div>

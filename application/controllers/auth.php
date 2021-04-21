@@ -8,7 +8,7 @@ class Auth extends CI_Controller
 
 		$this->load->helper(array('form', 'url', 'html'));
 		$this->load->library('form_validation');
-		$this->load->library('security');
+		// $this->load->library('security');
 		$this->load->library('tank_auth');
 		$this->lang->load('tank_auth');
 		$this->load->model('database');
@@ -17,6 +17,7 @@ class Auth extends CI_Controller
 		$this->load->helper('psycho_helper');
 		$this->load->helper('mailgun_helper');
 		$this->load->helper('auth_helper');
+		$this->load->helper('security');
 	}
 
 	function index()
@@ -512,7 +513,7 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
 			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
-			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]||max_length[6]');
+			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
 			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
 
 			if ($this->form_validation->run())
