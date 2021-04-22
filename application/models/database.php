@@ -21,7 +21,7 @@ class Database extends CI_Model
 		{
 			$this->GetProductDetails($product);
 		}
-				
+
 		return $product;
 	}
 
@@ -66,7 +66,7 @@ class Database extends CI_Model
 			$this->db->order_by('product_qty_sold', 'desc');	//Sort by selling amount
 
 		if($featured)	//Gets only featured products
-			$this->db->where('featured', 1);
+		$this->db->where('featured', 1);
 
 		if($search_filter)
 		{
@@ -101,16 +101,16 @@ class Database extends CI_Model
 		switch ($prod_type)
 		{			
 			case 'tshirt':
-				$prod_details = $this->GetTshirtDetails($product_id);
-				break;
+			$prod_details = $this->GetTshirtDetails($product_id);
+			break;
 
 			case 'mobilecover':
-				$prod_details = $this->GetMobileCoverDetails($product_id);
-				break;
+			$prod_details = $this->GetMobileCoverDetails($product_id);
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 
 		$product['product_details'] = $prod_details;
@@ -145,38 +145,41 @@ class Database extends CI_Model
 		return $query->result_array();
 	}
 
-	function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an array with exception values*/)
-	{	
-		$prods = $this->GetProducts($type,'latest',$game_name);
-		foreach ($prods as $key => $value)
+function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an array with exception values*/)
+{	
+	$prods = $this->GetProducts($type,'latest',$game_name);
+	foreach ($prods as $key => $value)
+	{
+		if($exceptions)
 		{
-			if($exceptions)
+			foreach ($exceptions as $ex_key => $ex_value)
 			{
-				foreach ($exceptions as $ex_key => $ex_value)
-				{
-					if( (string)$value['product_id'] === (string)$ex_value['product_id'] )
-						unset($prods[$key]);
-				}				
-			}
-		}		
-		$max_prods = count($prods);
-		
-		if($count > $max_prods )
-			$count = $max_prods;
-		
-		$random_ids = array_rand ($prods, $count);
-		$random_prods = array();
+				if( (string)$value['product_id'] === (string)$ex_value['product_id'] )
+					unset($prods[$key]);
+			}				
+		}
+	}		
+	$max_prods = count($prods);
 
-		foreach ($random_ids as $key => $value) 
-			$random_prods[] = $prods[$value];
-		
-		return $random_prods;
-	}
+	if($count > $max_prods )
+		$count = $max_prods;
+
+	$random_ids = array_rand ($prods, $count);
+	$random_prods = array();
+
+	foreach ($random_ids as $key => $value) 
+		$random_prods[] = $prods[$value];
+
+	return $random_prods;
+}
 
 	function AddProduct($product)
 	{		
 		$product_with_details = $product['product_details'];
+		$galleries = $product['galleries'];
+
 		unset($product['product_details']);			//Unset it here in the last step
+		unset($product['galleries']);			//Unset it here in the last step
 		$this->db->insert('products',$product);
 		$product_with_details['product_id'] = $this->GetProductCount() + 1;
 
@@ -188,6 +191,29 @@ class Database extends CI_Model
 		$last_id = $query->row_array();
 		$product_with_details['product_id'] = $last_id['product_id'];
 		$this->AddProductDetails($product_with_details,$product['product_type'] );
+
+
+
+		if(count($galleries) > 0) {
+
+			foreach ($galleries as $key => $value) {
+
+				if(!empty($value)) 
+				{
+					$data = array(
+						'product_id'=> $last_id['product_id'],
+						'imgurl'=> trim($value)
+					);
+
+					$this->db->insert('galleries',$data);
+				}
+
+			}
+		}
+		
+
+
+
 	}
 
 	function AddProductDetails($product, $type)
@@ -195,18 +221,18 @@ class Database extends CI_Model
 		switch ($type)
 		{
 			case 'tshirt':
-				$this->AddTshirtDetails($product);
-				break;
+			$this->AddTshirtDetails($product);
+			break;
 			// case 'mugs':
 			// 	$this->AddMugsDetails($product['product_details']);
 			// 	break;
 			// case 'mobilecover':
 			// 	$this->AddMobileCoverDetails($product['product_details']);
-				break;
-						
+			break;
+
 			default:
 				# code...
-				break;
+			break;
 		}
 	}
 
@@ -230,12 +256,12 @@ class Database extends CI_Model
 		switch ($product['product_type'])
 		{
 			case 'tshirt':
-				$this->ModifyTshirtDetails($product['product_details']);
-				break;
+			$this->ModifyTshirtDetails($product['product_details']);
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 	}
 
@@ -250,6 +276,7 @@ class Database extends CI_Model
 		$this->ModifyProductDetails($product);
 		
 		unset($product['product_details']);		//Do it here in the final step
+		unset($product['galleries']);		//Do it here in the final step
 		$this->db->where('product_id', $product['product_id']);
 		$this->db->update('products', $product);
 	}
@@ -822,6 +849,26 @@ class Database extends CI_Model
 		$this->db->like('page_name', $name);
 		$query = $this->db->get('metainfo');
 		return $query->row_array();
+	}
+
+	function _updateOrderTrackingDetail($order, $tracking_link)
+	{
+		$this->db->set('tracking_link', $tracking_link);
+		$this->db->where('order_id', $order['order_id']);
+		$this->db->update('orders');
+	}
+
+	function _getProductGalleries($productID)
+	{
+		$this->db->where('product_id', $productID);
+		$query = $this->db->get('galleries');
+		return $query->result_array();
+	}
+
+	function _delProductGalleries($productID)
+	{
+		$this->db->where('product_id', $productID);
+		$this->db->delete('galleries');
 	}
 
 }

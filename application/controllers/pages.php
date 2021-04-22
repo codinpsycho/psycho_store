@@ -264,6 +264,7 @@ class Pages extends CI_controller
 			$data['product'] = $result;
 			$data['total_products'] = $total_products;
 			$data['product_state'] = $result['product_state'];
+			$data['product_galleries'] = $this->database->_getProductGalleries($id);
 
 
 			// start: $prev variable modified on 16.04.2021 by dev. Sukamal
@@ -321,6 +322,7 @@ class Pages extends CI_controller
 			$data['recently_viewed'] = $this->GetRecentlyViewed();
 			$this->AddToRecentlyViewed($result);
 
+			// echo '<pre>'; print_r($data); exit();
 			display('product', $data);
 		}
 		else

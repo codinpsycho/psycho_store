@@ -1,3 +1,7 @@
+<div class="loader-bg" style="display: none;">
+    <div class="loader"></div>
+</div>
+
 <div class="container top-bottom-space">  
     <h1> processing Shipments
     	<span class="pull-right navbar-text play"> <small><?php echo $num_pkg_shipments?> shipment(s) pending for pickup on <?php echo $date ?></small></span>
@@ -6,10 +10,12 @@
     <div class="well">
         <div class="row">
             <div class="col-md-12">
-                <a class="btn btn-primary navbar-btn" <?php echo $pickup_btn_state?> href= <?php echo site_url('admin/request_pickup') ?> >Request Pickup (<?php echo $num_pkg_shipments?>)</a>
-
-                <a target="_blank" class="btn btn-primary navbar-btn" href= <?php echo site_url('admin/manifest') ?> >Manifest</a>
                 
+                
+                <!-- <a class="btn btn-primary navbar-btn" <?php //echo $pickup_btn_state?> href= <?php //echo site_url('admin/request_pickup') ?> >Request Pickup (<?php //echo $num_pkg_shipments?>)</a> -->
+                <!-- <a target="_blank" class="btn btn-primary navbar-btn" href= <?php //echo site_url('admin/manifest') ?> >Manifest</a> -->
+                
+
                 <?php if($pickup_requested): ?>
                     <h3 class="navbar-text text-primary pull-right play"> Pickup Requested for <?php echo $num_pcikup_shipments ?> shipments. Make sure they are ready.</h3>
                     <?php else: ?>
@@ -52,12 +58,13 @@
 
 <script type="text/javascript">
     $('.exampleModal').on('click', function() {
-      var $el = $(this);
-      var $txnid = $(this).data('txnid');
-      var $txnid = $(this).data('txnid');
-      $('#txnidM').html($txnid);
-      $('#txnid').val($txnid);
-  });
+        var $el = $(this);
+        var $txnid = $(this).data('txnid');
+        var $txnid = $(this).data('txnid');
+        $('#txnidM').html($txnid);
+        $('#txnid').val($txnid);
+    });
+
 
     $('#save').click(function (e) {
         
@@ -67,6 +74,8 @@
 
         if(tracking_link.length > 1 ) {
             
+            $('.loader-bg').show();
+
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -77,13 +86,16 @@
                 if(resposne.success == true) {
                     alert(resposne.message);
                 }
+
             })
             .fail(function() {
                 console.log("error");
             })
             .always(function() {
-                console.log("complete");
+
+                $('.loader-bg').hide();
                 $('#exampleModal').modal('toggle');
+                window.location.reload();
             });
 
         } else {

@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // $route['translate_uri_dashes'] = FALSE;
 
 $route['default_controller'] = "pages";
-$route['product/(:any)/(:any)'] = 'pages/product/$1';
+$route['product/(:any)/?(:any)?'] = 'pages/product/$1';
 $route['like'] = 'pages/like';
 $route['psycho_offers'] = 'pages/psycho_offers';
 $route['like/(:any)'] = 'pages/like/$1';

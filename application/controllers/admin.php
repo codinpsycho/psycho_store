@@ -793,20 +793,35 @@ class Admin extends CI_controller
 
 	function add_product()
 	{
-		$this->_set_product_form_rules();
 
-		if($this->form_validation->run())
-		{
-			$product = $this->_get_product_form_post($this->input->post());
-
-			$this->database->AddProduct($product);
-			redirect('admin/products');
-		}
-		else
+		if(!empty($this->input->post('addgallery'))) 
 		{
 			$data = $this->_fill_data_var_for_view(null);
+			$data['noofinputs'] = $this->input->post('noofinputs');
 			$data['action'] = site_url('admin/add_product');
 			display('admin_product_add_edit', $data);
+		}
+
+		else  
+		{
+
+			$this->_set_product_form_rules();
+
+			if($this->form_validation->run())
+			{
+				$product = $this->_get_product_form_post($this->input->post());
+				// echo '<pre>'; print_r($product); exit();
+
+				$this->database->AddProduct($product);
+				redirect('admin/products');
+			}
+			else
+			{
+				$data = $this->_fill_data_var_for_view(null);
+				$data['action'] = site_url('admin/add_product');
+				display('admin_product_add_edit', $data);
+			}
+
 		}
 	}
 
@@ -816,23 +831,62 @@ class Admin extends CI_controller
 
 		if(count($product))
 		{
-			$this->_set_product_form_rules();
 			
-			if($this->form_validation->run())
+			if(!empty($this->input->post('addgallery'))) 
 			{
-				$product = $this->_get_product_form_post($this->input->post());
-				$product['product_id'] = $product_id;
-				$product['product_details']['product_id'] = $product_id;
-
-				$this->database->ModifyProduct($product);
-				redirect('admin/products');
+				$data = $this->_fill_data_var_for_view($product);
+				$data['noofinputs'] = $this->input->post('noofinputs');
+				$data['action'] = site_url('admin/edit_product/'.$product_id);
+				$data['galleries'] = $this->database->_getProductGalleries($product_id);
+				display('admin_product_add_edit', $data);
 			}
 			else
 			{
-				$data = $this->_fill_data_var_for_view($product);
-				$data['action'] = site_url('admin/edit_product/'.$product_id);
-				display('admin_product_add_edit', $data);
+
+				$this->_set_product_form_rules();
+				
+				if($this->form_validation->run())
+				{
+					$product = $this->_get_product_form_post($this->input->post());
+					$product['product_id'] = $product_id;
+					$product['product_details']['product_id'] = $product_id;
+
+
+					$galleries = $this->input->post('galleries');
+					if(isset($galleries)) {
+
+						$this->database->_delProductGalleries($product_id);
+
+						foreach ($galleries as $key => $value) {
+							
+							if(!empty($value)) 
+							{
+								$data = array(
+									'product_id'=> $product_id,
+									'imgurl'=> trim($value)
+								);
+
+								$this->db->insert('galleries',$data);
+							}
+
+						}
+					}
+
+					// echo '<pre>'; var_dump($galleries); exit();
+					$this->database->ModifyProduct($product);
+					redirect('admin/products');
+				}
+				else
+				{
+					$data = $this->_fill_data_var_for_view($product);
+					$data['action'] = site_url('admin/edit_product/'.$product_id);
+					$data['galleries'] = $this->database->_getProductGalleries($product_id);
+					display('admin_product_add_edit', $data);
+				}
+
+
 			}
+
 		}
 		else
 		{
@@ -855,6 +909,7 @@ class Admin extends CI_controller
 		$product['product_desc'] = $input['desc'];
 		$product['product_image_path'] = $input['image_path'];
 		$product['product_price'] = $input['price'];
+		$product['galleries'] = $input['galleries'];
 
 		switch ($input['type'])
 		{
@@ -1285,10 +1340,11 @@ class Admin extends CI_controller
 
 
 			$order = $this->database->GetOrderById($txnid);
+			$this->database->_updateOrderTrackingDetail($order, $tracking_link);
 
-			$this->db->set('tracking_link', $tracking_link);
-			$this->db->where('order_id', $order['order_id']);
-			$this->db->update('orders');
+			// $this->db->set('tracking_link', $tracking_link);
+			// $this->db->where('order_id', $order['order_id']);
+			// $this->db->update('orders');
 
 			$this->update_order($txnid, 'shipped');
 
