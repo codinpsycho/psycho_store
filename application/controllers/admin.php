@@ -977,7 +977,8 @@ class Admin extends CI_controller
 	function _generate_orders_table($orders)
 	{		
 		$this->load->library('table');
-		$this->table->set_heading('#','Txn_id','Date','Email','Address', 'Mode', 'Amount', 'Status', 'Waybill', 'Process', 'Label');
+		// $this->table->set_heading('#','Txn_id','Date','Email','Address', 'Mode', 'Amount', 'Status', 'Waybill', 'Process', 'Label');
+		$this->table->set_heading('#','Txn_id','Date','Email','Address', 'Mode', 'Amount', 'Status', 'Process', 'Label');
 
 		$tmpl = array ( 'table_open'  => '<table class="table table-condensed" >' );
 		$this->table->set_template($tmpl);
@@ -1061,7 +1062,9 @@ class Admin extends CI_controller
 				break;
 			}	
 
-			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $waybill, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
+			// $this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $waybill, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
+			
+			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
 
 			foreach ($order['order_items'] as $key => $item) 
 			{
