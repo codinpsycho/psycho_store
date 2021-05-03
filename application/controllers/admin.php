@@ -1331,6 +1331,7 @@ class Admin extends CI_controller
 		}
 	}
 
+	// add tracking detail is developed on 21.04.2021
 	function addTrackingDetail()
 	{
 		try {
@@ -1342,14 +1343,7 @@ class Admin extends CI_controller
 			$order = $this->database->GetOrderById($txnid);
 			$this->database->_updateOrderTrackingDetail($order, $tracking_link);
 
-			// $this->db->set('tracking_link', $tracking_link);
-			// $this->db->where('order_id', $order['order_id']);
-			// $this->db->update('orders');
-
 			$this->update_order($txnid, 'shipped');
-
-
-			// print_r($this->db->last_query());  
 
 			$response = ['success' => true, 'message' => 'Order Tracking Detail Added Successful!'];
 			echo json_encode( $response );
@@ -1361,6 +1355,7 @@ class Admin extends CI_controller
 
 		}
 	}
+	// add tracking detail is developed on 21.04.2021
 
 
 

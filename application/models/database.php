@@ -851,13 +851,16 @@ function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an arra
 		return $query->row_array();
 	}
 
+	// added on 21.01.2021
 	function _updateOrderTrackingDetail($order, $tracking_link)
 	{
 		$this->db->set('tracking_link', $tracking_link);
 		$this->db->where('order_id', $order['order_id']);
 		$this->db->update('orders');
 	}
+	// added on 21.04.2021
 
+	// added on 22.04.2021
 	function _getProductGalleries($productID)
 	{
 		$this->db->where('product_id', $productID);
@@ -870,6 +873,7 @@ function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an arra
 		$this->db->where('product_id', $productID);
 		$this->db->delete('galleries');
 	}
+	// added on 22.04.2021
 
 }
 ?>

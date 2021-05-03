@@ -68,10 +68,10 @@ class Pages extends CI_controller
 		$next = $result['product_id'];		
 		
 		//reset
-		$result = null;
+		// $result = null;
+		$result = [];
 		$id = $current_id;
-		// while(count($result) < 1)
-		while($result)
+		while(count($result) < 1)
 		{
 			$id = $id - 1;
 			if($id < 1 )
@@ -265,39 +265,6 @@ class Pages extends CI_controller
 			$data['total_products'] = $total_products;
 			$data['product_state'] = $result['product_state'];
 			$data['product_galleries'] = $this->database->_getProductGalleries($id);
-
-
-			// start: $prev variable modified on 16.04.2021 by dev. Sukamal
-			$currentId = $this->db->escape($result['product_id']);
-			$sql = "SELECT product_id from products where product_id < $currentId ORDER BY product_id DESC LIMIT 1;";
-			$query = $this->db->query($sql);
-			$row = $query->row();
-
-			if(isset($row)) {
-				$prev = $row->product_id;
-			} else {
-				$sql = "SELECT product_id from products ORDER BY product_id DESC LIMIT 1;";
-				$query = $this->db->query($sql);
-				$row = $query->row();
-				$prev = $row->product_id;
-			}
-			// end: $prev variable modified on 16.04.2021 by dev. Sukamal
-
-			// start: $next variable modified on 16.04.2021 by dev. Sukamal
-			$next_sql = "SELECT product_id from products where product_id > $currentId ORDER BY product_id ASC LIMIT 1;";
-			$next_query = $this->db->query($next_sql);
-			$next_row = $next_query->row();
-
-			if(isset($next_row)) {
-				$next = $next_row->product_id;
-			} else {
-				$next_sql = "SELECT product_id from products ORDER BY product_id ASC LIMIT 1;";
-				$next_query = $this->db->query($next_sql);
-				$next_row = $next_query->row();
-				$next = $next_row->product_id;
-			}
-			// end: $next variable modified on 16.04.2021 by dev. Sukamal
-
 
 
 
