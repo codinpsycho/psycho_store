@@ -619,8 +619,8 @@ class Admin extends CI_controller
 		foreach ($txn_id as $key => $id)
 		{			
 			$this->database->UpdateOrderStatus($id, OrderState::Packaging);
-			$wb = $this->database->GetWaybills();	//Returns an array
-			$this->database->AssignWaybill($id, $wb[0]);
+			// $wb = $this->database->GetWaybills();	//Returns an array
+			// $this->database->AssignWaybill($id, $wb[0]);
 		}
 	}
 
@@ -634,9 +634,9 @@ class Admin extends CI_controller
 		foreach ($txn_id as $key => $id)
 		{
 			$order = $this->database->GetOrderById($id);
-			$this->database->SetWaybillState($order['waybill'], 'alive');
 			$this->database->UpdateOrderStatus($id, OrderState::Pending);
-			$this->database->RemoveWaybillFromOrder($id);
+			// $this->database->SetWaybillState($order['waybill'], 'alive');
+			// $this->database->RemoveWaybillFromOrder($id);
 		}
 	}
 
@@ -661,7 +661,7 @@ class Admin extends CI_controller
 				//Mail User
 				$data['order_id'] = $order['txn_id'];
 				$data['username'] = $order['user']['username'];
-				$data['waybill'] = $order['waybill'];
+				// $data['waybill'] = $order['waybill'];
 				$data['tracking_address'] = $order['tracking_link'];  // $this->config->item('delhivery_url')."/p/{$order['waybill']}";
 				$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 				$params = mg_create_mail_params('shipped', $data);
@@ -793,12 +793,13 @@ class Admin extends CI_controller
 
 	function add_product()
 	{
-
+		$categories = $this->database->_getProductCategories();
 		if(!empty($this->input->post('addgallery'))) 
 		{
 			$data = $this->_fill_data_var_for_view(null);
 			$data['noofinputs'] = $this->input->post('noofinputs');
 			$data['action'] = site_url('admin/add_product');
+			$data['categories'] = $categories;
 			display('admin_product_add_edit', $data);
 		}
 
@@ -819,6 +820,7 @@ class Admin extends CI_controller
 			{
 				$data = $this->_fill_data_var_for_view(null);
 				$data['action'] = site_url('admin/add_product');
+				$data['categories'] = $categories;
 				display('admin_product_add_edit', $data);
 			}
 
@@ -828,6 +830,7 @@ class Admin extends CI_controller
 	function edit_product($product_id)
 	{
 		$product = $this->database->GetProductById($product_id);
+		$categories = $this->database->_getProductCategories();
 
 		if(count($product))
 		{
@@ -838,6 +841,7 @@ class Admin extends CI_controller
 				$data['noofinputs'] = $this->input->post('noofinputs');
 				$data['action'] = site_url('admin/edit_product/'.$product_id);
 				$data['galleries'] = $this->database->_getProductGalleries($product_id);
+				$data['categories'] = $categories;
 				display('admin_product_add_edit', $data);
 			}
 			else
@@ -852,8 +856,11 @@ class Admin extends CI_controller
 					$product['product_details']['product_id'] = $product_id;
 
 
-					$galleries = $this->input->post('galleries');
-					if(isset($galleries)) {
+					$galleries = $this->input->post('galleries') ? $this->input->post('galleries') : NULL;
+					// var_dump($galleries); 
+					// exit();
+
+					if(!empty($galleries)) {
 
 						$this->database->_delProductGalleries($product_id);
 
@@ -870,6 +877,9 @@ class Admin extends CI_controller
 							}
 
 						}
+					} else {
+
+						$this->database->_delProductGalleries($product_id);
 					}
 
 					// echo '<pre>'; var_dump($galleries); exit();
@@ -881,6 +891,7 @@ class Admin extends CI_controller
 					$data = $this->_fill_data_var_for_view($product);
 					$data['action'] = site_url('admin/edit_product/'.$product_id);
 					$data['galleries'] = $this->database->_getProductGalleries($product_id);
+					$data['categories'] = $categories;
 					display('admin_product_add_edit', $data);
 				}
 
@@ -909,7 +920,9 @@ class Admin extends CI_controller
 		$product['product_desc'] = $input['desc'];
 		$product['product_image_path'] = $input['image_path'];
 		$product['product_price'] = $input['price'];
-		$product['galleries'] = $input['galleries'];
+		$product['galleries'] = isset($input['galleries']) ? $input['galleries'] : NULL;
+		$product['category_id'] = $input['category_id'];
+
 
 		switch ($input['type'])
 		{
@@ -955,6 +968,7 @@ class Admin extends CI_controller
 		$data['desc'] = is_null($product) ? '' : $product['product_desc'];		
 		$data['image_path'] = is_null($product) ? '' : $product['product_image_path'];
 		$data['price'] = is_null($product) ? '' : $product['product_price'];
+		$data['category_id'] = is_null($product) ? '' : $product['category_id'];
 
 		switch ($product['product_type'])
 		{
@@ -1011,9 +1025,9 @@ class Admin extends CI_controller
 			{
 				case OrderState::Pending:
 				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
-				$order_process_link = "<a class ='btn btn-default' href=$process_link> Dehlivery </a>";
+				$order_process_link = "<a class ='btn btn-default' href=$process_link> Package </a>";
 				$ship_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
-				$order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
+				// $order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
 				break;
 				
 				case OrderState::Packaging:
@@ -1359,6 +1373,46 @@ class Admin extends CI_controller
 		}
 	}
 	// add tracking detail is developed on 21.04.2021
+
+
+	// developed on 03.05.2021
+	function manage_category()
+	{
+		$data['categories'] = $this->database->_getProductCategories();
+		display('admin_manage_categories', $data);
+	}
+
+	function add_category()
+	{
+		if(!empty($this->input->post('submit'))) {
+
+			$name = trim($this->input->post('name'));
+			$this->database->_storeProductCategory($name);
+			redirect('admin/manage_category');
+
+		}
+
+
+		$data = [];
+		display('admin_add_edit_category', $data);
+	}
+
+	function edit_category($id)
+	{
+		$data['category'] = $this->database->_getProductCategory($id);
+		
+		if(!empty($this->input->post('submit'))) {
+
+			$name = trim($this->input->post('name'));
+			$this->database->_updateProductCategory($id, $name);
+			redirect('admin/manage_category');
+			
+		}
+
+		display('admin_add_edit_category', $data);
+	}
+
+	// developed on 03.05.2021
 
 
 

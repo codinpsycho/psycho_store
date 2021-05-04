@@ -60,7 +60,7 @@ function update_btn_text_on_addtocart(cb)
       </div>     
       <div class="col-md-6 text-center">
         <?php echo $product_img_view; ?>
-        <?php echo $this->load->view('view_product_social', null, True); ?>
+        <?php // echo $this->load->view('view_product_social', null, True); ?>
       </div>
       <div class="col-md-4">
         <div class="row">

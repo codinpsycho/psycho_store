@@ -28,6 +28,7 @@ if(!function_exists('generate_header'))
 
 		//Game search Links
 		$data['supported_games'] = $ci->database->GetAllSuportedGames();
+		$data['categories'] = $ci->database->_getProductCategories();
 
 		//Meta tags
 		$data['url'] = current_url();
@@ -88,7 +89,9 @@ if(!function_exists('get_metaid_by_name'))
 		$meta_info = $ci->database->GetMetaInfoByName($name);
 
 		$meta_id = 1; //General meta id for fail safe
-		if(sizeof($meta_info))
+		
+		// if(sizeof($meta_info))
+		if($meta_info)
 		{
 			$meta_id = $meta_info['metainfo_id'];
 		}
@@ -535,7 +538,13 @@ function _live($page, $data)
 			break;
 		case 'sales':
 			$body = $ci->load->view('view_sales', $data, true);
-			break;			
+			break;	
+		case 'admin_manage_categories':
+			$body = $ci->load->view('admin/manage_categories', $data, true);
+			break;		
+		case 'admin_add_edit_category':
+			$body = $ci->load->view('admin/add_edit_category', $data, true);
+			break;
 		default:
 			show_404();
 		break;

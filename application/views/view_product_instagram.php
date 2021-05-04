@@ -2,6 +2,10 @@
 	<div class="col-md-12">
 		<h3>#<?php echo $tag_name ?></h3>
 		<h5>Show off your geeky side. Tag your loot #<?php echo $tag_name ?> on instagram to get featured here.</h5>
+
+		<img src="https://instagram.fblr8-1.fna.fbcdn.net/v/t51.2885-15/e35/118144523_399153244389542_2120705845261368654_n.jpg?tp=1&_nc_ht=instagram.fblr8-1.fna.fbcdn.net&_nc_cat=102&_nc_ohc=zdL7P46W4ZgAX-NNPzu&edm=AP_V10EBAAAA&ccb=7-4&oh=740f00baa94b4f853e8873c66ce70cdb&oe=60B689D5">
+
+		
 		<hr>
 		<div id="instafeed">
 
@@ -18,7 +22,7 @@
 
 							?>
 							<div class="item">
-								<img src="<?=$value['imgurl']?>" class="img-responsive" alt="Product">
+								<img src="<?=$value['imgurl']?>" class="img-responsive" alt="instagram">
 							</div>
 
 							<?php
@@ -43,7 +47,7 @@
 <script>
 	$(document).ready(function() {
 		$('.owl-carousel').owlCarousel({
-			loop: true,
+			loop: false,
 			margin: 10,
 			nav:true,
 			dots:false,

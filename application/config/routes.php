@@ -72,3 +72,5 @@ $route['giveaways'] = 'pages/giveaways/';
 $route['coupon_partners'] = 'pages/coupon_partners/';
 $route['beta'] = 'pages/beta/';
 $route['404_override'] = '';
+
+$route['category/(:any)/products'] = 'pages/category_products/$1';

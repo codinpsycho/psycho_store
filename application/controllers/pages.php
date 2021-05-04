@@ -284,12 +284,18 @@ class Pages extends CI_controller
 			notify_event('instafeed', $params);
 
 			//Generate Suggestions
-			$data['suggested_products'] = $this->GenerateSuggestions($result, 5);
+			// $data['suggested_products'] = $this->GenerateSuggestions($result, 5);
 
 			$data['recently_viewed'] = $this->GetRecentlyViewed();
 			$this->AddToRecentlyViewed($result);
 
-			// echo '<pre>'; print_r($data); exit();
+			// Dev on 04.05.2021
+			$product_game = $this->beautify(url_title($result['product_game']),'-');
+			$data['suggested_products'] = $this->database->GetProducts('all','popular', $product_game);
+			// Dev on 04.05.2021
+
+			// echo '<pre>'; print_r($data['game']); exit();
+
 			display('product', $data);
 		}
 		else
@@ -567,5 +573,31 @@ class Pages extends CI_controller
 		$data['meta_id'] = 33;
 		display('basic', $data);
 	}
+
+	function category_products($categoryID)
+	{
+		$category = $this->database->_getProductCategory($categoryID);
+
+		$data['search_result'] = 0;
+		$data['search_text'] = $category['name'];
+		$data['products'] = array();
+		if(!empty($category))
+		{
+			$result = $this->database->GetCategoryWiseProducts($categoryID);
+			$count = count($result);
+			$data['search_result'] = $count;
+			
+			if($result)
+				$data['products'] = $result;
+		}
+
+		//Get Unique MetaInfo for the page with respect to 
+		// $data['meta_id'] = get_metaid_by_name($name);
+
+		display('search', $data);
+
+	}
+
+
 }
 ?>

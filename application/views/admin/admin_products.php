@@ -33,6 +33,7 @@
                 <button class="btn btn-primary" type="submit" > Sort </button>
                 <span class='pull-right'>
                     <a class="btn btn-primary play" href= <?php echo site_url('admin/add_product') ?> >Add New Product</a>
+                    <a class="btn btn-primary play" href= <?php echo site_url('admin/manage_category') ?> >Manage Categories</a>
                 </span>
             </form>
         </div>

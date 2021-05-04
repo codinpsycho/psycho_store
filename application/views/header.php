@@ -50,11 +50,20 @@
           <div class="btn-group">
             <a class=" molot btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">What do you like <span class="caret"></span>  </a>
             <ul class="dropdown-menu">
-              <?php foreach ($supported_games as $key => $game):?>
+
+              <?php
+                foreach ($categories as $key => $value) {    
+              ?>
+                <li><a href="<?=base_url().'category/'.$value['id'].'/products'?>"><?=$value['name']?></a></li>
+              <?php } ?>
+
+              <!-- <?php //foreach ($supported_games as $key => $game):?>
                 <li>
-                  <a href=<?php $game_url = url_title($game['product_game'], '-', true); echo site_url("like/$game_url")?>> <?php echo $game['product_game'] ?></a>
+                  <a href=<?php //$game_url = url_title($game['product_game'], '-', true); echo site_url("like/$game_url")?>> <?php //echo $game['product_game'] ?></a>
                 </li>
-              <?php endforeach ?>
+              <?php //endforeach ?> -->
+
+
             </ul>
           </div>
         </form>

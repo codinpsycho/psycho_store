@@ -6,7 +6,22 @@
 		<div class="row ">
 			<div class="col-md-12">
 				<form class='form-horizontal' method="post" enctype="multipart/form-data" action= <?php echo $action ?> >
-					<div class='form-group' >					
+					<div class='form-group' >	
+
+						<div class='col-md-2'>
+							<select class= "form-control" name="category_id" required="">
+								
+								<option disabled="">Select Category</option>
+								<?php 
+								foreach ($categories as $key => $value) {	?>
+
+									<option value="<?=$value['id']?>" <?=$value['id'] == $category_id ? 'selected' : '' ?>  ><?=$value['name']?></option>
+
+								<?php } ?>
+								
+							</select>
+						</div>
+
 						<div class='col-md-2'>
 							<select class= "form-control " name="type">
 								<?php if($type != ''):?>
@@ -26,7 +41,7 @@
 							<div class='col-md-3'>
 								<input class='form-control' type="text" placeholder="Product Name" name="product_name" value = "<?php echo !empty($name) ? $name : set_value('product_name'); ?>"></input>
 							</div>
-							<div class='col-md-5'>
+							<div class='col-md-3'>
 								<input class='form-control' type="text" placeholder="URL Keywords" name="url" value = "<?php echo !empty($product_url) ? $product_url : set_value('url'); ?>"></input>
 							</div>
 						</div>
@@ -108,14 +123,6 @@
 							}
 							?>
 
-							<!-- <div class="position-relative pr-3 mb-3">
-								<input class='form-control' type="text" placeholder="Paste Your Link Here" name="galleries[]">
-								<a href="javascript:void(0)" class="delicn">Remove</a>
-							</div>	
-							<div class="position-relative pr-3 mb-3">
-								<input class='form-control' type="text" placeholder="Paste Your Link Here" name="galleries[]">
-								<a href="javascript:void(0)" class="delicn">Remove</a>
-							</div> -->	
 						</div>	
 					</div>
 				</div>
@@ -125,15 +132,7 @@
 		</form>
 	</div>
 
-
-	<script type="text/javascript">
-
-		$(document).on('click', '#addgallery', function(e) {
-
-			var addhtml = '<div class="position-relative pr-3 mb-3"><input class="form-control" type="text" placeholder="Paste Your Link Here" name="galleries[]" value="56"><a href="javascript:void(0)" class="delicn">Remove</a></div>';
-
-			$('#addhtml').append(addhtml);
-		});
+<script type="text/javascript">
 
 		$(document).on('click', '.delicn', function(e) {
 			$(this).parent().remove();

@@ -173,10 +173,10 @@ function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an arra
 	return $random_prods;
 }
 
-	function AddProduct($product)
-	{		
-		$product_with_details = $product['product_details'];
-		$galleries = $product['galleries'];
+function AddProduct($product)
+{		
+	$product_with_details = $product['product_details'];
+	$galleries = $product['galleries'];
 
 		unset($product['product_details']);			//Unset it here in the last step
 		unset($product['galleries']);			//Unset it here in the last step
@@ -874,6 +874,61 @@ function GetRandomProducts ($count, $type, $game_name, $exceptions/*pass an arra
 		$this->db->delete('galleries');
 	}
 	// added on 22.04.2021
+
+	// dev on 04.05.2021
+	function _getProductCategories()
+	{
+		$query = $this->db->get('categories');
+		return $query->result_array();
+	}
+
+	function _storeProductCategory($name)
+	{
+		$data = array(
+			'name'=> $name,
+		);
+
+		$this->db->insert('categories',$data);
+	}
+
+	function _getProductCategory($id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->get('categories');
+		return $query->row_array();
+	}
+
+	function _updateProductCategory($id, $name)
+	{
+
+		$this->db->set('name', $name);
+		$this->db->where('id', $id);
+		$this->db->update('categories');
+
+	}
+
+
+	function GetCategoryWiseProducts($categoryID)
+	{	
+		$this->db->where('category_id', $categoryID);
+
+		//Dont get hidden products
+		$this->db->where('product_state !=', 'hidden');
+
+		$query = $this->db->get('products');
+		
+		$products = $query->result_array();
+
+		foreach ($query->result_array() as $key => $prod)
+		{
+			$products[$key]['product_details'] = $this->GetProductDetails($prod);
+		}
+
+		return $products;
+	}
+
+	// dev on 04.05.2021
+
 
 }
 ?>
