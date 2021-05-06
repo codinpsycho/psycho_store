@@ -138,7 +138,7 @@ class Database extends CI_Model
 		return $query->row_array();
 	}
 
-	function GetSupportedProductsForDesign($design_id)
+	function GetSupportedProductsForDesign($design_id, $select = false)
 	{
 		$this->db->where('design_id', $design_id);
 		$query = $this->db->get('products');
@@ -908,9 +908,52 @@ function AddProduct($product)
 	}
 
 
-	function GetCategoryWiseProducts($categoryID)
+	function GetCategoryWiseProducts($categoryID, $productID = false, $same_designed_ids = false)
 	{	
+
+		if($productID)
+		$this->db->where_not_in('product_id', [$productID]);
+	
+		if($same_designed_ids)
+		$this->db->where_not_in('product_id', $same_designed_ids);
+
+	
+
 		$this->db->where('category_id', $categoryID);
+		//Dont get hidden products
+		$this->db->where('product_state !=', 'hidden');
+
+		$query = $this->db->get('products');
+		
+		$products = $query->result_array();
+
+		foreach ($query->result_array() as $key => $prod)
+		{
+			$products[$key]['product_details'] = $this->GetProductDetails($prod);
+		}
+
+		return $products;
+	}
+
+
+	function GetSuggestedProducts($type, $sort, $game_name = 'all', $productID = false, $same_designed_ids = false)
+	{	
+		if($type != 'all')
+			$this->db->where('product_type', $type);
+		if($game_name != 'all')
+			$this->db->like('product_game', $game_name);
+
+		if($sort == 'latest')
+			$this->db->order_by('product_id', 'desc');
+		else if($sort =='popular')				
+			$this->db->order_by('product_qty_sold', 'desc');	//Sort by selling amount
+
+		if($productID)
+		$this->db->where_not_in('product_id', [$productID]);
+	
+		if($same_designed_ids)
+		$this->db->where_not_in('product_id', $same_designed_ids);
+
 
 		//Dont get hidden products
 		$this->db->where('product_state !=', 'hidden');
@@ -926,6 +969,7 @@ function AddProduct($product)
 
 		return $products;
 	}
+
 
 	// dev on 04.05.2021
 

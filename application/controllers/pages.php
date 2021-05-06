@@ -290,11 +290,21 @@ class Pages extends CI_controller
 			$this->AddToRecentlyViewed($result);
 
 			// Dev on 04.05.2021
+			$same_designed_products = $this->database->GetSupportedProductsForDesign($result['design_id'], True);
+			foreach ($same_designed_products as $key => $value) {
+				$same_designed_ids[] = $value['product_id'];
+			}
 			$product_game = $this->beautify(url_title($result['product_game']),'-');
-			$data['suggested_products'] = $this->database->GetProducts('all','popular', $product_game);
-			// Dev on 04.05.2021
+			$suggested_products = $this->database->GetSuggestedProducts('all','popular', $product_game, $id, $same_designed_ids);
+			
+			if(empty($suggested_products)) {
+				$suggested_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids);
+			}
 
-			// echo '<pre>'; print_r($data['game']); exit();
+			$data['suggested_products'] = $suggested_products;
+			// Dev on 04.05.2021
+			// echo '<pre>'; print_r($same_designed_ids); exit();
+
 
 			display('product', $data);
 		}
@@ -592,7 +602,7 @@ class Pages extends CI_controller
 		}
 
 		//Get Unique MetaInfo for the page with respect to 
-		// $data['meta_id'] = get_metaid_by_name($name);
+		$data['meta_id'] = 50; //get_metaid_by_name($name);
 
 		display('search', $data);
 

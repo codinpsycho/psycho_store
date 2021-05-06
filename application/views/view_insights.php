@@ -169,21 +169,22 @@
 };
 
 
+
 <?php if($is_admin): ?>
     var sales_canvas = document.getElementById("sales_chart").getContext("2d");
-    var sale_line_chart = new Chart(sales_canvas).Line(monthly_sales_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false });
+    var sale_line_chart = new Chart(sales_canvas).Line(monthly_sales_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false, animation: false });
 
 	var revenue_canvas = document.getElementById("revenue_chart").getContext("2d");        
-    var sale_line_chart = new Chart(revenue_canvas).Bar(revenue_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false });
+    var sale_line_chart = new Chart(revenue_canvas).Bar(revenue_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false, animation: false });
 
 	var payment_canvas = document.getElementById("payment_chart").getContext("2d");        
-    var sale_line_chart = new Chart(payment_canvas).Pie(payment_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true, datasetFill : false });
+    var sale_line_chart = new Chart(payment_canvas).Pie(payment_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true, datasetFill : false, animation: false });
 <?php endif; ?>
 
 	var states_canvas = document.getElementById("states_chart").getContext("2d");        
-    var states_data_chart = new Chart(states_canvas).Bar(states_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true, datasetFill : false });
+    var states_data_chart = new Chart(states_canvas).Bar(states_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true, datasetFill : false, animation: false });
 
     var game_sales_canvas = document.getElementById("game_sales_chart").getContext("2d");
-    var game_sales_line_chart = new Chart(game_sales_canvas).Bar(game_sales_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false });
+    var game_sales_line_chart = new Chart(game_sales_canvas).Bar(game_sales_data, { scaleFontColor: "#fff", bezierCurve : false, responsive : true,datasetFill : false, animation: false });
 
 </script>

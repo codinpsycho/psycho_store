@@ -18,6 +18,7 @@ class Insights extends CI_Controller
 	{
 		$is_admin = $this->_is_user_admin();
 
+
 		$month = !empty($this->input->post('month')) ? $this->input->post('month') : date("M"); // Coded on 19.04.2021
 		
 		if($month === false)
@@ -28,7 +29,9 @@ class Insights extends CI_Controller
 		$data['heading'] = "Insights";
 		
 		$all_orders = $this->database->GetAllOrders();
+
 		$gross = $this->_get_gross_info($all_orders);
+		
 
 		//get latest order
 		$latest_order_index = count($all_orders) - 1;
@@ -36,6 +39,7 @@ class Insights extends CI_Controller
 		
 		_add_address_and_user_to_orders($latest_order);
 
+		// echo '<pre>'; print_r($gross); exit();
 		//Get this months orders data
 		$month_info = $this->_getOrdersDataForMonth($month);
 
@@ -73,6 +77,7 @@ class Insights extends CI_Controller
 
 		$data['meta_id'] = 5;
 
+		// echo '<pre>'; print_r($data); exit();
 		display('insights', $data);
 	}
 
