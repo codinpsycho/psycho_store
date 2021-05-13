@@ -74,3 +74,6 @@ $route['beta'] = 'pages/beta/';
 $route['404_override'] = '';
 
 $route['category/(:any)/products'] = 'pages/category_products/$1';
+
+$route['admin/dashboard'] = 'insights/dashboard';
+$route['admin'] = 'insights/dashboard';

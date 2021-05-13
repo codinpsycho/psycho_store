@@ -187,6 +187,9 @@ class Admin extends CI_controller
 		$data['num_users'] = count($all_users);
 		$data['users_table'] = $this->_generate_users_table($all_users);
 
+
+		
+
 		display('admin_users', $data);
 	}
 
@@ -1412,8 +1415,9 @@ class Admin extends CI_controller
 		display('admin_add_edit_category', $data);
 	}
 
-	// developed on 03.05.2021
 
+
+	
 
 
 }

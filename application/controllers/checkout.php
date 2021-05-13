@@ -43,7 +43,7 @@ class Checkout extends CI_controller
 		}
 
 		$this->_save_cart_items();
-	
+
 		$this->login();
 	}
 
@@ -57,6 +57,7 @@ class Checkout extends CI_controller
 		$this->session->set_userdata('txn_id', $txn_id);
 	}
 
+
 	function _save_cart_items()
 	{
 		//Try applying domain based discount before saving
@@ -66,19 +67,26 @@ class Checkout extends CI_controller
 
 		//Empty checkout_items for this txn_id		
 		$this->database->RemoveCheckoutItemsForTxnId($txn_id);
+		// $this->database->SaveAmountOnCheckout($this->cart->final_price(), $txn_id);
 
-		$this->database->SaveAmountOnCheckout($this->cart->final_price(), $txn_id);
+
+		// dev on 13.05.2021 after applying credit points
+		$checkout_order = $this->_get_active_checkout_order($txn_id);
+		$final_price = $checkout_order['order_amount'];
+		$this->database->SaveAmountOnCheckout($final_price, $txn_id);
+		// dev on 13.05.2021 
+
 
 		//Save cart items
 		foreach ($this->cart->contents() as $item)
 		{
 			$checkout_item = array
-						(
-							'txn_id'		=>	$txn_id,
-							'product_id'	=> 	$item['id'],
-							'count'			=> 	$item['qty'],
-							'option'		=> 	isset($item['options']) ? $item['options']['extra'] : null,
-						);
+			(
+				'txn_id'		=>	$txn_id,
+				'product_id'	=> 	$item['id'],
+				'count'			=> 	$item['qty'],
+				'option'		=> 	isset($item['options']) ? $item['options']['extra'] : null,
+			);
 
 			$this->database->SaveCartItemOnCheckout($checkout_item);
 		}
@@ -185,15 +193,15 @@ class Checkout extends CI_controller
 		{
 			case 'hoodie':
 			case 'tshirt':
-				$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
-				
-				if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
-					return true;
-				break;
+			$size_in_stock = $product['product_details'][strtolower($cart_item['options']['extra']).'_qty'];
+
+			if($product['product_details']['size_preorder'] == false && $cart_item['qty'] > $size_in_stock)
+				return true;
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 
 		return false;
@@ -279,7 +287,53 @@ class Checkout extends CI_controller
 		$checkout_order = $this->_get_active_checkout_order();
 		$user = $this->database->GetUserById($checkout_order['user_id']);
 
-		$user = $this->database->GetUserById($checkout_order['user_id']);
+
+		// echo '<pre>';
+		// print_r($checkout_order);
+		// exit();
+
+
+
+		// dev on 12.05.2021
+		$final_price = $this->cart->final_price();
+		$max_points_claimed = round(($final_price * $user['max_claim_percentage'])/100);
+		$data['points_claimed'] = $user['points'] > $max_points_claimed ? $max_points_claimed : $user['points'];
+		$data['checked'] = !empty($data['points_claimed']) ? true : false;
+		
+		if(empty($checkout_order['is_point_applied'])) {
+			$order_amount = $final_price - $data['points_claimed'];
+			$attributes = ['order_amount' => $order_amount, 'is_point_applied' => true];
+			$this->database->_updateAttributeOnCheckoutOrdersIfPointsApplied($attributes, $checkout_order['txn_id'], 'open');
+			
+			$new_points = $user['points'] - $data['points_claimed'];
+			$this->database->RewardUser($user['id'], $new_points);
+		}
+
+
+
+		
+		if(!empty($this->input->post('is_clicked'))) {
+
+			if(empty($this->input->post('is_applied'))) {
+
+				$new_points = $user['points'] + $data['points_claimed'];
+				$this->database->RewardUser($user['id'], $new_points);
+
+				// first update the previous price
+				$order_amount = $final_price;
+				$attributes = ['order_amount' => $order_amount, 'is_point_applied' => false];
+				$this->database->_updateAttributeOnCheckoutOrdersIfPointsApplied($attributes, $checkout_order['txn_id'], 'open');
+
+				// second initialise it to ZERO
+				$data['points_claimed'] = 0;
+				$data['checked'] = false;
+				$order_amount = $checkout_order['order_amount'] - $data['points_claimed'];
+			}
+
+		}
+		// dev on 12.05.2021
+
+
 
 		if( is_null($checkout_order['address_id'] ))
 		{
@@ -294,11 +348,9 @@ class Checkout extends CI_controller
 
 		// $shipping_available = false;
 		// $cod_available = false;
-
 		// if($shipping_details)
 		// {
 		// 	$shipping_available = true;
-			
 		// 	if($shipping_details['cod'] === 'Y')
 		// 	{
 		// 		$cod_available = true;
@@ -307,8 +359,8 @@ class Checkout extends CI_controller
 
 		$data['txn_id'] = $checkout_order['txn_id'];
 		$data['email'] = $user['email'];
- 		$data['raw_address'] = $address;
- 		$data['formatted_address'] = format_address($address);
+		$data['raw_address'] = $address;
+		$data['formatted_address'] = format_address($address);
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
 		$data['cod_charges'] = $this->config->item('cod_charge');
@@ -316,7 +368,7 @@ class Checkout extends CI_controller
 		//Add 'notes' for Razorpay
 		$data['txn_id'] = $checkout_order['txn_id'];
 		
-		
+		// echo '<pre>'; print_r($data); exit();
 		display('review', $data);
 	}
 
@@ -337,19 +389,19 @@ class Checkout extends CI_controller
 		switch ($payment_mode)
 		{			
 			case 'cod':
-				$this->_lock_active_checkout_order();
-				$this->session->set_flashdata('ok_to_order', true);
-				redirect('checkout/place_order');
-				break;
+			$this->_lock_active_checkout_order();
+			$this->session->set_flashdata('ok_to_order', true);
+			redirect('checkout/place_order');
+			break;
 
 			case 'pre-paid':
-				$this->_lock_active_checkout_order();
-				$this->_payment_gateway($this->input->post());
-				break;
+			$this->_lock_active_checkout_order();
+			$this->_payment_gateway($this->input->post());
+			break;
 			
 			default:
-				redirect('checkout/');
-				break;
+			redirect('checkout/');
+			break;
 		}
 	}
 
@@ -405,16 +457,16 @@ class Checkout extends CI_controller
 		switch ($this->config->item('payment_gateway'))
 		{
 			case 'razorpay':
-				$this->_process_razorpay($post_params);
-				break;
+			$this->_process_razorpay($post_params);
+			break;
 			
 			case 'payu':
-				$this->_process_payu();
-				break;
+			$this->_process_payu();
+			break;
 			
 			default:
 				# code...
-				break;
+			break;
 		}
 	}
 
@@ -525,141 +577,153 @@ class Checkout extends CI_controller
 			case 'pre-paid':
 				$divider = 10;	//10%
 				break;
-			
-			case 'cod':
+
+				case 'cod':
 				$divider = 20;	//5%
 				break;
+			}
+
+			$points = $user['points'] + $order_info['amount']/$divider;
+			$this->database->RewardUser($order_info['user_id'], $points);
 		}
-		
-		$points = $user['points'] + $order_info['amount']/$divider;
-		$this->database->RewardUser($order_info['user_id'], $points);
-	}
 
-	function _send_order_mail($order_info)
-	{
-		//Detects order num for a particular user and sends a mail accordingly
-		$user = $order_info['user'];
-		$orders = $this->database->GetOrdersForUser($order_info['user_id']);
-		$order_num = count($orders);
-
-		$data['site_name'] = $this->config->item('website_name', 'tank_auth');
-		$data['username'] = $user['username'];
-		$data['order_id'] = $order_info['txn_id'];
-		$data['product_table'] = generate_product_table_for_order($order_info['txn_id']);
-		$data['address'] = format_address($order_info['address']);
-		$data['payment_mode'] = $order_info['payment_mode'];
-		
-		//For special mails
-		switch ($order_num)
+		function _send_order_mail($order_info)
 		{
-			case '1':
+		//Detects order num for a particular user and sends a mail accordingly
+			$user = $order_info['user'];
+			$orders = $this->database->GetOrdersForUser($order_info['user_id']);
+			$order_num = count($orders);
+
+			$data['site_name'] = $this->config->item('website_name', 'tank_auth');
+			$data['username'] = $user['username'];
+			$data['order_id'] = $order_info['txn_id'];
+			$data['product_table'] = generate_product_table_for_order($order_info['txn_id']);
+			$data['address'] = format_address($order_info['address']);
+			$data['payment_mode'] = $order_info['payment_mode'];
+
+		//For special mails
+			switch ($order_num)
+			{
+				case '1':
 				$params = mg_create_mail_params('first_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
 
-			case '2':
+				case '2':
 				$params = mg_create_mail_params('second_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
 
-			case '3':
+				case '3':
 				$params = mg_create_mail_params('third_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
-			
-			case '4':
+
+				case '4':
 				$params = mg_create_mail_params('fourth_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
 
-			case '5':
+				case '5':
 				$params = mg_create_mail_params('fifth_order', $data);
 				mg_send_mail($user['email'], $params);
 				break;
 
-			
-			default:
+
+				default:
 				# code...
 				break;
-		}
+			}
 
 		//This is to be sent for each order
-		$params = mg_create_mail_params('order', $data);
-		mg_send_mail($user['email'], $params);
-	}	
+			$params = mg_create_mail_params('order', $data);
+			mg_send_mail($user['email'], $params);
+		}	
 
 
-	function _place_order($order_info)
-	{
-		$order = array
+		function _place_order($order_info)
+		{
+			$order = array
+			(
+				'txn_id'		=>	$order_info['txn_id'],
+				'user_id'		=>	$order_info['user_id'],
+				'address_id' 	=> 	$order_info['address_id'],
+				'payment_mode'	=>	$order_info['payment_mode'],
+				'order_amount'	=>	$order_info['amount'],
+					//'order_status'=>	Default set as pending
+			);
+
+			$this->database->AddOrder($order);
+
+			$checkout_items = $order_info['checkout_items'];
+
+			foreach ($checkout_items as $item)
+			{
+				$order_item = array
 				(
 					'txn_id'		=>	$order_info['txn_id'],
-					'user_id'		=>	$order_info['user_id'],
-					'address_id' 	=> 	$order_info['address_id'],
-					'payment_mode'	=>	$order_info['payment_mode'],
-					'order_amount'	=>	$order_info['amount'],
-					//'order_status'=>	Default set as pending
+					'product_id'	=> 	$item['product_id'],
+					'count'			=> 	$item['count'],
+					'option'		=> 	$item['option'],
 				);
-		
-		$this->database->AddOrder($order);
-		
-		$checkout_items = $order_info['checkout_items'];
 
-		foreach ($checkout_items as $item)
-		{
-			$order_item = array
-						(
-							'txn_id'		=>	$order_info['txn_id'],
-							'product_id'	=> 	$item['product_id'],
-							'count'			=> 	$item['count'],
-							'option'		=> 	$item['option'],
-						);
-			
 
 			//Update database
-			$this->_update_product_info($item);
-			$this->database->AddOrderItem($order_item);
+				$this->_update_product_info($item);
+				$this->database->AddOrderItem($order_item);
 
 			//Consume code
-			if($this->cart->is_discount_applied())
-			{
-				$disc_info = $this->cart->discount_info();
-				$this->database->ConsumeCode($disc_info['coupon']);
+				if($this->cart->is_discount_applied())
+				{
+					$disc_info = $this->cart->discount_info();
+					$this->database->ConsumeCode($disc_info['coupon']);
+				}
+
 			}
-			
-		}
 
 		//Destroy stuff now
-		$this->cart->destroy();
-		$this->session->unset_userdata('txn_id');
-		$this->database->CheckoutDone($order_info['txn_id']);
-	}
+			$this->cart->destroy();
+			$this->session->unset_userdata('txn_id');
+			$this->database->CheckoutDone($order_info['txn_id']);
+		}
 
-	function _update_product_info($checkout_item)
-	{
-		$product = $this->database->GetProductById($checkout_item['product_id']);
-		$product['product_qty_sold'] += $checkout_item['count'];
-		
-		//Update product info
-		switch ($product['product_type'])
+		function _update_product_info($checkout_item)
 		{
-			case 'hoodie':
-			case 'tshirt':
+			$product = $this->database->GetProductById($checkout_item['product_id']);
+			$product['product_qty_sold'] += $checkout_item['count'];
+
+		//Update product info
+			switch ($product['product_type'])
+			{
+				case 'hoodie':
+				case 'tshirt':
 				$size = $checkout_item['option'];
 				$size = strtolower($size).'_qty';
 				$product['product_details'][$size] -= $checkout_item['count'];
 				$this->database->ModifyProduct($product);
 				break;
-			
-			default:
+
+				case 'posters':
+				$this->database->ModifyProduct($product);
+				break;
+				
+				case 'mugs':
+				$this->database->ModifyProduct($product);
+				break;
+
+				case 'mobilecover':
+				$this->database->ModifyProduct($product);
+				break;
+
+				default:
 				# code...
 				break;
+			}
 		}
-	}
 
-	function _generate_orderinfo($post_back_params)
-	{
-		$order_info = array();
+		function _generate_orderinfo($post_back_params)
+		{
+			$order_info = array();
 
 		//Payment Mode
 		if( isset($post_back_params['mode']) )	//For PayU

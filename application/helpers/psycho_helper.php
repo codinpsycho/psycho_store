@@ -545,6 +545,9 @@ function _live($page, $data)
 		case 'admin_add_edit_category':
 			$body = $ci->load->view('admin/add_edit_category', $data, true);
 			break;
+		case 'admin_dashboard':
+			$body = $ci->load->view('admin/admin_dashboard', $data, true);
+			break;
 		default:
 			show_404();
 		break;

@@ -912,12 +912,12 @@ function AddProduct($product)
 	{	
 
 		if($productID)
-		$this->db->where_not_in('product_id', [$productID]);
-	
-		if($same_designed_ids)
-		$this->db->where_not_in('product_id', $same_designed_ids);
+			$this->db->where_not_in('product_id', [$productID]);
 
-	
+		if($same_designed_ids)
+			$this->db->where_not_in('product_id', $same_designed_ids);
+
+
 
 		$this->db->where('category_id', $categoryID);
 		//Dont get hidden products
@@ -949,10 +949,10 @@ function AddProduct($product)
 			$this->db->order_by('product_qty_sold', 'desc');	//Sort by selling amount
 
 		if($productID)
-		$this->db->where_not_in('product_id', [$productID]);
-	
+			$this->db->where_not_in('product_id', [$productID]);
+
 		if($same_designed_ids)
-		$this->db->where_not_in('product_id', $same_designed_ids);
+			$this->db->where_not_in('product_id', $same_designed_ids);
 
 
 		//Dont get hidden products
@@ -969,9 +969,180 @@ function AddProduct($product)
 
 		return $products;
 	}
-
-
 	// dev on 04.05.2021
+
+	// Dev on 06.05.2021
+	function _getUserUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT date(`created`) as joining_date, COUNT(id) as count FROM users WHERE DATE_FORMAT(created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(created, '%Y-%m-%d') <= '$end_date' GROUP BY date(`created`)";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+
+	function _getUserIDsUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT id FROM users WHERE DATE_FORMAT(created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(created, '%Y-%m-%d') <= '$end_date'";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+
+	function _getConvertedUsers()
+	{
+		$sql = "SELECT * FROM `users` WHERE id IN(SELECT user_id FROM `orders` ORDER BY `order_id` ASC)";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+	function _getUserWithOrders($val1, $val2, $selected_ids = [])
+	{
+		
+		// $sql = "SELECT user_id, COUNT(*) AS cnt FROM orders WHERE user_id IN($selected_ids) GROUP BY user_id HAVING cnt > $val1 AND cnt <$val2";
+
+		$this->db->select('user_id');
+		$this->db->select('COUNT(*) AS cnt');
+
+		if(count($selected_ids)) 
+		$this->db->where_in('user_id', $selected_ids);
+
+		$this->db->group_by('user_id');
+		$this->db->having('cnt > ', $val1);
+		$this->db->having('cnt < ', $val2);
+		$query = $this->db->get('orders');
+
+		// echo $this->db->last_query();
+		return $query->result_array();
+	}
+	// Dev on 06.05.2021
+
+	// Dev on 07.05.2021
+	function _getProductSalesUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT COUNT(product_id) as count, product_id FROM `order_items` WHERE txn_id IN( SELECT txn_id FROM `orders` WHERE DATE_FORMAT(date_created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(date_created, '%Y-%m-%d') <= '$end_date' ORDER BY `order_id` ASC ) GROUP BY product_id";
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+
+		foreach ($result as $key => $value) {
+			$result[$key]['game'] = $this->GetProductAttributeById($value['product_id'], 'product_game');
+		}
+
+		return $result;
+	}
+
+
+	function GetProductAttributeById($id, $attribute = 'product_game')
+	{
+		$this->db->select($attribute);
+		$this->db->where('product_id', $id);
+		$query = $this->db->get('products');
+		$product = $query->row();
+		return $product->$attribute;
+	}
+
+
+	function _getDesignName($designID)
+	{
+		$this->db->select('design_name');
+		$this->db->where('design_id', $designID);
+		$query = $this->db->get('designs');
+		return $query->row_array();
+	}
+
+
+	function _getCheckOutOrdersUsingDateRange($date)
+	{
+		$sql = "SELECT COUNT(txn_id) as count, DATE_FORMAT(date_created, '%Y-%m-%d') as created FROM `checkout_orders` WHERE DATE_FORMAT(date_created, '%Y-%m-%d') = '$date'";
+		$query = $this->db->query($sql);
+		$result = $query->row_array();
+		return $result;
+	}
+
+
+	function _getDesignSalesUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT count(product_id) as count, product_id FROM `order_items` WHERE txn_id IN(SELECT txn_id FROM `orders` WHERE DATE_FORMAT(date_created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(date_created, '%Y-%m-%d') <= '$end_date' ORDER BY `order_id` ASC) GROUP BY product_id ORDER BY count DESC";
+
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+
+		foreach ($result as $key => $value) {
+			$result[$key]['design'] = $this->_getDesignUsingProductID($value['product_id']);
+		}
+
+		return $result;
+	}
+
+	function _getDesignUsingProductID($productID)
+	{
+		$product = $this->GetProductById($productID);
+		return $product['product_name'];
+	}
+
+
+	function GetAllOrdersUsingDateRange($start_date, $end_date)
+	{
+		$this->db->select('txn_id');	
+		$this->db->where("DATE_FORMAT(date_created, '%Y-%m-%d') >= '$start_date'");
+		$this->db->where("DATE_FORMAT(date_created, '%Y-%m-%d') <= '$end_date'");
+		$query = $this->db->get('orders');
+		$orders = array();
+		foreach ($query->result_array() as $row)
+		{
+			$orders[] = $this->GetOrderById($row['txn_id']);
+		}
+
+		return $orders;
+	}
+	
+
+	function _getStateWiseOrderUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT COUNT(txn_id) as count, address_id FROM `orders` WHERE DATE_FORMAT(date_created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(date_created, '%Y-%m-%d') <= '$end_date' GROUP BY address_id";
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+
+		foreach ($result as $key => $value) {
+			$result[$key]['state'] = $this->GetStateUsingAddressById($value['address_id']);
+		}
+
+		return $result;
+	}
+
+
+	function GetStateUsingAddressById($id)
+	{
+		$this->db->select('state');	
+		$this->db->where('address_id', $id);
+		$query = $this->db->get('address');
+		$data = $query->row();
+		return $data->state;
+	}
+
+	// converted user is one who has placed an order
+	function _getConvertedUserUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT date(`created`) as joining_date, count(id) as count, id FROM users WHERE DATE_FORMAT(created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(created, '%Y-%m-%d') <= '$end_date' AND id IN(SELECT user_id FROM `orders` ORDER BY `order_id` ASC) GROUP BY date(`created`)";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+	// a user who places an order within the selected date range but has signed up before the date range.
+	// so lets say we select a date range of a week, I have placed an order in that week only but I have registered earlier, can be 2 weeks back, month back or an year back, anything
+	function _getReturningUsersUsingDateRange($start_date, $end_date)
+	{
+		$sql = "SELECT * FROM `users` WHERE DATE_FORMAT(created, '%Y-%m-%d') < '$start_date' AND id IN(SELECT user_id FROM `orders` WHERE DATE_FORMAT(date_created, '%Y-%m-%d') >= '$start_date' AND DATE_FORMAT(date_created, '%Y-%m-%d') <= '$end_date' GROUP BY user_id ORDER BY `order_id` ASC)";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+
+	function _updateAttributeOnCheckoutOrdersIfPointsApplied($data, $txn_id, $state = 'open')
+	{
+		$this->db->where('txn_id', $txn_id);
+		$this->db->where('state', $state);
+		$this->db->update('checkout_orders', $data);
+	}
 
 
 }
