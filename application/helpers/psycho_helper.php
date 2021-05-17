@@ -548,6 +548,9 @@ function _live($page, $data)
 		case 'admin_dashboard':
 			$body = $ci->load->view('admin/admin_dashboard', $data, true);
 			break;
+		case 'edit_address':
+			$body = $ci->load->view('auth/edit_address', $data, true);
+			break;
 		default:
 			show_404();
 		break;

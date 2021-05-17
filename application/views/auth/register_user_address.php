@@ -98,7 +98,7 @@ $captcha = array(
 	'maxlength'	=> 8,
 );
 ?>
-<!--<?php echo form_open($this->uri->uri_string()); ?>-->
+<!--<?php //echo form_open($this->uri->uri_string()); ?>-->
 <div class="container top-bottom-space">
 	<h1>Register</h1>
 	<hr>

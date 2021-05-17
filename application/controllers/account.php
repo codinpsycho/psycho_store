@@ -20,7 +20,7 @@ class Account extends CI_controller
 		//Get logged in user
 		$userid = $this->tank_auth->get_user_id();
 		//Get orders for logged in user
-		echo $userid;
+		// echo $userid;
 		$data['orders'] = $this->database->GetOrdersForUser($userid);
 		
 		$this->load->view('account', $data);

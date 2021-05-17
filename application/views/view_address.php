@@ -2,7 +2,7 @@
 	<h1>Select an Address <span class='pull-right'><?php echo anchor("auth/register_address/", 'Add Address', "class='btn btn-default play navbar-btn' "); ?></span> </h1>
 	<hr>
 	<div class="well">
-		<form method = 'post' action = <?php echo site_url('checkout/save_address')?> role="form">
+		<form method = 'post' action = "<?php echo site_url('checkout/save_address')?>" role="form">
 		<div class="row">
 			<?php
 			foreach($addresses as $address): 	
@@ -14,6 +14,9 @@
 			<div class="col-md-3">				
 				<input type = 'radio' name = 'address_id' checked value = <?php echo $address['address_id'] ?> >
 				<?php echo $complete_add ?>
+
+				<br>
+				<a href="<?=base_url().'checkout/address/edit/'.$address['address_id']?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>EDIT</a>
 			</div>
 			<?php
 			endforeach;

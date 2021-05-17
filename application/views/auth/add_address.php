@@ -32,19 +32,19 @@ $address1 = array(
 	'placeholder'	=> 'House no. / Flat no. / Buiilding no.',
 	'class' => "form-control"
 );
-$address2 = array(
-	'name'	=> 'address2',
-	'id'	=> 'address2',
-	'value' => set_value('address2'),
-	'maxlength'	=> 120,
-	'size'	=> 30,
-	'placeholder'	=> 'Society / Locality / Road',
-	'class' => "form-control"
-);
+// $address2 = array(
+// 	'name'	=> 'address2',
+// 	'id'	=> 'address2',
+// 	'value' => set_value('address2'),
+// 	'maxlength'	=> 120,
+// 	'size'	=> 30,
+// 	'placeholder'	=> 'Society / Locality / Road',
+// 	'class' => "form-control"
+// );
 $address3 = array(
 	'name'	=> 'address3',
 	'id'	=> 'address3',
-	'value' => set_value('address2'),
+	'value' => set_value('address3'),
 	'maxlength'	=> 90,
 	'size'	=> 30,
 	'placeholder'	=> "Near Master Roshi's island",
@@ -105,7 +105,7 @@ $number = array(
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-				<form method = 'post' action = <?php echo site_url('auth/register_address')?> role="form">
+				<form method = 'post' action = "<?php echo site_url('auth/register_address')?>" role="form">
 					<div class="col-md-6">
 						<div class="form-group">
 							<?php echo ('First Name'); ?>
@@ -127,13 +127,13 @@ $number = array(
 								<?php echo form_error($address1['name']); ?>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<!-- <div class="col-md-12">
 						<div class="form-group">
-								<?php echo ('Some more address'); ?>
-								<?php echo form_input($address2); ?>
-								<?php echo form_error($address2['name']); ?>
+								<?php //echo ('Some more address'); ?>
+								<?php //echo form_input($address2); ?>
+								<?php //echo form_error($address2['name']); ?>
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-12">
 						<div class="form-group">
 								<?php echo ('Landmark (if any)'); ?>

@@ -303,9 +303,9 @@ class Pages extends CI_controller
 
 			$data['suggested_products'] = $suggested_products;
 			// Dev on 04.05.2021
-			// echo '<pre>'; print_r($same_designed_ids); exit();
 
 
+			// echo '<pre>'; print_r($data); exit();
 			display('product', $data);
 		}
 		else

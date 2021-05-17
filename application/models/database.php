@@ -311,6 +311,10 @@ function AddProduct($product)
 	function RegisterAddress($data)
 	{
 		$this->db->insert('address',$data);
+
+		// dev on 14.05.2021
+		$insertId = $this->db->insert_id();
+   		return  $insertId;
 	}
 
 	function RemoveAddress($id)
@@ -1142,6 +1146,34 @@ function AddProduct($product)
 		$this->db->where('txn_id', $txn_id);
 		$this->db->where('state', $state);
 		$this->db->update('checkout_orders', $data);
+	}
+
+
+	function _updateCustomerAddress($address_id, $data)
+	{
+		$this->db->where('address_id', $address_id);
+		$this->db->update('address', $data);
+	}
+
+	function _getLastAddressAsDefaultUserAddress($user_id)
+	{
+		$sql = "SELECT * FROM `address` WHERE user_id = $user_id ORDER BY address_id DESC LIMIT 1";
+		$query = $this->db->query($sql);
+		return $query->row_array();
+	}
+
+
+	function updateUserPoints($user_id, $points)
+	{
+		$user = $this->GetUserById($user_id);
+		if($user['points'] >= $points) 
+		{
+			$updatedPoints = $user['points'] - $points;
+
+			$this->db->set('points', $updatedPoints);
+			$this->db->where('id', $user_id);
+			$this->db->update('users');
+		}
 	}
 
 

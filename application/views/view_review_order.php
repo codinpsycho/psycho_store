@@ -62,6 +62,7 @@
 			<div class="col-md-4">
 				<h1>Shipping To</h1>
 				<h4> <?php echo $formatted_address;?> </h4>
+				<a href="<?=base_url().'checkout/address?edit=true'?>">Click to Change address</a>
 			</div>
 			<div class="col-md-4">
 				<h1>Pricing
