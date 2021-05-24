@@ -47,10 +47,13 @@ $(function () {
           <div class="text-center">
              <?php echo $this->load->view('google_signin.html', array("gauth_url" => $gauth_url ), True ) ?>
           </div>
-          <hr>
+
+          <!-- commented out on 24.05.2021 -->
+          <!-- <hr>
           <div class="text-center">
-             <?php echo $this->load->view('fb_login.html', null, True)?>
-          </div>          
+             <?php // echo $this->load->view('fb_login.html', null, True)?>
+          </div> -->   
+
         </div>
       </div>
     </div>
