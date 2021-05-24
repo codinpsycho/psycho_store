@@ -37,8 +37,8 @@ $(function () {
               <input type="checkbox"> Remember Me
             </label>
           </div>
-          <?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor("/auth/register/?redirect_url=$redirect_url", ' Register'); ?> \
-          <?php echo anchor('/auth/forgot_password/', 'Forgot password'); ?>
+          <?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor("/auth/register/?redirect_url=$redirect_url", 'Register'); ?> \
+          <?php echo anchor('/auth/forgot_password/', 'Forgot password'); ?> \ <?php echo anchor("/auth/guest_checkout/?redirect_url=$redirect_url", 'Guest Checkout'); ?>
         </div>
         <div class="col-md-1 col-xs-12 vcenter">
           <h1 class=" text-center play"><small>or</small></h1>
@@ -47,10 +47,13 @@ $(function () {
           <div class="text-center">
              <?php echo $this->load->view('google_signin.html', array("gauth_url" => $gauth_url ), True ) ?>
           </div>
-          <hr>
+
+          <!-- commented out on 24.05.2021 -->
+          <!-- <hr>
           <div class="text-center">
-             <?php echo $this->load->view('fb_login.html', null, True)?>
-          </div>          
+             <?php //echo $this->load->view('fb_login.html', null, True)?>
+          </div> -->   
+                 
         </div>
       </div>
     </div>

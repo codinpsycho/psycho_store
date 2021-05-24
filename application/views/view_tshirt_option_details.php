@@ -34,21 +34,23 @@
 
 </script>
 
-<div class="w-100 stky">
+<div class="w-100">
   <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12" id="ordersize">
       <?php if($product_state == 'preorder'): ?>
         <h5 class="pull-left"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order? (Ships on <?php echo $restock_date ?>)</a> </h5>
       <?php endif; ?>
       <?php if($show_size_preorder_info): ?>
         <h5 class="pull-left"><a class="" href='#size_preorder' data-toggle='modal' data-target="#size_preorder">Pre-Orders shipping from <?php echo $restock_date ?></a> </h5>
       <?php endif; ?> 
+
       <div class="checkbox">
         <label class="pull-right "><input id="add_to_cart_checkbox" onclick="update_btn_text_on_addtocart(this)" type="checkbox" name="optradio">add to cart</label>
       </div>
     </div>
     <div class="col-md-4 col-sm-12 col-xs-12">
       <form id="cart_form" method = "post" action = <?php echo site_url("cart/instant_checkout/{$product['product_id']}")?> role="form">
+        
         <select id="size_selection" required class="form-control" name="extra" onchange="update_btn_text_on_size_select(this)">
           <option disabled selected value="">Select Size</option>  
           <option <?php echo $small_stock; ?> value ="Small">Small 
@@ -65,10 +67,18 @@
                 <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';
                 elseif ($xl_stock == 'preorder') echo '(Pre-Order)';?></option>
               </select>
+
+
             </div>
-            <div class="col-md-8 col-sm-12 col-xs-12">
-              <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
-              <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
+            <div class="w-100 stky">
+              <div class="col-md-8 col-sm-12 col-xs-12">
+                <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
+
+                <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block" style="display: none;"><?php echo $button_text?></button>
+
+                <a href="#ordersize" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
+
+              </div>
             </div>
           </form> 
           <div class="col-md-12 col-sm-12 col-xs-12">
@@ -77,6 +87,19 @@
            </div>
          </div>
        </div>
+
+
+       <script type="text/javascript">
+
+
+         $('#size_selection').change(function (e) {
+           
+           $('#anchorcart').hide();
+           $('#add_to_cart').show();
+
+         });
+       </script>
+
        <style>
         @media (max-width: 480px) {
           .stky.sticky {

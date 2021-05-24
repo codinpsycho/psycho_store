@@ -45,21 +45,24 @@
 	$(document).ready(function() {
 		$('.owl-carousel').owlCarousel({
 			loop: false,
-			margin: 15,
+			margin: 20,
 			nav:true,
 			dots:false,
-			 autoWidth:true,
+			items:5,
+			autoWidth:true,
 			responsiveClass: true,
 			responsive: {
 				0: {
-					items: 1,
-
+					items:2,
+					 autoWidth:false,
 				},
 				600: {
-					items: 3,
+					items: 2,
+					 autoWidth:false,
 				},
 				1000: {
 					items: 3,
+					 autoWidth:false,
 				},
 				1200: {
 					items: 5,

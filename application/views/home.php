@@ -38,7 +38,8 @@ $(function () {
 
 	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data, TRUE); ?>
 
-	<div class="row top-bottom-space">
+	<!-- commented out on 24.05.2021 -->
+	<!-- <div class="row top-bottom-space">
 		<div class="col-md-12">
 			<h2>What's Your Geek Quotient?</h2>
 			<h5>Consider yourself a true geek?</h5>
@@ -46,7 +47,7 @@ $(function () {
 		</div>
 		<div class="col-md-12">
 			<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-			  <!-- Wrapper for slides -->
+
 				<div class="carousel-inner" role="listbox">
 				    <div class="item active">
 				    	<iframe src="//renderer.qmerce.com/interaction/5757443b245d1126130297fe"  width="100%" height="491" frameborder="0" scrolling="no"></iframe>
@@ -62,7 +63,6 @@ $(function () {
 				    </div>				    
 			  	</div>
 
-				<!-- Left and right controls -->
 				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
 					<span class="glyphicon glyphicon-chevron-left" aria-hidden=""></span>
 					<span class="sr-only">Previous</span>
@@ -80,7 +80,7 @@ $(function () {
 				</div>
 			</div>			
 		</div>
-	</div>
+	</div> -->
 
 	<div class="row top-bottom-space">
 		<div class="col-md-12">

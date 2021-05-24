@@ -551,6 +551,9 @@ function _live($page, $data)
 		case 'edit_address':
 			$body = $ci->load->view('auth/edit_address', $data, true);
 			break;
+		case 'save_guest_information':
+			$body = $ci->load->view('auth/save_guest_information_form', $data, true);
+			break;
 		default:
 			show_404();
 		break;

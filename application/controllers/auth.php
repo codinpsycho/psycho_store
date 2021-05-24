@@ -8,7 +8,6 @@ class Auth extends CI_Controller
 
 		$this->load->helper(array('form', 'url', 'html'));
 		$this->load->library('form_validation');
-		// $this->load->library('security');
 		$this->load->library('tank_auth');
 		$this->lang->load('tank_auth');
 		$this->load->model('database');
@@ -18,6 +17,7 @@ class Auth extends CI_Controller
 		$this->load->helper('mailgun_helper');
 		$this->load->helper('auth_helper');
 		$this->load->helper('security');
+		// $this->load->library('security');
 	}
 
 	function index()
@@ -306,6 +306,7 @@ class Auth extends CI_Controller
 
 			$email_activation = $this->config->item('email_activation', 'tank_auth');
 
+
 			if ($this->form_validation->run())
 			{								// validation ok
 				if (!is_null($data = $this->tank_auth->create_user(
@@ -314,6 +315,11 @@ class Auth extends CI_Controller
 					$this->form_validation->set_value('password'),
 					$email_activation)))
 				{
+
+					// var_dump($email_activation);
+					// echo '<pre>'; 
+					// print_r($data); exit();
+
 					//success					
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 					if ($email_activation)
@@ -509,13 +515,13 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
-			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
 			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
 			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
-			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
 			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
 			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
+			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
+			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
 
 			if ($this->form_validation->run())
 			{
@@ -526,7 +532,6 @@ class Auth extends CI_Controller
 					'first_name' => $this->form_validation->set_value('first_name'),
 					'last_name' => $this->form_validation->set_value('last_name'),
 					'address_1' => $this->form_validation->set_value('address1'),
-					// 'address_2' => $this->form_validation->set_value('address2'),
 					'address_3' => $this->form_validation->set_value('address3'),
 					'city' => $this->form_validation->set_value('city'),
 					'state' => $this->form_validation->set_value('state'),
@@ -534,6 +539,7 @@ class Auth extends CI_Controller
 					'pincode' => $this->form_validation->set_value('pincode'),
 					'phone_number' => $this->form_validation->set_value('number'),
 					'user_id' => $this->tank_auth->get_user_id()
+					// 'address_2' => $this->form_validation->set_value('address2'),
 				);
 
 
@@ -994,13 +1000,13 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
-			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
 			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
 			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
-			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
 			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
 			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
+			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
+			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
 
 			if ($this->form_validation->run())
 			{
@@ -1011,7 +1017,6 @@ class Auth extends CI_Controller
 					'first_name' => $this->form_validation->set_value('first_name'),
 					'last_name' => $this->form_validation->set_value('last_name'),
 					'address_1' => $this->form_validation->set_value('address1'),
-					// 'address_2' => $this->form_validation->set_value('address2'),
 					'address_3' => $this->form_validation->set_value('address3'),
 					'city' => $this->form_validation->set_value('city'),
 					'state' => $this->form_validation->set_value('state'),
@@ -1019,13 +1024,14 @@ class Auth extends CI_Controller
 					'pincode' => $this->form_validation->set_value('pincode'),
 					'phone_number' => $this->form_validation->set_value('number'),
 					'user_id' => $this->tank_auth->get_user_id()
+					// 'address_2' => $this->form_validation->set_value('address2'),
 				);
 
 				$this->database->_updateCustomerAddress($address_id, $address);
 				// redirect('checkout/address');
 
 				// dev on 14.05.2021
-				// if anyuser (OLD or NEW) whoever enter an new address will auto redirect him to checkout/review section			
+				// if anyuser (OLD or NEW) whoever enter a new address will auto redirect him to checkout/review section			
 				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));			
 				redirect('checkout/review');
 				// dev on 14.05.2021
@@ -1039,6 +1045,100 @@ class Auth extends CI_Controller
 		}
 	}
 
+	// dev on 19.05.2021
+	function guest_checkout()
+	{
+
+		if(!empty($this->input->post('submit'))) 
+		{
+
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
+			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
+			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
+			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
+
+			if ($this->form_validation->run() == FALSE)
+			{
+				// do nothing, auto display the page again
+			}
+			else
+			{
+
+				$email = $this->input->post('email');
+				$username = $this->input->post('first_name').' '.$this->input->post('last_name');
+
+				$user = $this->database->GetUserByEmail($email);
+
+				// echo '<pre>';
+				// print_r($user);
+				// exit();
+
+				if(empty($user)) {
+					$user = $this->_external_register($email, $username);
+				}
+				$user_id = isset($user['user_id']) ? $user['user_id'] : $user['id'];
+				$this->_guest_user_external_login($user_id, $username );
+				
+
+				$address = array
+				(
+					'first_name' => $this->form_validation->set_value('first_name'),
+					'last_name' => $this->form_validation->set_value('last_name'),
+					'address_1' => $this->form_validation->set_value('address1'),
+					'address_3' => $this->form_validation->set_value('address3'),
+					'city' => $this->form_validation->set_value('city'),
+					'state' => $this->form_validation->set_value('state'),
+					'country' => 'India',	//$this->form_validation->set_value('country'),
+					'pincode' => $this->form_validation->set_value('pincode'),
+					'phone_number' => $this->form_validation->set_value('number'),
+					'user_id' => $user_id
+					// 'address_2' => $this->form_validation->set_value('address2'),
+				);
+
+				$address_id = $this->database->RegisterAddress($address);			
+				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));
+				$this->_save_guest_user_details();			
+				redirect('checkout/review');
+			
+				
+
+			}
+		}
+
+
+		$data = [];
+		display('save_guest_information', $data);
+	}
+
+
+	function _guest_user_external_login($user_id, $username)
+	{
+		// simulate what happens in the tank auth
+		$this->session->set_userdata(array(	'user_id' => $user_id, 'username' => $username,
+			'status' => STATUS_ACTIVATED));
+		
+		//$this->tank_auth->clear_login_attempts($user->email);
+		
+		$this->users->update_login_info( $user_id, $this->config->item('login_record_ip', 'tank_auth'), 
+			$this->config->item('login_record_time', 'tank_auth'));
+
+	}
+
+
+	function _save_guest_user_details()
+	{
+		//Save address and user id
+		$txn_id = $this->session->userdata('txn_id');
+		$this->database->SaveUserIdOnCheckout($this->tank_auth->get_user_id(), $txn_id);
+
+		//Address must be there else _validate_address() will fail
+	}
+	// End: dev on 19.05.2021
 
 
 

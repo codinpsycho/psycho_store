@@ -1177,5 +1177,22 @@ function AddProduct($product)
 	}
 
 
+	function GetUserByEmail($email)
+	{
+		$this->db->where('email', $email);
+		$query = $this->db->get('users');
+		return $query->row_array();
+	}
+
+
+	function _getProviderDetailUsingSecretKey($secret_key)
+	{
+		$this->db->where('secret_key', $secret_key);
+		$query = $this->db->get('providers');
+		return $query->row_array();
+	}
+
+
+
 }
 ?>

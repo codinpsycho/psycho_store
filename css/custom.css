@@ -44,7 +44,7 @@
     animation: spin 2s linear infinite;
 }
 .productslider{
-    padding:0 30px;
+    padding:0 10px;
     position:relative;
 }
 .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
@@ -53,6 +53,9 @@
     padding: 0!important;
     background-color: transparent;
     outline: none !important;
+}
+.owl-carousel .owl-nav button.owl-next:hover, .owl-carousel .owl-nav button.owl-prev:hover, .owl-carousel button.owl-dot:hover{
+ color: #bababa !important;
 }
 .owl-theme .owl-nav [class*=owl-]:hover {
     background: #86979100 !important;
@@ -118,5 +121,15 @@
         transform: rotate(360deg);
     }
 }
+@media (max-width:1200px) {
 
-
+.productslider{
+    padding:0 40px;
+    position:relative;
+}
+}
+@media (max-width:480px) {
+    .owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot{
+        top: -35%;
+    }
+    }

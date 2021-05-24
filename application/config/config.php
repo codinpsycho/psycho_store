@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['project_path'] = 'store'; // server
+$config['project_path'] = 'store_v2'; // server
 $config['base_url']	= 'http://' . $_SERVER["HTTP_HOST"] . "/" . $config['project_path'] . "/";
 
 /*
@@ -137,7 +137,9 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+
+// $config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------

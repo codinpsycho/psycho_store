@@ -472,7 +472,7 @@ class Checkout extends CI_controller
 			$order_info = $this->_generate_orderinfo($order_info_params);
 			$this->_place_order($order_info);
 			$this->_reward_user($order_info);
-			$this->_send_order_mail($order_info);
+			// $this->_send_order_mail($order_info);
 
 			redirect('checkout/success');
 		}
