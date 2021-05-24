@@ -23,8 +23,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['project_path'] = 'store'; // server
+
+$config['project_path'] = 'upgradev3'; // server
 $config['base_url']	= 'http://' . $_SERVER["HTTP_HOST"] . "/" . $config['project_path'] . "/";
+
 
 /*
 |--------------------------------------------------------------------------

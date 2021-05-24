@@ -28,7 +28,7 @@
 				<h4 class="molot ">Step 2</h4>
 				<h5 class=""> Follow us</h5>
 				<p>Follow us on social media to stay updated with latest releases and offers.</p>
-                    <iframe src="http://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpsychostorein&layout=button_count&action=like&show_faces=false&share=true&height=21&appId=601282446622582" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:135px;" allowTransparency="true">
+                    <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpsychostorein&layout=button_count&action=like&show_faces=false&share=true&height=21&appId=601282446622582" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:135px;" allowTransparency="true">
                     </iframe>
 				<a href="https://twitter.com/psychostorein" class="twitter-follow-button" data-show-count="false" data-lang="en" show-screen-name="false" data-size="small"></a>
 				<style>.ig-b- { display: inline-block; }
