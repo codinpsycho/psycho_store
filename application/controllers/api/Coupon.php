@@ -1,8 +1,9 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
 
-use chriskacerguis\RestServer\RestController;
+require APPPATH . '/libraries/REST_Controller.php';
+use Restserver\Libraries\REST_Controller;
 
-class Api extends RestController  {
+class Coupon extends REST_Controller  {
 
 	function __construct()
 	{
@@ -12,7 +13,7 @@ class Api extends RestController  {
 		$this->load->library('form_validation');
 	}
 
-	public function coupon_post()
+	public function index_post()
 	{
 
 		$this->form_validation->set_rules('secret_key', 'Secret Key', 'trim|required|xss_clean');
@@ -20,7 +21,7 @@ class Api extends RestController  {
 		{
 			$error = $this->form_validation->error_array();
 			$response = ['status' => false, 'message' => $error['secret_key']];
-			$this->response($response, RESTController::HTTP_OK);
+			$this->response($response, REST_Controller::HTTP_OK);
 		}
 
 
@@ -44,7 +45,7 @@ class Api extends RestController  {
 		$this->database->AddDiscountCoupon($data);
 
 		$response = ['status' => true, 'message' => 'coupon created successfully', 'data' => $data];
-		$this->response( $response, RESTController::HTTP_OK );
+		$this->response( $response, REST_Controller::HTTP_OK );
 	} 
 
 }
