@@ -9,89 +9,89 @@ if(!function_exists('mg_create_mail_params'))
 	{
 		$ci =& get_instance();
 		$ci->load->language('tank_auth.php');
-				
+
 		switch ($type)
 		{
 			case 'feedback':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'cart_reminder':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'first_order':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'second_order':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'third_order':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'order':
-				$subject_var = $data['order_id'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store Orders <email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['order_id'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store Orders <email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'activate':
-				$subject_var = $data['username'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = $data['username'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 
 			case 'shipped':
-				$subject_var_1 = $data['username'];
-				$subject_var_2 = $data['order_id'];
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var_1, $subject_var_2);
-				$data['from'] = 'Psycho Store Orders<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var_1 = $data['username'];
+			$subject_var_2 = $data['order_id'];
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var_1, $subject_var_2);
+			$data['from'] = 'Psycho Store Orders<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 			
 			default:
-				$subject_var = 'Psycho Store';
-				$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
-				$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
-				$data['domain'] = 'mails.psychostore.in';
-				$data['campaign_id'] = null;
-				$data['reply_to'] = 'contact@psychostore.in';
+			$subject_var = 'Psycho Store';
+			$data['subject'] = sprintf($ci->lang->line('auth_subject_'.$type), $subject_var);
+			$data['from'] = 'Psycho Store<email@mails.psychostore.in>';
+			$data['domain'] = 'mails.psychostore.in';
+			$data['campaign_id'] = null;
+			$data['reply_to'] = 'contact@psychostore.in';
 			break;
 		}
 
@@ -103,25 +103,50 @@ if(!function_exists('mg_create_mail_params'))
 	}
 }
 
+
+
+// if(!function_exists('mg_send_mail'))
+// {
+// 	function mg_send_mail($to_email, $params)
+// 	{
+// 		$key = get_instance()->config->item('mailgun_key');
+// 		$mg = new Mailgun($key);
+// 		$domain = $params['domain'];
+
+// 		$mg->sendMessage($domain, array(
+// 			'from' 		=> 	$params['from'],
+// 			'to'		=>	$to_email,
+// 			'subject'	=>	$params['subject'],
+// 			'o:campaign'=>	$params['campaign_id'],
+// 			'h:Reply-To'=>	$params['reply_to'],
+// 			'html'		=>	$params['html'],
+// 			'text'		=>	$params['txt']
+// 			));
+// 	}
+// }
+
+
+// dev on 24.05.2021
 if(!function_exists('mg_send_mail'))
 {
 	function mg_send_mail($to_email, $params)
 	{
-		$key = get_instance()->config->item('mailgun_key');
-		$mg = new Mailgun($key);
-		$domain = $params['domain'];
-
-		$mg->sendMessage($domain, array(
-			'from' 		=> 	$params['from'],
-			'to'		=>	$to_email,
-			'subject'	=>	$params['subject'],
+		$ci =& get_instance();
+		$ci->load->library('mailgun');
+		$result = $ci->mailgun->send([
+			'from' => $params['from'],
+			'to' => $to_email,
+			'subject' => $params['subject'],
+			'text' => $params['txt'],
+			'html' => $params['html'],
 			'o:campaign'=>	$params['campaign_id'],
-			'h:Reply-To'=>	$params['reply_to'],
-			'html'		=>	$params['html'],
-			'text'		=>	$params['txt']
-			));
+			'h:Reply-To'=>	$params['reply_to']
+		]);
+
 	}
 }
+
+
 
 if(!function_exists('mg_add_subscriber'))
 {
@@ -133,10 +158,10 @@ if(!function_exists('mg_add_subscriber'))
 
 		# Issue the call to the client.
 		$result = $mg->post("lists/$list_address/members",array(
-		    'address'   => $email_id,
-		    'name'      => $name,
-		    'subscribed'=> 'yes',
-		    'upsert'	=> 'true'
+			'address'   => $email_id,
+			'name'      => $name,
+			'subscribed'=> 'yes',
+			'upsert'	=> 'true'
 		));
 	}
 }
@@ -164,8 +189,8 @@ if(!function_exists('mg_unsubscribe'))
 
 		# Issue the call to the client.
 		$result = $mg->put("lists/$list_address/members",array(
-		    'address'  => $email_id,
-		    'subscribed'=> 'no',
+			'address'  => $email_id,
+			'subscribed'=> 'no',
 		));
 	}	
 }
