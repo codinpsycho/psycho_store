@@ -1,0 +1,122 @@
+
+.mb-3{
+    margin-bottom:20px;
+}
+
+.position-relative{
+    position:relative;
+}
+
+.pr-3{
+    padding-right:60px;
+}
+
+.delicn{
+    position:absolute;
+    right:0;
+    top:10px;
+}
+
+.loader-bg {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #000000e0;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.loader {
+    border: 9px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid #4b95f5;
+    width: 60px;
+    left: 50%;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -30px;
+    z-index: 9;
+    height: 60px;
+    position: absolute;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+.productslider{
+    padding:0 30px;
+    position:relative;
+}
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
+    color: #fff !important;
+    border: none !important;
+    padding: 0!important;
+    background-color: transparent;
+    outline: none !important;
+}
+.owl-theme .owl-nav [class*=owl-]:hover {
+    background: #86979100 !important;
+    color: #FFF;
+    text-decoration: none;
+}
+.owl-carousel p, .owl-carousel .item{
+    text-decoration:none;
+    color:#fff!important;
+}
+.owl-theme .owl-nav {
+    margin-top: 10px;
+    position: absolute;
+    top:3%;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    font-size: 100px !important;
+}
+.owl-carousel .owl-nav button.owl-prev{
+    background: 0 0;
+    color: inherit;
+    border: none;
+    padding: 0!important;
+    font: inherit;
+    position: absolute;
+    left: -50px;
+    font-size: 100px !important;
+}
+.owl-carousel .owl-nav button.owl-next{
+    background: 0 0;
+    color: inherit;
+    border: none;
+    padding: 0!important;
+    font: inherit;
+    position: absolute;
+    right: -50px;
+    font-size: 100px !important;
+}
+.productimg img, .owl-carousel .owl-item img{
+   /* height:200px;*/
+    width:170px !important;
+    margin: 0 auto;
+    /*object-fit:cover;
+    object-position: 50% top;*/
+}
+/* Safari */
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+

@@ -47,6 +47,27 @@ class Checkout extends CI_controller
 		$this->login();
 	}
 
+	// dev on 14.05.2021
+	function _add_default_address_to_checkout_order()
+	{
+		$checkout_order = $this->_get_active_checkout_order();
+		if(!empty($checkout_order['user_id'])) {
+
+			$address = $this->database->_getLastAddressAsDefaultUserAddress($checkout_order['user_id']);
+			if(!empty($address)) {
+
+				$address_id = $address['address_id'];
+				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+	// End: dev on 14.05.2021
+
+
 	function _create_checkout_order()
 	{
 		$txn_id = $this->_generate_txnid();
@@ -69,12 +90,12 @@ class Checkout extends CI_controller
 		$this->database->RemoveCheckoutItemsForTxnId($txn_id);
 		// $this->database->SaveAmountOnCheckout($this->cart->final_price(), $txn_id);
 
-
-		// dev on 13.05.2021 after applying credit points
-		$checkout_order = $this->_get_active_checkout_order($txn_id);
-		$final_price = $checkout_order['order_amount'];
+		// dev on 17.05.2021
+		// bug fix: update order amount if any points applied during checkout
+		$checkout_order = $this->_get_active_checkout_order();
+		$final_price = $this->cart->final_price() - $checkout_order['points_applied'];
 		$this->database->SaveAmountOnCheckout($final_price, $txn_id);
-		// dev on 13.05.2021 
+		// dev on 17.05.2021
 
 
 		//Save cart items
@@ -111,6 +132,21 @@ class Checkout extends CI_controller
 		}
 		else
 		{
+			// dev on 14.05.2021
+			$checkout_order = $this->_get_active_checkout_order();
+
+			// echo $this->tank_auth->get_user_id();
+			// echo '<pre>'; print_r($checkout_order); exit();
+			$this->_save_user_details();
+			if(!empty($checkout_order['user_id'])) {
+
+				$isAdded = $this->_add_default_address_to_checkout_order();
+				if($isAdded) {
+					redirect('checkout/review');
+				}
+			}
+			// End: dev on 14.05.2021
+
 			redirect('checkout/address');
 		}
 	}
@@ -132,8 +168,18 @@ class Checkout extends CI_controller
 				redirect('auth/register_address');
 			}
 
+			if(empty($_GET['edit'])) {
+				if(count($result) > 0) {
+					$isAdded = $this->_add_default_address_to_checkout_order();
+					if($isAdded) {
+						redirect('checkout/review');
+					}
+				}
+			}
+
+
 			$data['addresses'] = $result;
-			display('address',$data);
+			display('address', $data);
 		}
 		else
 		{
@@ -141,6 +187,7 @@ class Checkout extends CI_controller
 		}
 		
 	}
+
 
 	function _is_active_txn_id_valid()
 	{
@@ -271,7 +318,7 @@ class Checkout extends CI_controller
 		{
 			//We need to be here to show the review page, else we go again to address page
 			//to get correct address			
-			$this->database->SaveAddressOnCheckout($address_id,$this->session->userdata('txn_id'));			
+			$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));			
 			redirect('checkout/review');
 		}
 
@@ -287,47 +334,32 @@ class Checkout extends CI_controller
 		$checkout_order = $this->_get_active_checkout_order();
 		$user = $this->database->GetUserById($checkout_order['user_id']);
 
-
 		// echo '<pre>';
 		// print_r($checkout_order);
 		// exit();
-
-
 
 		// dev on 12.05.2021
 		$final_price = $this->cart->final_price();
 		$max_points_claimed = round(($final_price * $user['max_claim_percentage'])/100);
 		$data['points_claimed'] = $user['points'] > $max_points_claimed ? $max_points_claimed : $user['points'];
 		$data['checked'] = !empty($data['points_claimed']) ? true : false;
+		$is_point_applied = !empty($data['points_claimed']) ? true : false;
 		
-		if(empty($checkout_order['is_point_applied'])) {
-			$order_amount = $final_price - $data['points_claimed'];
-			$attributes = ['order_amount' => $order_amount, 'is_point_applied' => true];
-			$this->database->_updateAttributeOnCheckoutOrdersIfPointsApplied($attributes, $checkout_order['txn_id'], 'open');
-			
-			$new_points = $user['points'] - $data['points_claimed'];
-			$this->database->RewardUser($user['id'], $new_points);
-		}
-
-
+		$order_amount = $final_price - $data['points_claimed'];
+		$attributes = ['order_amount' => $order_amount, 'is_point_applied' => $is_point_applied, 'points_applied' => $data['points_claimed']];
+		$this->database->_updateAttributeOnCheckoutOrdersIfPointsApplied($attributes, $checkout_order['txn_id'], 'open');
 
 		
 		if(!empty($this->input->post('is_clicked'))) {
 
 			if(empty($this->input->post('is_applied'))) {
 
-				$new_points = $user['points'] + $data['points_claimed'];
-				$this->database->RewardUser($user['id'], $new_points);
-
-				// first update the previous price
+				$data['checked'] = false;
+				$data['points_claimed'] = 0;
 				$order_amount = $final_price;
-				$attributes = ['order_amount' => $order_amount, 'is_point_applied' => false];
+				$attributes = ['order_amount' => $order_amount, 'is_point_applied' => false, 'points_applied' => $data['points_claimed']];
 				$this->database->_updateAttributeOnCheckoutOrdersIfPointsApplied($attributes, $checkout_order['txn_id'], 'open');
 
-				// second initialise it to ZERO
-				$data['points_claimed'] = 0;
-				$data['checked'] = false;
-				$order_amount = $checkout_order['order_amount'] - $data['points_claimed'];
 			}
 
 		}
@@ -367,8 +399,6 @@ class Checkout extends CI_controller
 
 		//Add 'notes' for Razorpay
 		$data['txn_id'] = $checkout_order['txn_id'];
-		
-		// echo '<pre>'; print_r($data); exit();
 		display('review', $data);
 	}
 
@@ -583,6 +613,10 @@ class Checkout extends CI_controller
 				break;
 			}
 
+			// dev on 17.05.2021
+			// get the latest user as the points are applied in order amount
+			$user = $this->database->GetUserById($order_info['user_id']);
+
 			$points = $user['points'] + $order_info['amount']/$divider;
 			$this->database->RewardUser($order_info['user_id'], $points);
 		}
@@ -650,10 +684,14 @@ class Checkout extends CI_controller
 				'address_id' 	=> 	$order_info['address_id'],
 				'payment_mode'	=>	$order_info['payment_mode'],
 				'order_amount'	=>	$order_info['amount'],
+				'points_applied' => $order_info['points_applied'],
 					//'order_status'=>	Default set as pending
 			);
 
 			$this->database->AddOrder($order);
+
+			// update the points column in user table after successful applied
+			$this->database->updateUserPoints($order_info['user_id'], $order_info['points_applied']);
 
 			$checkout_items = $order_info['checkout_items'];
 
@@ -755,6 +793,8 @@ class Checkout extends CI_controller
 		$order_info['user'] = $this->database->GetUserById($checkout_order['user_id']);
 		$order_info['address'] = $this->database->GetAddressById($checkout_order['address_id']);
 
+		$order_info['points_applied'] = $checkout_order['points_applied'];
+
 		return $order_info;
 	}
 
@@ -763,5 +803,7 @@ class Checkout extends CI_controller
 		//return substr(hash('sha256', mt_rand() . microtime()), 0, 10);
 		return dechex(time());	//makes the txnid smaller
 	}
+
+
 }
 ?>

@@ -67,7 +67,7 @@ class Auth extends CI_Controller
 
 		$user_info = $this->_process_user_info();
 		//var_dump($this->input->get('code'));
-			
+
 		$email =  $user_info['email'];//trim($this->input->post('email'));
 		$username = $user_info['username']; //trim($this->input->post('username'));
 		
@@ -88,12 +88,12 @@ class Auth extends CI_Controller
 	{
 		// simulate what happens in the tank auth
 		$this->session->set_userdata(array(	'user_id' => $user_id, 'username' => $username,
-											'status' => STATUS_ACTIVATED));
+			'status' => STATUS_ACTIVATED));
 		
 		//$this->tank_auth->clear_login_attempts($user->email);
 		
 		$this->users->update_login_info( $user_id, $this->config->item('login_record_ip', 'tank_auth'), 
-										 $this->config->item('login_record_time', 'tank_auth'));
+			$this->config->item('login_record_time', 'tank_auth'));
 
 		$this->_redirect();
 	}
@@ -135,7 +135,7 @@ class Auth extends CI_Controller
 
 		} else {
 			$data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND
-					$this->config->item('use_username', 'tank_auth'));
+				$this->config->item('use_username', 'tank_auth'));
 			$data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
 
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
@@ -144,36 +144,36 @@ class Auth extends CI_Controller
 
 			// Get login for counting attempts to login
 			if ($this->config->item('login_count_attempts', 'tank_auth') AND
-					($login = $this->input->post('login'))) {
+				($login = $this->input->post('login'))) {
 				$login = $this->security->xss_clean($login);
-			} else {			
-				$login = '';
-			}
+		} else {			
+			$login = '';
+		}
 
-			$data['use_recaptcha'] = $this->config->item('use_recaptcha', 'tank_auth');
-			if ($this->tank_auth->is_max_login_attempts_exceeded($login)) {
-				if ($data['use_recaptcha'])
-					$this->form_validation->set_rules('recaptcha_response_field', 'Confirmation Code', 'trim|xss_clean|required|callback__check_recaptcha');
-				else
-					$this->form_validation->set_rules('captcha', 'Confirmation Code', 'trim|xss_clean|required|callback__check_captcha');
-			}
-			$data['errors'] = array();
-						
-			if ($this->form_validation->run()) 
-			{
+		$data['use_recaptcha'] = $this->config->item('use_recaptcha', 'tank_auth');
+		if ($this->tank_auth->is_max_login_attempts_exceeded($login)) {
+			if ($data['use_recaptcha'])
+				$this->form_validation->set_rules('recaptcha_response_field', 'Confirmation Code', 'trim|xss_clean|required|callback__check_recaptcha');
+			else
+				$this->form_validation->set_rules('captcha', 'Confirmation Code', 'trim|xss_clean|required|callback__check_captcha');
+		}
+		$data['errors'] = array();
+
+		if ($this->form_validation->run()) 
+		{
 				// validation ok
-				if ($this->tank_auth->login(
-						$this->form_validation->set_value('email'),
-						$this->form_validation->set_value('password'),
-						$this->form_validation->set_value('remember'),
-						$data['login_by_username'],
-						$data['login_by_email'])) 
-						{
-							$this->_redirect();
-				}
-				else
-				{
-					$errors = $this->tank_auth->get_error_message();
+			if ($this->tank_auth->login(
+				$this->form_validation->set_value('email'),
+				$this->form_validation->set_value('password'),
+				$this->form_validation->set_value('remember'),
+				$data['login_by_username'],
+				$data['login_by_email'])) 
+			{
+				$this->_redirect();
+			}
+			else
+			{
+				$errors = $this->tank_auth->get_error_message();
 					if (isset($errors['banned'])) {								// banned user
 						$this->_show_message($this->lang->line('auth_message_banned').' '.$errors['banned']);
 
@@ -206,6 +206,7 @@ class Auth extends CI_Controller
 			save_redirect_url($this->input->get('redirect_url'));
 			$sess_url = $this->session->userdata('redirect_url');
 
+			// echo '<pre>'; print_r($data); exit();
 			display('login',$data);
 		}
 	}
@@ -283,7 +284,7 @@ class Auth extends CI_Controller
 			$this->_show_message($this->lang->line('auth_message_registration_disabled'));
 
 		} else {
-			 $use_username = $this->config->item('use_username', 'tank_auth');
+			$use_username = $this->config->item('use_username', 'tank_auth');
 			if ($use_username) 
 			{				
 				$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|min_length['.$this->config->item('username_min_length', 'tank_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']');
@@ -308,18 +309,18 @@ class Auth extends CI_Controller
 			if ($this->form_validation->run())
 			{								// validation ok
 				if (!is_null($data = $this->tank_auth->create_user(
-						$use_username ? $this->form_validation->set_value('username') : '',
-						$this->form_validation->set_value('email'),
-						$this->form_validation->set_value('password'),
-						$email_activation)))
+					$use_username ? $this->form_validation->set_value('username') : '',
+					$this->form_validation->set_value('email'),
+					$this->form_validation->set_value('password'),
+					$email_activation)))
 				{
 					//success					
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 					if ($email_activation)
 					{									// send "activate" email
-						$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
+				$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
 
-						$this->_send_email('activate', $data['email'], $data);
+				$this->_send_email('activate', $data['email'], $data);
 
 						unset($data['password']); // Clear password (just for any case)
 
@@ -412,13 +413,13 @@ class Auth extends CI_Controller
 
 			if ($this->form_validation->run()) {								// validation ok
 				if (!is_null($data = $this->tank_auth->create_user(
-						$use_username ? $this->form_validation->set_value('username') : '',
-						$this->form_validation->set_value('email'),
-						$this->form_validation->set_value('password'),
+					$use_username ? $this->form_validation->set_value('username') : '',
+					$this->form_validation->set_value('email'),
+					$this->form_validation->set_value('password'),
 						$email_activation))) {									// success
 
 					//Create an entry into address table as well
-					 $address = array
+					$address = array
 					(
 						'first_name' => $this->form_validation->set_value('first_name'),
 						'last_name' => $this->form_validation->set_value('last_name'),
@@ -437,9 +438,9 @@ class Auth extends CI_Controller
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 
 					if ($email_activation) {									// send "activate" email
-						$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
+					$data['activation_period'] = $this->config->item('email_activation_expire', 'tank_auth') / 3600;
 
-						$this->_send_email('activate', $data['email'], $data);
+					$this->_send_email('activate', $data['email'], $data);
 
 						unset($data['password']); // Clear password (just for any case)
 
@@ -448,8 +449,8 @@ class Auth extends CI_Controller
 					} else {
 						if ($this->config->item('email_account_details', 'tank_auth')) {	// send "welcome" email
 
-							$this->_send_email('welcome', $data['email'], $data);
-						}						
+						$this->_send_email('welcome', $data['email'], $data);
+					}						
 						unset($data['password']); // Clear password (just for any case)
 
 						$this->_show_message($this->lang->line('auth_message_registration_completed_2').' echo br()'.anchor('/auth/login/', 'Login'));
@@ -496,9 +497,9 @@ class Auth extends CI_Controller
 	function register_address()
 	{		
 		if (!$this->tank_auth->is_logged_in())			// logged in
-			redirect('auth/login');
+		redirect('auth/login');
 		elseif ($this->tank_auth->is_logged_in(FALSE)) 	// logged in, not activated
-			redirect('/auth/send_again/');
+		redirect('/auth/send_again/');
 		else 
 		{
 			//Run address detection script
@@ -508,7 +509,7 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
-			$this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
+			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
 			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
 			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
@@ -520,12 +521,12 @@ class Auth extends CI_Controller
 			{
 				// validation ok
 				//Create an entry into address table as well
-				 $address = array
+				$address = array
 				(
 					'first_name' => $this->form_validation->set_value('first_name'),
 					'last_name' => $this->form_validation->set_value('last_name'),
 					'address_1' => $this->form_validation->set_value('address1'),
-					'address_2' => $this->form_validation->set_value('address2'),
+					// 'address_2' => $this->form_validation->set_value('address2'),
 					'address_3' => $this->form_validation->set_value('address3'),
 					'city' => $this->form_validation->set_value('city'),
 					'state' => $this->form_validation->set_value('state'),
@@ -534,8 +535,22 @@ class Auth extends CI_Controller
 					'phone_number' => $this->form_validation->set_value('number'),
 					'user_id' => $this->tank_auth->get_user_id()
 				);
-				$this->database->RegisterAddress($address);
-				redirect('checkout/address');
+
+
+				// $this->database->RegisterAddress($address);				
+				// redirect('checkout/address');
+				
+
+				// dev on 14.05.2021
+				// if anyuser (OLD or NEW) whoever enter an new address will auto redirect him to checkout/review section
+				$address_id = $this->database->RegisterAddress($address);			
+				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));			
+				redirect('checkout/review');
+				// dev on 14.05.2021
+
+
+
+
 			}
 			//$this->load->view('auth/add_address');
 			display('add_address',null);
@@ -627,7 +642,7 @@ class Auth extends CI_Controller
 
 			if ($this->form_validation->run()) {								// validation ok
 				if (!is_null($data = $this->tank_auth->forgot_password(
-						$this->form_validation->set_value('email')))) {
+					$this->form_validation->set_value('email')))) {
 
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 
@@ -666,7 +681,7 @@ class Auth extends CI_Controller
 
 		if ($this->form_validation->run()) {								// validation ok
 			if (!is_null($data = $this->tank_auth->reset_password(
-					$user_id, $new_pass_key,
+				$user_id, $new_pass_key,
 					$this->form_validation->set_value('new_password')))) {	// success
 
 				$data['site_name'] = $this->config->item('website_name', 'tank_auth');
@@ -712,7 +727,7 @@ class Auth extends CI_Controller
 
 			if ($this->form_validation->run()) {								// validation ok
 				if ($this->tank_auth->change_password(
-						$this->form_validation->set_value('old_password'),
+					$this->form_validation->set_value('old_password'),
 						$this->form_validation->set_value('new_password'))) {	// success
 					$this->_show_message($this->lang->line('auth_message_password_changed'));
 
@@ -743,7 +758,7 @@ class Auth extends CI_Controller
 
 			if ($this->form_validation->run()) {								// validation ok
 				if (!is_null($data = $this->tank_auth->set_new_email(
-						$this->form_validation->set_value('email'),
+					$this->form_validation->set_value('email'),
 						$this->form_validation->set_value('password')))) {			// success
 
 					$data['site_name'] = $this->config->item('website_name', 'tank_auth');
@@ -861,8 +876,8 @@ class Auth extends CI_Controller
 
 		// Save captcha params in session
 		$this->session->set_flashdata(array(
-				'captcha_word' => $cap['word'],
-				'captcha_time' => $cap['time'],
+			'captcha_word' => $cap['word'],
+			'captcha_time' => $cap['time'],
 		));
 
 		return $cap['image'];
@@ -887,8 +902,8 @@ class Auth extends CI_Controller
 			return FALSE;
 
 		} elseif (($this->config->item('captcha_case_sensitive', 'tank_auth') AND
-				$code != $word) OR
-				strtolower($code) != strtolower($word)) {
+			$code != $word) OR
+		strtolower($code) != strtolower($word)) {
 			$this->form_validation->set_message('_check_captcha', $this->lang->line('auth_incorrect_captcha'));
 			return FALSE;
 		}
@@ -923,9 +938,9 @@ class Auth extends CI_Controller
 		$this->load->helper('recaptcha');
 
 		$resp = recaptcha_check_answer($this->config->item('recaptcha_private_key', 'tank_auth'),
-				$_SERVER['REMOTE_ADDR'],
-				$_POST['recaptcha_challenge_field'],
-				$_POST['recaptcha_response_field']);
+			$_SERVER['REMOTE_ADDR'],
+			$_POST['recaptcha_challenge_field'],
+			$_POST['recaptcha_response_field']);
 
 		if (!$resp->is_valid) {
 			$this->form_validation->set_message('_check_recaptcha', $this->lang->line('auth_incorrect_captcha'));
@@ -943,7 +958,7 @@ class Auth extends CI_Controller
 		if ($strength & 2) { $vowels .= "AEUY"; }
 		if ($strength & 4) { $consonants .= '23456789'; }
 		if ($strength & 8) { $consonants .= '@#$%'; }
-	 
+
 		$password = '';
 		$alt = time() % 2;
 		for ($i = 0; $i < $length; $i++) 
@@ -961,6 +976,71 @@ class Auth extends CI_Controller
 		}
 		return $password;
 	}
+
+
+	//  dev on 14.05.2021
+	function address_edit($address_id)
+	{
+		if (!$this->tank_auth->is_logged_in())			// logged in
+		redirect('auth/login');
+		elseif ($this->tank_auth->is_logged_in(FALSE)) 	// logged in, not activated
+		redirect('/auth/send_again/');
+		else 
+		{
+			//Run address detection script
+			//$this->_show_address_detection_popup();
+			//$this->_detect_address();
+
+			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
+			// $this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
+			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
+			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
+			//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
+			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
+			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
+
+			if ($this->form_validation->run())
+			{
+				// validation ok
+				//Create an entry into address table as well
+				$address = array
+				(
+					'first_name' => $this->form_validation->set_value('first_name'),
+					'last_name' => $this->form_validation->set_value('last_name'),
+					'address_1' => $this->form_validation->set_value('address1'),
+					// 'address_2' => $this->form_validation->set_value('address2'),
+					'address_3' => $this->form_validation->set_value('address3'),
+					'city' => $this->form_validation->set_value('city'),
+					'state' => $this->form_validation->set_value('state'),
+					'country' => 'India',	//$this->form_validation->set_value('country'),
+					'pincode' => $this->form_validation->set_value('pincode'),
+					'phone_number' => $this->form_validation->set_value('number'),
+					'user_id' => $this->tank_auth->get_user_id()
+				);
+
+				$this->database->_updateCustomerAddress($address_id, $address);
+				// redirect('checkout/address');
+
+				// dev on 14.05.2021
+				// if anyuser (OLD or NEW) whoever enter an new address will auto redirect him to checkout/review section			
+				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));			
+				redirect('checkout/review');
+				// dev on 14.05.2021
+
+			}
+
+			//$this->load->view('auth/add_address');
+
+			$data['address'] = $this->database->GetAddressById($address_id);
+			display('edit_address', $data);
+		}
+	}
+
+
+
 
 }
 

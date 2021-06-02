@@ -77,3 +77,4 @@ $route['category/(:any)/products'] = 'pages/category_products/$1';
 
 $route['admin/dashboard'] = 'insights/dashboard';
 $route['admin'] = 'insights/dashboard';
+$route['checkout/address/edit/(:num)'] = 'auth/address_edit/$1';
