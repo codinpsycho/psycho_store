@@ -70,12 +70,17 @@
 					<h4 id='discount'>Discount : <i class="fa fa-rupee"></i> <?php echo $this->cart->discount() ?> </h4>
 					<h4 id='shipping'>Shipping : Always Free </h4>
 					<h4 id='final_price'>Final Price : <i class="fa fa-rupee"></i> <?= ($this->cart->final_price() - $points_claimed) ?> </h4>
-					<h4>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </h4>
 
-					<form action="" method="post">
-						<input type="hidden" name="is_clicked" value="1">
-						<input type="checkbox" name="is_applied" value="1" onClick='submit();' <?=$checked == 1 ? 'checked' : ''?>> Click to claim your points
-					</form>
+					<?php 
+					if($this->config->item('redeem_points'))	{
+					?>
+						<h4>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </h4>
+
+						<form action="" method="post">
+							<input type="hidden" name="is_clicked" value="1">
+							<input type="checkbox" name="is_applied" value="1" onClick='submit();' <?=$checked == 1 ? 'checked' : ''?>> Click to claim your points
+						</form>
+					<?php } ?>
 
 				</h1>
 			</div>
@@ -88,7 +93,7 @@
 					<select class="form-control" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
 						<option value="pre-paid" >Pay Online</option>
 						<?php if($cod_available == true): ?>
-							<option value="cod">Cash/Paytm On Delivery</option>
+							<option value="cod">Cash On Delivery( ₹60 extra )</option>
 						<?php endif; ?>
 					</select>
 				</form>

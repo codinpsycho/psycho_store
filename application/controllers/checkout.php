@@ -47,6 +47,7 @@ class Checkout extends CI_controller
 		$this->login();
 	}
 
+
 	// dev on 14.05.2021
 	function _add_default_address_to_checkout_order()
 	{
@@ -66,7 +67,7 @@ class Checkout extends CI_controller
 		return false;
 	}
 	// End: dev on 14.05.2021
-
+	
 
 	function _create_checkout_order()
 	{
@@ -77,6 +78,33 @@ class Checkout extends CI_controller
 		//Set txn_id in session
 		$this->session->set_userdata('txn_id', $txn_id);
 	}
+
+	// function _save_cart_items()
+	// {
+	// 	//Try applying domain based discount before saving
+	// 	check_domain_discount();
+
+	// 	$txn_id = $this->session->userdata('txn_id');
+
+	// 	//Empty checkout_items for this txn_id		
+	// 	$this->database->RemoveCheckoutItemsForTxnId($txn_id);
+
+	// 	$this->database->SaveAmountOnCheckout($this->cart->final_price(), $txn_id);
+
+	// 	//Save cart items
+	// 	foreach ($this->cart->contents() as $item)
+	// 	{
+	// 		$checkout_item = array
+	// 					(
+	// 						'txn_id'		=>	$txn_id,
+	// 						'product_id'	=> 	$item['id'],
+	// 						'count'			=> 	$item['qty'],
+	// 						'option'		=> 	isset($item['options']) ? $item['options']['extra'] : null,
+	// 					);
+
+	// 		$this->database->SaveCartItemOnCheckout($checkout_item);
+	// 	}
+	// }
 
 
 	function _save_cart_items()
@@ -112,6 +140,7 @@ class Checkout extends CI_controller
 			$this->database->SaveCartItemOnCheckout($checkout_item);
 		}
 	}
+
 
 	function _save_user_details()
 	{
@@ -187,7 +216,6 @@ class Checkout extends CI_controller
 		}
 		
 	}
-
 
 	function _is_active_txn_id_valid()
 	{
@@ -325,6 +353,57 @@ class Checkout extends CI_controller
 		redirect('checkout/');
 	}	
 
+	// function review()
+	// {
+	// 	$this->_validate_cart();
+	// 	$this->_validate_address();
+
+	// 	//make sure address is set in checkout_db
+	// 	$checkout_order = $this->_get_active_checkout_order();
+	// 	$user = $this->database->GetUserById($checkout_order['user_id']);
+
+	// 	$user = $this->database->GetUserById($checkout_order['user_id']);
+
+	// 	if( is_null($checkout_order['address_id'] ))
+	// 	{
+	// 		redirect('checkout/');
+	// 	}
+
+	// 	$address = $this->database->GetAddressById($checkout_order['address_id']);		
+	// 	$shipping_details = $this->database->GetShippingDetails($address['pincode']);
+	// 	$shipping_available = true;
+	// 	$cod_available = true;
+
+
+	// 	// $shipping_available = false;
+	// 	// $cod_available = false;
+
+	// 	// if($shipping_details)
+	// 	// {
+	// 	// 	$shipping_available = true;
+
+	// 	// 	if($shipping_details['cod'] === 'Y')
+	// 	// 	{
+	// 	// 		$cod_available = true;
+	// 	// 	}	
+	// 	// }
+
+	// 	$data['txn_id'] = $checkout_order['txn_id'];
+	// 	$data['email'] = $user['email'];
+ // 		$data['raw_address'] = $address;
+ // 		$data['formatted_address'] = format_address($address);
+	// 	$data['shipping_available'] = $shipping_available;
+	// 	$data['cod_available'] = $cod_available;
+	// 	$data['cod_charges'] = $this->config->item('cod_charge');
+
+	// 	//Add 'notes' for Razorpay
+	// 	$data['txn_id'] = $checkout_order['txn_id'];
+
+
+	// 	display('review', $data);
+	// }
+
+
 	function review()
 	{
 		$this->_validate_cart();
@@ -344,6 +423,12 @@ class Checkout extends CI_controller
 		$data['points_claimed'] = $user['points'] > $max_points_claimed ? $max_points_claimed : $user['points'];
 		$data['checked'] = !empty($data['points_claimed']) ? true : false;
 		$is_point_applied = !empty($data['points_claimed']) ? true : false;
+
+
+		if($this->config->item('redeem_points') == false)	{
+			$data['points_claimed'] = 0;
+			$is_point_applied = false;
+		}
 		
 		$order_amount = $final_price - $data['points_claimed'];
 		$attributes = ['order_amount' => $order_amount, 'is_point_applied' => $is_point_applied, 'points_applied' => $data['points_claimed']];
@@ -803,7 +888,5 @@ class Checkout extends CI_controller
 		//return substr(hash('sha256', mt_rand() . microtime()), 0, 10);
 		return dechex(time());	//makes the txnid smaller
 	}
-
-
 }
 ?>

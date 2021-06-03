@@ -27,8 +27,11 @@ if(!function_exists('generate_header'))
 		$data['total_price'] = $ci->cart->total();
 
 		//Game search Links
-		$data['supported_games'] = $ci->database->GetAllSuportedGames();
+		// $data['supported_games'] = $ci->database->GetAllSuportedGames();
 		$data['categories'] = $ci->database->_getProductCategories();
+
+		// dev on 01.06.2021
+		$data['supported_games'] = $ci->database->_getGamesNameWithCategory();
 
 		//Meta tags
 		$data['url'] = current_url();
@@ -550,6 +553,9 @@ function _live($page, $data)
 			break;
 		case 'edit_address':
 			$body = $ci->load->view('auth/edit_address', $data, true);
+			break;
+		case 'save_guest_information':
+			$body = $ci->load->view('auth/save_guest_information_form', $data, true);
 			break;
 		default:
 			show_404();

@@ -5,6 +5,7 @@
   </div>
   <div class="col-md-12">
     <?php
+    $count = 0;
     foreach($suggested_products as $key => $product_item):
       $prod_url = product_url($product_item);
       $path = "/".$product_item['product_image_path'];
@@ -22,11 +23,13 @@
       </div>
 
       <?php
-      if($key == 4)
+      if($count == 5)
       {
         break;
       }
       ?>
-    <?php endforeach ?>            
+    <?php 
+    $count++;
+  endforeach ?>            
   </div>
 </div>

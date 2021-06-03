@@ -18,7 +18,6 @@ class Insights extends CI_Controller
 	{
 		$is_admin = $this->_is_user_admin();
 
-
 		$month = !empty($this->input->post('month')) ? $this->input->post('month') : date("M"); // Coded on 19.04.2021
 		
 		if($month === false)
@@ -29,9 +28,7 @@ class Insights extends CI_Controller
 		$data['heading'] = "Insights";
 		
 		$all_orders = $this->database->GetAllOrders();
-
 		$gross = $this->_get_gross_info($all_orders);
-		
 
 		//get latest order
 		$latest_order_index = count($all_orders) - 1;
@@ -39,10 +36,8 @@ class Insights extends CI_Controller
 		
 		_add_address_and_user_to_orders($latest_order);
 
-		// echo '<pre>'; print_r($gross); exit();
 		//Get this months orders data
 		$month_info = $this->_getOrdersDataForMonth($month);
-		// echo '<pre>'; print_r($month_info); exit();
 
 		$data['gross'] = $gross;
 		$data['month'] = $month;
@@ -79,10 +74,7 @@ class Insights extends CI_Controller
 		$data['meta_id'] = 5;
 
 
-		// echo '<pre>'; 
-		// print_r($data['game_sales_data']);
-		// print_r($data['all_games']); exit();
-		
+		// echo '<pre>'; print_r($data['all_games']); exit();
 		display('insights', $data);
 	}
 
@@ -255,6 +247,7 @@ class Insights extends CI_Controller
 	// developed on 06.05.2021
 	function dashboard()
 	{
+		_validate_user();
 		// $data['total_users'] = $this->database->GetAllUsers();
 		// $data['total_converted_users'] = $this->database->_getConvertedUsers();
 
@@ -383,17 +376,8 @@ class Insights extends CI_Controller
 			$data['states_colors'][] = "#09f"; //$this->rand_color();
 		}
 
-		// echo '<pre>'; 
-		// print_r($data['states']);
-		// print_r($data['states_sales']);
-		// print_r($data['states_colors']);
-
-		// exit();
-		
 		// Remodeling Insight Page Data Using Date Range on 10.05.2021
-
 		display('admin_dashboard', $data);
-
 	}
 
 

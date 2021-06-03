@@ -25,7 +25,7 @@
                         <option value="all"> All </option>
                         <?php foreach ($supported_games as $game):?>
                           <option>
-                            <?php echo $game['product_game'] ?>
+                            <?php echo $game['game_name']; // echo $game['product_game']; ?>
                           </option>
                         <?php endforeach; ?>
                     </select>

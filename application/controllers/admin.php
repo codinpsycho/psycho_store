@@ -187,9 +187,6 @@ class Admin extends CI_controller
 		$data['num_users'] = count($all_users);
 		$data['users_table'] = $this->_generate_users_table($all_users);
 
-
-		
-
 		display('admin_users', $data);
 	}
 
@@ -622,8 +619,8 @@ class Admin extends CI_controller
 		foreach ($txn_id as $key => $id)
 		{			
 			$this->database->UpdateOrderStatus($id, OrderState::Packaging);
-			// $wb = $this->database->GetWaybills();	//Returns an array
-			// $this->database->AssignWaybill($id, $wb[0]);
+			$wb = $this->database->GetWaybills();	//Returns an array
+			$this->database->AssignWaybill($id, $wb[0]);
 		}
 	}
 
@@ -637,9 +634,9 @@ class Admin extends CI_controller
 		foreach ($txn_id as $key => $id)
 		{
 			$order = $this->database->GetOrderById($id);
+			$this->database->SetWaybillState($order['waybill'], 'alive');
 			$this->database->UpdateOrderStatus($id, OrderState::Pending);
-			// $this->database->SetWaybillState($order['waybill'], 'alive');
-			// $this->database->RemoveWaybillFromOrder($id);
+			$this->database->RemoveWaybillFromOrder($id);
 		}
 	}
 
@@ -664,7 +661,7 @@ class Admin extends CI_controller
 				//Mail User
 				$data['order_id'] = $order['txn_id'];
 				$data['username'] = $order['user']['username'];
-				// $data['waybill'] = $order['waybill'];
+				$data['waybill'] = $order['waybill'];
 				$data['tracking_address'] = $order['tracking_link'];  // $this->config->item('delhivery_url')."/p/{$order['waybill']}";
 				$data['site_name'] = $this->config->item('website_name', 'tank_auth');
 				$params = mg_create_mail_params('shipped', $data);
@@ -750,7 +747,8 @@ class Admin extends CI_controller
 	{
 		_validate_user();
 		$products = null;
-		$data['supported_games'] = $this->database->GetAllSuportedGames();	
+		$data['supported_games'] = $this->database->_getGamesNameWithCategory();
+		// $data['supported_games'] = $this->database->GetAllSuportedGames();	
 
 		if(is_numeric($product_id))
 		{
@@ -762,8 +760,7 @@ class Admin extends CI_controller
 			$game = $this->input->post('game') != false ? $this->input->post('game') : 'all' ;
 			$sort = $this->input->post('sort') != false ? $this->input->post('sort') : 'latest';
 
-			$search_string = trim($product_id);
-			
+			$search_string = trim($product_id);			
 			$products = $this->database->GetProducts($product_type, $sort, $game, false, $search_string);
 		}
 		else
@@ -788,6 +785,8 @@ class Admin extends CI_controller
 			$data['products'] = $products;
 			$data['num_prods'] = count($products);
 			$data['products_table'] = $this->_generate_products_table($products);
+			
+
 			display('admin_products', $data);
 
 			// display('404', null); // comment out by Dev. Sukamal on 19.04.2021
@@ -860,8 +859,6 @@ class Admin extends CI_controller
 
 
 					$galleries = $this->input->post('galleries') ? $this->input->post('galleries') : NULL;
-					// var_dump($galleries); 
-					// exit();
 
 					if(!empty($galleries)) {
 
@@ -880,9 +877,6 @@ class Admin extends CI_controller
 							}
 
 						}
-					} else {
-
-						$this->database->_delProductGalleries($product_id);
 					}
 
 					// echo '<pre>'; var_dump($galleries); exit();
@@ -923,9 +917,8 @@ class Admin extends CI_controller
 		$product['product_desc'] = $input['desc'];
 		$product['product_image_path'] = $input['image_path'];
 		$product['product_price'] = $input['price'];
-		$product['galleries'] = isset($input['galleries']) ? $input['galleries'] : NULL;
+		$product['galleries'] = $input['galleries'];
 		$product['category_id'] = $input['category_id'];
-
 
 		switch ($input['type'])
 		{
@@ -1028,9 +1021,9 @@ class Admin extends CI_controller
 			{
 				case OrderState::Pending:
 				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Packaging);
-				$order_process_link = "<a class ='btn btn-default' href=$process_link> Package </a>";
+				$order_process_link = "<a class ='btn btn-default' href=$process_link> Dehlivery </a>";
 				$ship_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
-				// $order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
+				$order_ship_link = "<a class ='btn btn-danger' href=$ship_link> Self-Shipped</a>";
 				break;
 				
 				case OrderState::Packaging:
@@ -1414,9 +1407,7 @@ class Admin extends CI_controller
 
 		display('admin_add_edit_category', $data);
 	}
-
-
-
+	// developed on 03.05.2021
 	
 
 

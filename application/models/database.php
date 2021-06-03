@@ -867,6 +867,7 @@ function AddProduct($product)
 	// added on 22.04.2021
 	function _getProductGalleries($productID)
 	{
+		$this->db->order_by('id', 'RANDOM');	
 		$this->db->where('product_id', $productID);
 		$query = $this->db->get('galleries');
 		return $query->result_array();
@@ -922,10 +923,9 @@ function AddProduct($product)
 			$this->db->where_not_in('product_id', $same_designed_ids);
 
 
-
 		$this->db->where('category_id', $categoryID);
 		//Dont get hidden products
-		$this->db->where('product_state !=', 'hidden');
+		$this->db->where('product_state !=', 'hidden');		
 
 		$query = $this->db->get('products');
 		
@@ -960,7 +960,7 @@ function AddProduct($product)
 
 
 		//Dont get hidden products
-		$this->db->where('product_state !=', 'hidden');
+		$this->db->where('product_state !=', 'hidden');		
 
 		$query = $this->db->get('products');
 		
@@ -1175,6 +1175,91 @@ function AddProduct($product)
 			$this->db->update('users');
 		}
 	}
+
+
+	function GetUserByEmail($email)
+	{
+		$this->db->where('email', $email);
+		$query = $this->db->get('users');
+		return $query->row_array();
+	}
+
+
+	function _getProviderDetailUsingSecretKey($secret_key)
+	{
+		$this->db->where('secret_key', $secret_key);
+		$query = $this->db->get('providers');
+		return $query->row_array();
+	}
+
+
+
+	function _checkIsUserRefCodeValid($ref_code, $user_id = null)
+	{
+		$this->db->where('ref_code', $ref_code);
+
+		if($user_id)
+		$this->db->where("id !=", $user_id);
+
+		$query = $this->db->get('users');
+		return $query->row_array();
+	}
+
+	// dev on 31.05.2021
+	function _getProductGalleryImagesRandomly()
+	{
+		$this->db->order_by('id', 'RANDOM');
+		$query = $this->db->get('galleries');
+		return $query->result_array();
+	}
+
+
+	// dev on 01.06.2021
+	function _getGamesNameWithCategory()
+	{
+		$this->db->select('t1.game_name, t2.name as category_name');
+		$this->db->from('category_games as t1');
+
+		$this->db->join('categories as t2', 't1.category_id = t2.id', 'LEFT');
+		$this->db->order_by('t1.game_name');
+		$query = $this->db->get();
+
+
+		if($query->num_rows() != 0)
+		{
+			return $query->result_array();
+		}
+		else
+		{
+			return [];
+		}
+	}
+
+
+	function _getCategoryNameUsingGameName($game_name = null)
+	{
+		$this->db->select('t1.game_name, t2.name as category_name');
+		$this->db->from('category_games as t1');
+
+		if(!empty($game_name))
+		$this->db->where('t1.game_name', $game_name);
+
+		$this->db->join('categories as t2', 't1.category_id = t2.id', 'LEFT');
+		$this->db->order_by('t1.game_name');
+		$query = $this->db->get();
+
+
+		if($query->num_rows() != 0)
+		{
+			return $query->row_array();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 
 
 }

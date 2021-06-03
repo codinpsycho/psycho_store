@@ -34,21 +34,30 @@
 
 </script>
 
-<div class="w-100 stky">
+<div class="w-100">
   <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
+
+    <!-- showing alert msg to select a size -->
+    <div class="col-md-7 col-sm-12 col-xs-12" id="ordersize">
+      <span id="orderalert" style="display: none;">Please select a size</span>
+    </div>
+
+
+    <div class="col-md-5 col-sm-12 col-xs-12">
       <?php if($product_state == 'preorder'): ?>
         <h5 class="pull-left"><a class="" href='#preorder' data-toggle='modal' data-target="#preorder">Why Pre-order? (Ships on <?php echo $restock_date ?>)</a> </h5>
       <?php endif; ?>
       <?php if($show_size_preorder_info): ?>
         <h5 class="pull-left"><a class="" href='#size_preorder' data-toggle='modal' data-target="#size_preorder">Pre-Orders shipping from <?php echo $restock_date ?></a> </h5>
       <?php endif; ?> 
-      <div class="checkbox">
+
+      <div class="checkbox mobcheck">
         <label class="pull-right "><input id="add_to_cart_checkbox" onclick="update_btn_text_on_addtocart(this)" type="checkbox" name="optradio">add to cart</label>
       </div>
     </div>
-    <div class="col-md-4 col-sm-12 col-xs-12">
-      <form id="cart_form" method = "post" action = <?php echo site_url("cart/instant_checkout/{$product['product_id']}")?> role="form">
+    <div class="col-md-6 col-sm-12 col-xs-12">
+      <form id="cart_form" method = "post" action = "<?php echo site_url("cart/instant_checkout/{$product['product_id']}")?>" role="form">
+
         <select id="size_selection" required class="form-control" name="extra" onchange="update_btn_text_on_size_select(this)">
           <option disabled selected value="">Select Size</option>  
           <option <?php echo $small_stock; ?> value ="Small">Small 
@@ -65,10 +74,18 @@
                 <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';
                 elseif ($xl_stock == 'preorder') echo '(Pre-Order)';?></option>
               </select>
+
+
             </div>
-            <div class="col-md-8 col-sm-12 col-xs-12">
-              <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
-              <button type="submit" name = "add_to_cart" id="add_to_cart" class="btn btn-primary btn-block"><?php echo $button_text?></button>
+            <div class="w-100 stky">
+              <div class="col-md-6 col-sm-12 col-xs-12">
+                <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
+
+                <button type="submit" name="add_to_cart" id="add_to_cart" class="btn btn-primary btn-block" style="display: none;"><?php echo $button_text?></button>
+
+                <a href="#ordersize" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
+
+              </div>
             </div>
           </form> 
           <div class="col-md-12 col-sm-12 col-xs-12">
@@ -77,17 +94,50 @@
            </div>
          </div>
        </div>
-       <style>
-        @media (max-width: 480px) {
-          .stky.sticky {
-           position: fixed;
-           bottom: 0;
-           width: 100%;
-           background: #242424;
-           left: 0;
-           padding: 10px;
-           z-index: 99;
-         }
 
+
+       <script type="text/javascript">
+
+        $('#anchorcart').click(function (e) {
+          $('#orderalert').show();
+        });
+
+        $('#size_selection').change(function (e) {
+
+         $('#anchorcart').hide();
+         $('#add_to_cart').show();
+         $('#orderalert').hide();
+
+       });
+     </script>
+
+     <style>
+
+      #orderalert
+      {
+        padding-top: 11px;
+        display: inline-block;
+      }
+
+      #anchorcart {
+        margin-top: 0px;
+      }
+
+      @media (max-width: 480px) 
+      {
+        .stky.sticky 
+        {
+         position: fixed;
+         bottom: 0;
+         width: 100%;
+         background: #242424;
+         left: 0;
+         padding: 10px;
+         z-index: 99;
        }
-     </style>
+       .mobcheck{;
+        margin-top: -20px !important;
+      }
+
+    }
+  </style>

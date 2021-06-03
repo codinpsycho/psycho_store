@@ -17,10 +17,13 @@ class Pages extends CI_controller
 		$this->load->library('tank_auth');
 		$this->load->library('cart');
 		$this->load->helper('email');
+		$this->load->database();
 	}
 
 	function index()
 	{
+		// $data = $this->database->_getGamesNameWithCategory();
+		// echo '<pre>'; print_r($data); exit();
 		$this->home();
 	}
 
@@ -68,7 +71,6 @@ class Pages extends CI_controller
 		$next = $result['product_id'];		
 		
 		//reset
-		// $result = null;
 		$result = [];
 		$id = $current_id;
 		while(count($result) < 1)
@@ -301,9 +303,8 @@ class Pages extends CI_controller
 				$suggested_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids);
 			}
 
-			$data['suggested_products'] = $suggested_products;
+			$data['suggested_products'] = $this->shuffle_assoc($suggested_products);
 			// Dev on 04.05.2021
-
 
 			// echo '<pre>'; print_r($data); exit();
 			display('product', $data);
@@ -315,6 +316,20 @@ class Pages extends CI_controller
 			display('basic', $data);
 		}
 	}
+
+
+	// dev on 31.05.2021
+	function shuffle_assoc($list) { 
+		if (!is_array($list)) return $list; 
+
+		$keys = array_keys($list); 
+		shuffle($keys); 
+		$random = array(); 
+		foreach ($keys as $key) { 
+			$random[$key] = $list[$key]; 
+		}
+		return $random; 
+	} 
 
 	function _generate_product_specific_views($product, &$data)
 	{
@@ -421,8 +436,11 @@ class Pages extends CI_controller
 		$data['latest_link_state'] = 'active';
 		$data['popular_link_state'] = 'none';
 		$params['tag_name'] = 'psychofamous';
-		notify_event('instafeed', $params);
 
+		// dev on 31.05.2021
+		$data['product_galleries'] = $this->database->_getProductGalleryImagesRandomly();
+
+		notify_event('instafeed', $params);
 		display('home', $data);
 	}
 
@@ -456,13 +474,17 @@ class Pages extends CI_controller
 	}
 
 
-	function like($like_what = "")
+	function like($like_what = "", $category_name = null)
 	{
 		$name = ($this->input->post('search_query') != false) ? trim($this->input->post('search_query')) : $this->beautify($like_what,'-');
 
 		$data['search_result'] = 0;
 		$data['search_text'] = $name;
 		$data['products'] = array();
+
+		if(!empty($category_name))
+			$data['category_name'] = $category_name;
+
 		if(strlen($name))
 		{
 			$result = $this->database->GetProducts('all','popular', $name);
@@ -584,28 +606,18 @@ class Pages extends CI_controller
 		display('basic', $data);
 	}
 
-	function category_products($categoryID)
+	// dev on 01.06.2021
+	// like route revamped with categorised games for better SEO results
+	function categorised_games($url)
 	{
-		$category = $this->database->_getProductCategory($categoryID);
+		$position = strpos($url, 'psychostore');
+		$game_name = substr($url, 0, $position-1);
 
-		$data['search_result'] = 0;
-		$data['search_text'] = $category['name'];
-		$data['products'] = array();
-		if(!empty($category))
-		{
-			$result = $this->database->GetCategoryWiseProducts($categoryID);
-			$count = count($result);
-			$data['search_result'] = $count;
-			
-			if($result)
-				$data['products'] = $result;
-		}
-
-		//Get Unique MetaInfo for the page with respect to 
-		$data['meta_id'] = 50; //get_metaid_by_name($name);
-
-		display('search', $data);
-
+		$category_name = ucwords($this->beautify($game_name,'-'));
+		$category = $this->database->_getCategoryNameUsingGameName($category_name);
+		// echo '<pre>'; print_r($category['category_name']); exit();
+		
+		$this->like($game_name, $category['category_name']);
 	}
 
 

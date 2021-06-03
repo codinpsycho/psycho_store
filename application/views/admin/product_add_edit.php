@@ -22,6 +22,7 @@
 							</select>
 						</div>
 
+
 						<div class='col-md-2'>
 							<select class= "form-control " name="type">
 								<?php if($type != ''):?>
@@ -123,6 +124,14 @@
 							}
 							?>
 
+							<!-- <div class="position-relative pr-3 mb-3">
+								<input class='form-control' type="text" placeholder="Paste Your Link Here" name="galleries[]">
+								<a href="javascript:void(0)" class="delicn">Remove</a>
+							</div>	
+							<div class="position-relative pr-3 mb-3">
+								<input class='form-control' type="text" placeholder="Paste Your Link Here" name="galleries[]">
+								<a href="javascript:void(0)" class="delicn">Remove</a>
+							</div> -->	
 						</div>	
 					</div>
 				</div>
@@ -132,7 +141,15 @@
 		</form>
 	</div>
 
-<script type="text/javascript">
+
+	<script type="text/javascript">
+
+		$(document).on('click', '#addgallery', function(e) {
+
+			var addhtml = '<div class="position-relative pr-3 mb-3"><input class="form-control" type="text" placeholder="Paste Your Link Here" name="galleries[]" value="56"><a href="javascript:void(0)" class="delicn">Remove</a></div>';
+
+			$('#addhtml').append(addhtml);
+		});
 
 		$(document).on('click', '.delicn', function(e) {
 			$(this).parent().remove();

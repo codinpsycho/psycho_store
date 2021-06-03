@@ -1,8 +1,8 @@
 <div class="container">  
     <div class="row">
       <div class="col-md-12 top-bottom-space-s">
-        <h1 class="text-center"><?php echo $search_text;?> T-Shirts/Merchandise</h1>
-        <h5 class="text-center grey-text"><?php echo $search_result ?>&nbsp;product(s) found to satisfy your inner geek!</h5>
+        <h1 class="text-center"><?php echo $search_text?> <?=isset($category_name) ? $category_name : ''?> T-Shirts/Merchandise</h1>
+        <h5 class="text-center grey-text"><?php echo $search_result ?>&nbsp; <?=isset($category_name) ? $category_name : ''?> product(s) found to satisfy your inner geek!</h5>
       </div>
     </div>  
     <div class="row well">

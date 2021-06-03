@@ -225,7 +225,6 @@ class Cart extends CI_controller
 		$this->cart->update($data);
 		$this->_reconfirm_cheat_code();
 
-		
 		redirect('cart');
 	}
 

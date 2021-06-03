@@ -48,4 +48,7 @@ $config['gstin'] = '29AAICP0480E1ZF';
 $config['gstin_state'] = 'Karnataka';
 
 
+// dev on 28.05.2021
+$config['redeem_points'] = false;
+
 ?>

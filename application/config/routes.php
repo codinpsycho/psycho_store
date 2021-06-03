@@ -57,7 +57,7 @@ $route['default_controller'] = "pages";
 $route['product/(:any)/?(:any)?'] = 'pages/product/$1';
 $route['like'] = 'pages/like';
 $route['psycho_offers'] = 'pages/psycho_offers';
-$route['like/(:any)'] = 'pages/like/$1';
+// $route['like/(:any)'] = 'pages/like/$1';
 $route['explore/(:any)/?(:any)?'] = 'pages/explore/$1/$2';
 $route['latest'] = 'pages/latest/';
 $route['subscribe'] = 'pages/subscribe/';
@@ -78,3 +78,6 @@ $route['category/(:any)/products'] = 'pages/category_products/$1';
 $route['admin/dashboard'] = 'insights/dashboard';
 $route['admin'] = 'insights/dashboard';
 $route['checkout/address/edit/(:num)'] = 'auth/address_edit/$1';
+
+// like route revamped with categorised games for better SEO results: dev on 01.06.2021
+$route['like/(:any)'] = 'pages/categorised_games/$1';

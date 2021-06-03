@@ -7,7 +7,7 @@
               <li>
                 <h5>
                   <span class=''>
-                    <iframe src="http://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpsychostorein&layout=button_count&action=like&show_faces=false&share=true&height=21&appId=601282446622582" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:135px;" allowTransparency="true">
+                    <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpsychostorein&layout=button_count&action=like&show_faces=false&share=true&height=21&appId=601282446622582" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:21px; width:135px;" allowTransparency="true">
                     </iframe>
                   </span>
                 </h5>
@@ -35,7 +35,7 @@
               <li>
                 <h5>
                   <span class=''>
-                    <iframe src="http://ghbtns.com/github-btn.html?user=codinpsycho&type=follow&count=false"allowtransparency="true" frameborder="0" scrolling="0" width="150" height="30"></iframe>
+                    <iframe src="https://ghbtns.com/github-btn.html?user=codinpsycho&type=follow&count=false"allowtransparency="true" frameborder="0" scrolling="0" width="150" height="30"></iframe>
                   </span>
                 </h5>
               </li>

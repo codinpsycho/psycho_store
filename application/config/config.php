@@ -23,8 +23,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['project_path'] = 'store'; // server
+
+$config['project_path'] = 'upgradev3'; // server
 $config['base_url']	= 'http://' . $_SERVER["HTTP_HOST"] . "/" . $config['project_path'] . "/";
+
 
 /*
 |--------------------------------------------------------------------------
@@ -380,7 +382,7 @@ $config['encryption_key'] = '';
 */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 0;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;

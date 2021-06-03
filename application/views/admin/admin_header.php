@@ -11,7 +11,7 @@
 <?php echo meta('keywords', $keywords) ?>
 <link rel="icon" type="image/jpg" href=<?php echo $favico ?> >
 
-<link href='http://fonts.googleapis.com/css?family=Carrois+Gothic+SC' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Carrois+Gothic+SC' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href=<?php echo site_url('css/bootstrap.min.css') ?> >
 <link rel="stylesheet" href= <?php echo site_url('css/font-awesome.min.css') ?> >
 <link rel="stylesheet" href=<?php echo site_url('css/manual.css')?>>
@@ -28,7 +28,7 @@
       <li>
       <a class='navbar-btn' href = <?php echo site_url('admin/dashboard') ?> >Dashboard</i></a>
       </li>
-
+      
       <li>
     	<a class='navbar-btn' href = <?php echo site_url('admin/orders') ?> >Orders</i></a>
       </li>

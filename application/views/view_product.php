@@ -83,19 +83,25 @@ function update_btn_text_on_addtocart(cb)
         </div>
       </div>
     </div>
-  <?php $data['suggested_products'] = $suggested_products; echo $this->load->view('product_suggestions', $data, True); ?>
+
+  <!-- switched galleries with suggestions -->
+  <?php 
+  $data['tag_name'] = $hashtag; 
+  $data['product_galleries'] = $product_galleries;
+  if(count($product_galleries) > 0)
+  echo $this->load->view('view_product_instagram', $data, True); 
+  ?>
+
+  
   <div id='prod_desc'>
     <?php echo $this->load->view('view_product_desc', null, True); ?>
   </div>
 
+  <!-- closed on 31.05.2021 -->
+  <?php // $data['product_galleries'] = $product_galleries; echo $this->load->view('product_galleries', $data, True); ?>
 
-  <?php //$data['product_galleries'] = $product_galleries; echo $this->load->view('product_galleries', $data, True); ?>
-
-  <?php 
-  $data['tag_name'] = $hashtag; 
-  $data['product_galleries'] = $product_galleries;
-  echo $this->load->view('view_product_instagram', $data, True); 
-  ?>
+  <!-- switched suggestions with galleries -->
+  <?php $data['suggested_products'] = $suggested_products; echo $this->load->view('product_suggestions', $data, True); ?>
   
   <?php $data['product_name'] = $product['product_name']; echo $this->load->view('view_disqus', $data, True); ?>
 
