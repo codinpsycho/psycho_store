@@ -919,6 +919,7 @@ class Admin extends CI_controller
 		$product['product_price'] = $input['price'];
 		$product['galleries'] = $input['galleries'];
 		$product['category_id'] = $input['category_id'];
+		$product['featured'] = $input['featured'];
 
 		switch ($input['type'])
 		{
@@ -965,6 +966,7 @@ class Admin extends CI_controller
 		$data['image_path'] = is_null($product) ? '' : $product['product_image_path'];
 		$data['price'] = is_null($product) ? '' : $product['product_price'];
 		$data['category_id'] = is_null($product) ? '' : $product['category_id'];
+		$data['featured'] = is_null($product) ? '' : $product['featured'];
 
 		switch ($product['product_type'])
 		{
