@@ -314,7 +314,7 @@ function AddProduct($product)
 
 		// dev on 14.05.2021
 		$insertId = $this->db->insert_id();
-   		return  $insertId;
+		return  $insertId;
 	}
 
 	function RemoveAddress($id)
@@ -913,7 +913,7 @@ function AddProduct($product)
 	}
 
 
-	function GetCategoryWiseProducts($categoryID, $productID = false, $same_designed_ids = false)
+	function GetCategoryWiseProducts($categoryID, $productID = false, $same_designed_ids = false, $limit = null)
 	{	
 
 		if($productID)
@@ -922,10 +922,14 @@ function AddProduct($product)
 		if($same_designed_ids)
 			$this->db->where_not_in('product_id', $same_designed_ids);
 
-
 		$this->db->where('category_id', $categoryID);
+		
 		//Dont get hidden products
 		$this->db->where('product_state !=', 'hidden');		
+
+		if($limit!=''){
+			$this->db->limit($limit);
+		}
 
 		$query = $this->db->get('products');
 		
@@ -1008,7 +1012,7 @@ function AddProduct($product)
 		$this->db->select('COUNT(*) AS cnt');
 
 		if(count($selected_ids)) 
-		$this->db->where_in('user_id', $selected_ids);
+			$this->db->where_in('user_id', $selected_ids);
 
 		$this->db->group_by('user_id');
 		$this->db->having('cnt > ', $val1);
@@ -1199,7 +1203,7 @@ function AddProduct($product)
 		$this->db->where('ref_code', $ref_code);
 
 		if($user_id)
-		$this->db->where("id !=", $user_id);
+			$this->db->where("id !=", $user_id);
 
 		$query = $this->db->get('users');
 		return $query->row_array();
@@ -1242,7 +1246,7 @@ function AddProduct($product)
 		$this->db->from('category_games as t1');
 
 		if(!empty($game_name))
-		$this->db->where('t1.game_name', $game_name);
+			$this->db->where('t1.game_name', $game_name);
 
 		$this->db->join('categories as t2', 't1.category_id = t2.id', 'LEFT');
 		$this->db->order_by('t1.game_name');

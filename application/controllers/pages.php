@@ -268,8 +268,6 @@ class Pages extends CI_controller
 			$data['product_state'] = $result['product_state'];
 			$data['product_galleries'] = $this->database->_getProductGalleries($id);
 
-
-
 			$data['next_id'] = product_url( $this->database->GetProductById($next) );
 			$data['prev_id'] = product_url( $this->database->GetProductById($prev) );
 
@@ -288,6 +286,7 @@ class Pages extends CI_controller
 			//Generate Suggestions
 			// $data['suggested_products'] = $this->GenerateSuggestions($result, 5);
 
+
 			$data['recently_viewed'] = $this->GetRecentlyViewed();
 			$this->AddToRecentlyViewed($result);
 
@@ -303,10 +302,17 @@ class Pages extends CI_controller
 				$suggested_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids);
 			}
 
+			// check if suggested_products less than 6 items then get the same categorised products and merge with them
+			if(!empty($suggested_products)) {
+				$limit = 6 - count($suggested_products);
+				$same_categorised_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids, $limit);
+				$suggested_products = array_merge($suggested_products, $same_categorised_products); 
+			}
+
 			$data['suggested_products'] = $this->shuffle_assoc($suggested_products);
 			// Dev on 04.05.2021
 
-			// echo '<pre>'; print_r($data); exit();
+			// echo '<pre>'; print_r($data['suggested_products']); exit();
 			display('product', $data);
 		}
 		else
