@@ -114,9 +114,11 @@ class Auth extends CI_Controller
 
 	function _redirect()
 	{
-		$redirect_url = clear_and_get_redirect_url();
-		//$redirect_url = $url != (string)FALSE ? $redirect_url = $url : '';
+		// $redirect_url = clear_and_get_redirect_url(); // this single line is closed on 11.06.2021
+		
+		// // $redirect_url = $url != (string)FALSE ? $redirect_url = $url : '';  // don't know but seems old commited
 
+		$redirect_url = !empty($this->input->post('page')) ? $this->input->post('page') : clear_and_get_redirect_url(); // added on 11.06.2021
 		$this->_post_login($redirect_url);
 	}
 
@@ -161,7 +163,7 @@ class Auth extends CI_Controller
 		
 		if ($this->form_validation->run()) 
 		{
-				// validation ok
+			// validation ok
 			if ($this->tank_auth->login(
 				$this->form_validation->set_value('email'),
 				$this->form_validation->set_value('password'),
@@ -169,6 +171,8 @@ class Auth extends CI_Controller
 				$data['login_by_username'],
 				$data['login_by_email'])) 
 			{
+
+				$redirect_url = clear_and_get_redirect_url(); 
 				$this->_redirect();
 			}
 			else
@@ -206,7 +210,12 @@ class Auth extends CI_Controller
 			save_redirect_url($this->input->get('redirect_url'));
 			$sess_url = $this->session->userdata('redirect_url');
 
-			display('login',$data);
+			// added on 11.06.2021
+			$this->session->set_flashdata('error', 'Incorrect details. Please check.');
+			redirect($this->input->post('page'));
+
+
+			// display('login', $data); //  commited on 11.06.2021
 		}
 	}
 

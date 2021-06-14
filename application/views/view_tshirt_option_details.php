@@ -81,9 +81,16 @@
               <div class="col-md-6 col-sm-12 col-xs-12">
                 <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
 
+                <!-- here -->
+                <?php if ($this->tank_auth->is_logged_in()) {  ?>
                 <button type="submit" name="add_to_cart" id="add_to_cart" class="btn btn-primary btn-block" style="display: none;"><?php echo $button_text?></button>
-
                 <a href="#ordersize" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
+                <?php } else { ?>
+                <!-- <button type="button" name="add_to_cart" id="add_to_cart" data-toggle="modal" data-target="#loginModal" class="btn btn-primary btn-block" style="display: none;"><?php //echo $button_text?></button> -->
+                <a data-toggle="modal" data-target="#loginModal" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
+
+                <?php } ?>
+
 
               </div>
             </div>

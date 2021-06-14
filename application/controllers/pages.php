@@ -22,8 +22,6 @@ class Pages extends CI_controller
 
 	function index()
 	{
-		// $data = $this->database->_getGamesNameWithCategory();
-		// echo '<pre>'; print_r($data); exit();
 		$this->home();
 	}
 
@@ -305,8 +303,10 @@ class Pages extends CI_controller
 			// check if suggested_products less than 6 items then get the same categorised products and merge with them
 			if(!empty($suggested_products)) {
 				$limit = 6 - count($suggested_products);
-				$same_categorised_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids, $limit);
-				$suggested_products = array_merge($suggested_products, $same_categorised_products); 
+				if($limit > 0) {
+					$same_categorised_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids, $limit);
+					$suggested_products = array_merge($suggested_products, $same_categorised_products); 
+				}
 			}
 
 			$data['suggested_products'] = $this->shuffle_assoc($suggested_products);
@@ -452,7 +452,6 @@ class Pages extends CI_controller
 
 	function latest()
 	{
-		echo 99; exit();
 		$data['products'] = $this->database->GetProducts('all', 'latest', 'all');
 		$data['latest_link_state'] = 'active';
 		$data['popular_link_state'] = 'none';

@@ -390,8 +390,8 @@ class Checkout extends CI_controller
 
 	// 	$data['txn_id'] = $checkout_order['txn_id'];
 	// 	$data['email'] = $user['email'];
- // 		$data['raw_address'] = $address;
- // 		$data['formatted_address'] = format_address($address);
+	// 	$data['raw_address'] = $address;
+	// 	$data['formatted_address'] = format_address($address);
 	// 	$data['shipping_available'] = $shipping_available;
 	// 	$data['cod_available'] = $cod_available;
 	// 	$data['cod_charges'] = $this->config->item('cod_charge');
@@ -412,10 +412,6 @@ class Checkout extends CI_controller
 		//make sure address is set in checkout_db
 		$checkout_order = $this->_get_active_checkout_order();
 		$user = $this->database->GetUserById($checkout_order['user_id']);
-
-		// echo '<pre>';
-		// print_r($checkout_order);
-		// exit();
 
 		// dev on 12.05.2021
 		$final_price = $this->cart->final_price();
@@ -481,6 +477,7 @@ class Checkout extends CI_controller
 		$data['shipping_available'] = $shipping_available;
 		$data['cod_available'] = $cod_available;
 		$data['cod_charges'] = $this->config->item('cod_charge');
+		$data['product_galleries'] = $this->database->_getProductGalleryImagesRandomly();
 
 		//Add 'notes' for Razorpay
 		$data['txn_id'] = $checkout_order['txn_id'];

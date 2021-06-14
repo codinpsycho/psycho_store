@@ -75,8 +75,18 @@
         </li>
         <li>
           <?php $redirect_url = rawurlencode(uri_string()); ?>
-          <?php  if ( $user_id == 0 ): ?> <a href= <?php  echo site_url('auth/login').'?redirect_url='.$redirect_url; ?> > Login </a>
-        <?php else: ?> <a href= <?php echo site_url('auth/logout').'?redirect_url='.$redirect_url; ?> >Logout</a> <?php endif; ?>
+          
+          <?php  if ( $user_id == 0 ): ?> 
+            
+            <!-- <a href= <?php  //echo site_url('auth/login').'?redirect_url='.$redirect_url; ?> > Login </a> -->
+            <a href="javascript:void(0)" data-toggle="modal" data-target="#loginModal"> Login </a>
+
+          <?php else: ?> 
+
+          <a href= <?php echo site_url('auth/logout').'?redirect_url='.$redirect_url; ?> >Logout</a> 
+
+          <?php endif; ?>
+
       </li>
       <li>
         <a class="" href= <?php echo site_url('cart')?> ><i class="fa fa-shopping-cart"></i><span class="badge"><?php echo $num_items ?></span></a>
@@ -86,3 +96,24 @@
 </div><!-- /.container-fluid -->
 </nav>
 </header>
+
+<?php 
+$data['redirect_url'] = $redirect_url;
+$gclient = init_google_client();
+$data['gauth_url'] = $gclient->createAuthUrl();
+echo $this->load->view('login_modal', $data, TRUE); 
+?>
+
+<?php
+$error = $this->session->flashdata('error');
+if(!empty($error))
+{
+?>
+
+<script type="text/javascript">
+  $('#loginModal').modal('show');
+</script>
+
+<?php
+}
+?>

@@ -73,7 +73,7 @@
 
 					<?php 
 					if($this->config->item('redeem_points'))	{
-					?>
+						?>
 						<h4>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </h4>
 
 						<form action="" method="post">
@@ -106,6 +106,9 @@
 	</div>
 	Placing the order implies you agree to our <a target="_blank" href = <?php echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a>
 	<button class="btn btn-primary pull-right" id='place_order_btn'> Place Order | <i class="fa fa-rupee"></i>  <?=($this->cart->final_price() - $points_claimed);?> <i class="fa fa-arrow-right"></i></button>
+
+	<?php $data['tag_name'] = 'psychofamous'; echo $this->load->view('view_product_instagram', $data, TRUE); ?>
+	
 </div>
 
 <script>
