@@ -69,18 +69,22 @@ function get_formatted_address(results, status)
 
 function fill_address_form(address)
 {
+	// console.log(address)
 	var total_parts = address.length - 1;
 	
-	var address1 = document.getElementById('address1');
+	// var address1 = document.getElementById('address1');
+	var city = document.getElementById('city');
+	var state = document.getElementById('state');
+	var pincode = document.getElementById('pincode');
 	
-	address1.value = address[0].long_name + ", " + address[1].long_name;
-	address2.value = address[2].long_name + ", " + address[3].long_name;
 	city.value = address[total_parts - 4].long_name;
 	state.value = address[total_parts - 2].long_name;
-
-	//couontry.value = address[total_parts - 1].long_name; Country is India for now, so no need
-	
 	pincode.value = address[total_parts].long_name;
+
+	// address1.value = address[0].long_name + ", " + address[1].long_name;
+	// address2.value = address[2].long_name + ", " + address[3].long_name; // currently no need for address2
+	// couontry.value = address[total_parts - 1].long_name; Country is India for now, so no need
+	
 
 	update_alert("Location confirmed, please fill in the remaining info. You can improve the location details as well, to help our minions find you more easily.", 'success');
 }

@@ -22,10 +22,12 @@ function update_btn_text_on_addtocart(cb)
   if(cb.checked)
   {
     var path = "<?php echo site_url("cart/add/{$product['product_id']}")?>";
+    $('#anchorcart').text("Add To Cart");
   }
   else
   {
     var path = "<?php echo site_url("cart/instant_checkout/{$product['product_id']}")?>";
+    $('#anchorcart').text("Order Now");
   }
 
   var form = document.getElementById('cart_form');

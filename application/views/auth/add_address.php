@@ -8,7 +8,7 @@ $(function () {
 $first_name = array(
 	'name'	=> 'first_name',
 	'id'	=> 'first_name',
-	'value' => set_value('first_name'),
+	'value' => !empty($first_name) ? $first_name : set_value('first_name'),
 	'maxlength'	=> 50,
 	'size'	=> 30,
 	'placeholder'	=> 'What normal people call you',
@@ -17,7 +17,7 @@ $first_name = array(
 $last_name = array(
 	'name'	=> 'last_name',
 	'id'	=> 'last_name',
-	'value' => set_value('last_name'),
+	'value' => !empty($last_name) ? $last_name : set_value('last_name'),
 	'maxlength'	=> 50,
 	'size'	=> 30,
 	'placeholder'	=> 'What business people call you',
@@ -32,6 +32,7 @@ $address1 = array(
 	'placeholder'	=> 'House no. / Flat no. / Buiilding no.',
 	'class' => "form-control"
 );
+
 // $address2 = array(
 // 	'name'	=> 'address2',
 // 	'id'	=> 'address2',
@@ -41,6 +42,7 @@ $address1 = array(
 // 	'placeholder'	=> 'Society / Locality / Road',
 // 	'class' => "form-control"
 // );
+
 $address3 = array(
 	'name'	=> 'address3',
 	'id'	=> 'address3',
@@ -50,12 +52,14 @@ $address3 = array(
 	'placeholder'	=> "Near Master Roshi's island",
 	'class' => "form-control"
 );
+
 $city = array(
 	'name'	=> 'city',
 	'id'	=> 'city',
 	'value' => set_value('city'),
 	'maxlength'	=> 20,
 	'size'	=> 30,
+	'placeholder'	=> 'City',
 	'class' => "form-control",
 );
 $state = array(
@@ -64,6 +68,7 @@ $state = array(
 	'value' => set_value('state'),
 	'maxlength'	=> 20,
 	'size'	=> 30,
+	'placeholder'	=> 'State',
 	'class' => "form-control"
 );
 $country = array(

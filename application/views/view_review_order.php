@@ -104,7 +104,7 @@
 			<?php //endif; //We dont deliver at this address ?>	
 		</div>
 	</div>
-	Placing the order implies you agree to our <a target="_blank" href = <?php echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a>
+	<!-- Placing the order implies you agree to our <a target="_blank" href = <?php //echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a> -->
 	<button class="btn btn-primary pull-right" id='place_order_btn'> Place Order | <i class="fa fa-rupee"></i>  <?=($this->cart->final_price() - $points_claimed);?> <i class="fa fa-arrow-right"></i></button>
 </div>
 

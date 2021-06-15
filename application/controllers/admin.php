@@ -1258,9 +1258,17 @@ class Admin extends CI_controller
 		$this->table->set_template($tmpl);		
 
 		$num = 1;
+
+		// echo '<pre>'; print_r($orders);exit();
+
 		foreach ($orders as $order)
 		{
 			if(is_null($order))
+			{
+				continue;
+			}
+
+			if(empty($order['order_items'])) 
 			{
 				continue;
 			}
@@ -1293,8 +1301,8 @@ class Admin extends CI_controller
 					{
 						$product_id[] = $item['product']['product_id'];
 					}
-
 					$product_id = implode('-', $product_id);
+
 					$user_id = $order['user']['id'];
 					$remind_url = site_url("admin/remind/$user_id/$product_id");
 

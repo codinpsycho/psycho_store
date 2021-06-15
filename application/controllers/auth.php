@@ -552,8 +552,9 @@ class Auth extends CI_Controller
 		else 
 		{
 			//Run address detection script
-			//$this->_show_address_detection_popup();
-			//$this->_detect_address();
+			$this->_show_address_detection_popup();
+			$this->_detect_address();
+
 
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
@@ -597,8 +598,17 @@ class Auth extends CI_Controller
 				// dev on 14.05.2021
 
 			}
+
+
+			// dev on 14.06.2021
+			$user = $this->database->GetUserById($this->tank_auth->get_user_id());
+			$name = explode(' ', $user['username']);
+			$data['first_name'] = $name[0];
+			$data['last_name'] = isset($name[1]) ? $name[1] : '';
+			// dev on 14.06.2021
+
 			//$this->load->view('auth/add_address');
-			display('add_address',null);
+			display('add_address', $data);
 		}
 	}
 

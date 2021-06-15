@@ -143,3 +143,38 @@
         top: -35%;
     }
 }
+
+#orderalert
+{
+    padding-top: 11px;
+    display: inline-block;
+}
+
+#anchorcart {
+    margin-top: 0px;
+}
+.lgtxt {
+    font-size: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+@media (max-width: 480px) 
+{
+    .stky.sticky 
+    {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #242424;
+        left: 0;
+        padding: 10px;
+        z-index: 99;
+    }
+    .mobcheck{;
+        margin-top: -20px !important;
+    }
+    .row.top-bottom-space{
+        margin: 0;
+    }
+
+}

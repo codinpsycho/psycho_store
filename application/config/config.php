@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['project_path'] = 'upgradev3'; // server
+$config['project_path'] = 'upgradev4'; // server
 $config['base_url']	= 'http://' . $_SERVER["HTTP_HOST"] . "/" . $config['project_path'] . "/";
 
 

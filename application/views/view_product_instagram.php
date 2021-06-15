@@ -2,6 +2,7 @@
 	<div class="col-md-12">
 
 		<!-- comment out hardcodedly on tag_name on 31.05.2021 -->
+		<div id="psychofamous"></div>
 		<h3>#psychofamous <?php // echo $tag_name ?></h3>
 		<h5>Show off your geeky side. Tag your loot #psychofamous <?php // echo $tag_name ?> on instagram to get featured here.</h5>
 		

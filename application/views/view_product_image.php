@@ -19,7 +19,11 @@
     <?php foreach ($images as $key => $img): ?>
       <?php $img_path = site_url($img); ?>
       <a  onclick="update_image('<?php echo $img_path ?>');" href="#prod_img"> <img width="60" id="prod_img" class="" src = <?php echo $img_path ?> > </a>
+
     <?php endforeach; ?> 
+    <?php if(count($product_galleries) > 0) { ?>
+     <a href="#psychofamous" class="molot"><span class="lgtxt">+<?=count($product_galleries);?></span></a>
+   <?php } ?>
   </div>
 </div>
 <?php endif; ?>

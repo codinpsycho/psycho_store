@@ -1,5 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-
 <script type="text/javascript">
   function update_btn_text_on_size_select(size_select)
   {
@@ -31,7 +29,6 @@
       $('.stky').removeClass('sticky');
     }
   });
-
 </script>
 
 <div class="w-100">
@@ -110,34 +107,3 @@
 
        });
      </script>
-
-     <style>
-
-      #orderalert
-      {
-        padding-top: 11px;
-        display: inline-block;
-      }
-
-      #anchorcart {
-        margin-top: 0px;
-      }
-
-      @media (max-width: 480px) 
-      {
-        .stky.sticky 
-        {
-         position: fixed;
-         bottom: 0;
-         width: 100%;
-         background: #242424;
-         left: 0;
-         padding: 10px;
-         z-index: 99;
-       }
-       .mobcheck{;
-        margin-top: -20px !important;
-      }
-
-    }
-  </style>
