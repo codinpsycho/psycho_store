@@ -1,14 +1,14 @@
 <script type="text/javascript">
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 <?php
 $first_name = array(
 	'name'	=> 'first_name',
 	'id'	=> 'first_name',
-	'value' => !empty($first_name) ? $first_name : set_value('first_name'),
+	'value' => set_value('first_name'),
 	'maxlength'	=> 50,
 	'size'	=> 30,
 	'placeholder'	=> 'What normal people call you',
@@ -18,13 +18,25 @@ $first_name = array(
 $last_name = array(
 	'name'	=> 'last_name',
 	'id'	=> 'last_name',
-	'value' => !empty($last_name) ? $last_name : set_value('last_name'),
+	'value' => set_value('last_name'),
 	'maxlength'	=> 50,
 	'size'	=> 30,
 	'placeholder'	=> 'What business people call you',
 	'class' => "form-control",
 	'autocomplete' => "off"
 );
+
+$email = array(
+	'name'	=> 'email',
+	'id'	=> 'email',
+	'value' => set_value('email'),
+	'maxlength'	=> 80,
+	'size'	=> 30,
+	'placeholder'	=> 'you@email.com',
+	'class' => "form-control",
+	'autocomplete' => "off"
+);
+
 $address1 = array(
 	'name'	=> 'address1',
 	'id'	=> 'address1',
@@ -36,16 +48,6 @@ $address1 = array(
 	'autocomplete' => "off"
 );
 
-// $address2 = array(
-// 	'name'	=> 'address2',
-// 	'id'	=> 'address2',
-// 	'value' => set_value('address2'),
-// 	'maxlength'	=> 120,
-// 	'size'	=> 30,
-// 	'placeholder'	=> 'Society / Locality / Road',
-// 	'class' => "form-control"
-// );
-
 $address3 = array(
 	'name'	=> 'address3',
 	'id'	=> 'address3',
@@ -56,14 +58,13 @@ $address3 = array(
 	'class' => "form-control",
 	'autocomplete' => "off"
 );
-
 $city = array(
 	'name'	=> 'city',
 	'id'	=> 'city',
 	'value' => set_value('city'),
 	'maxlength'	=> 20,
 	'size'	=> 30,
-	'placeholder'	=> 'City',
+	'placeholder'	=> "City",
 	'class' => "form-control",
 	'autocomplete' => "off"
 );
@@ -73,7 +74,7 @@ $state = array(
 	'value' => set_value('state'),
 	'maxlength'	=> 20,
 	'size'	=> 30,
-	'placeholder'	=> 'State',
+	'placeholder'	=> "State",
 	'class' => "form-control",
 	'autocomplete' => "off"
 );
@@ -85,7 +86,7 @@ $country = array(
 	'size'	=> 30,
 	'class' => "form-control",
 	'placeholder'	=> 'India',
-	'readonly' => 'readonly'
+	'readonly' => 'readonly',
 );
 $pincode = array(
 	'name'	=> 'pincode',
@@ -106,75 +107,84 @@ $number = array(
 	'minlength'	=> 10,
 	'size'	=> 30,
 	'class' => "form-control",
-	'placeholder' => 'Enter 10 digit number',
+	'placeholder' => 'Enter 10 digit number',	
 	'autocomplete' => "off"
 );
 ?>
 <div class="container top-bottom-space">
 	<h1>Wheres your realm?
 		<span class="pull-right play">
-			<button type="button" id="usegeolocation" class="btn btn-danger">Use current location</button>
+		<a href="<?= base_url().'auth/guest_checkout?redirect_url='.rawurlencode('checkout/').'&usegeolocation=true'; ?>" class="btn btn-danger">Use current location</a>
 		</span>
 	</h1>
+
 	<hr>
-
 	<div id="alert"></div>
-
 	<div class="well">
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-					<form method = 'post' action = "<?php echo site_url('auth/register_address')?>" role="form">
-						<div class="col-md-6">
-							<div class="form-group">
-								<?php echo ('First Name'); ?>
+				<form method = 'post' action = "" role="form">
+
+					<div class="col-md-12">
+						<div class="form-group">
+								<?php echo ('Email Address'); ?>
+								<?php echo form_input($email); ?>
+								<?php echo form_error($email['name']); ?>
+						</div>	
+
+						<div class="text-center accbtn">
+							Already have an account? <a href="<?= base_url().'auth/login?redirect_url='.rawurlencode('checkout/'); ?>" class="btn btn-danger">Login</a>
+						</div>
+
+						<hr>
+
+					</div>
+
+
+					<div class="col-md-6">
+						<div class="form-group">
+							<?php echo ('First Name'); ?>
 								<?php echo form_input($first_name); ?>
 								<?php echo form_error($first_name['name']); ?>
-							</div>		
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
+						</div>		
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
 								<?php echo ('Last Name'); ?>
 								<?php echo form_input($last_name); ?>
 								<?php echo form_error($last_name['name']); ?>
-							</div>		
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
+						</div>		
+					</div>
+
+					
+
+					<div class="col-md-12">
+						<div class="form-group">
 								<?php echo ('Address (where you will be available during daytime)'); ?>
 								<?php echo form_input($address1); ?>
 								<?php echo form_error($address1['name']); ?>
-							</div>
 						</div>
-					<!-- <div class="col-md-12">
-						<div class="form-group">
-								<?php //echo ('Some more address'); ?>
-								<?php //echo form_input($address2); ?>
-								<?php //echo form_error($address2['name']); ?>
-						</div>
-					</div> -->
+					</div>
+					
 					<div class="col-md-12">
 						<div class="form-group">
-							<?php echo ('Landmark (if any)'); ?>
-							<?php echo form_input($address3); ?>
-							<?php echo form_error($address3['name']); ?>
+								<?php echo ('Landmark (if any)'); ?>
+								<?php echo form_input($address3); ?>
+								<?php echo form_error($address3['name']); ?>
 						</div>
-					</div>	
+					</div>		
 
-						
-
-						<div class="col-xs-12 col-md-4">
-							<div class="form-group">
+					<div class="col-xs-12 col-md-4">
+						<div class="form-group">
 								<?php echo ('City'); ?>
 								<?php echo form_input($city); ?>
 								<?php echo form_error($city['name']); ?>
-							</div>
 						</div>
+					</div>
 
-
-
-						<div class="col-xs-6 col-md-4">
-							<div class="form-group">
+					<div class="col-xs-6 col-md-4">
+						<div class="form-group">
 								<?php echo ('State'); ?>
 								<select id="state" name="state" class='form-control'>
 									<option value="Anadaman and Nicobar Islands" <?php echo set_select('state', 'Anadaman and Nicobar Islands'); ?>>Anadaman and Nicobar Islands</option>
@@ -215,21 +225,17 @@ $number = array(
 									<option value="West Bengal" <?php echo set_select('state', 'West Bengal'); ?> >West Bengal</option>
 								</select>
 								<?php echo form_error($state['name']); ?>
-							</div>
 						</div>
-
-						<div class="col-xs-6 col-md-4 ">
-							<div class="form-group">
-								<?php echo ('Pincode'); ?>
-								<?php echo form_input($pincode); ?>
-								<?php echo form_error($pincode['name']); ?>
-							</div>						
-						</div>
-
-				
-
-
-
+					</div>
+					
+					<div class="col-xs-6 col-md-4 ">
+						<div class="form-group">
+							<?php echo ('Pincode'); ?>
+							<?php echo form_input($pincode); ?>
+							<?php echo form_error($pincode['name']); ?>
+						</div>						
+					</div>
+					
 					<!-- <div class="col-md-6">
 						<div class="form-group" data-toggle="tooltip" title="We ship only in India as of now." >
 							<?php // echo ('Country'); ?>
@@ -237,8 +243,6 @@ $number = array(
 							<?php // echo form_error($country['name']); ?>
 						</div>
 					</div> -->
-
-
 
 					<div class="col-xs-12 col-md-12">
 						<div class="form-group">
@@ -254,6 +258,13 @@ $number = array(
 			</div>
 		</div>
 	</div>
-	<button class="btn btn-primary" type="submit">Add Address</button>
-</form>
+	<button class="btn btn-primary" name="submit" value="submit" type="submit">Add Address</button>
+	</form>
 </div>
+
+<style type="text/css">
+	.accbtn {
+		padding: 30px 0;
+		margin-bottom: 20px;
+	}
+</style>

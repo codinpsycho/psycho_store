@@ -157,7 +157,8 @@ class Checkout extends CI_controller
 
 		if(!$this->tank_auth->is_logged_in())
 		{
-			redirect('auth/login?redirect_url='.rawurlencode('checkout/'));
+			// redirect('auth/login?redirect_url='.rawurlencode('checkout/')); // commented on 17.06.2021
+			redirect('auth/guest_checkout?redirect_url='.rawurlencode('checkout/')); // added on 17.06.2021
 		}
 		else
 		{

@@ -13,7 +13,7 @@
 <img class="img-responsive" alt = "<?php echo $img_alt ?>" id="prod_img" src = <?php echo site_url($images[0]) ?> >
 
 
-<?php if(count($images) > 1): ?>
+<?php if(count($images) >= 1): ?>
 <div class="row">
   <div class="col-md-12">    
     <?php foreach ($images as $key => $img): ?>

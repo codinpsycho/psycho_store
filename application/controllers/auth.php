@@ -493,56 +493,6 @@ class Auth extends CI_Controller
 		notify_event('geolocation');
 	}
 
-	// function register_address()
-	// {		
-	// 	if (!$this->tank_auth->is_logged_in())			// logged in
-	// 		redirect('auth/login');
-	// 	elseif ($this->tank_auth->is_logged_in(FALSE)) 	// logged in, not activated
-	// 		redirect('/auth/send_again/');
-	// 	else 
-	// 	{
-	// 		//Run address detection script
-	// 		//$this->_show_address_detection_popup();
-	// 		//$this->_detect_address();
-
-	// 		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
-	// 		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
-	// 		$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
-	// 		$this->form_validation->set_rules('address2', 'Address2', 'trim|xss_clean');
-	// 		$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
-	// 		$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
-	// 		$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
-	// 		//$this->form_validation->set_rules('country', 'Country', 'trim|required|xss_clean');	//Its India for now
-	// 		$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
-	// 		$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
-
-	// 		if ($this->form_validation->run())
-	// 		{
-	// 			// validation ok
-	// 			//Create an entry into address table as well
-	// 			 $address = array
-	// 			(
-	// 				'first_name' => $this->form_validation->set_value('first_name'),
-	// 				'last_name' => $this->form_validation->set_value('last_name'),
-	// 				'address_1' => $this->form_validation->set_value('address1'),
-	// 				'address_2' => $this->form_validation->set_value('address2'),
-	// 				'address_3' => $this->form_validation->set_value('address3'),
-	// 				'city' => $this->form_validation->set_value('city'),
-	// 				'state' => $this->form_validation->set_value('state'),
-	// 				'country' => 'India',	//$this->form_validation->set_value('country'),
-	// 				'pincode' => $this->form_validation->set_value('pincode'),
-	// 				'phone_number' => $this->form_validation->set_value('number'),
-	// 				'user_id' => $this->tank_auth->get_user_id()
-	// 			);
-	// 			$this->database->RegisterAddress($address);
-	// 			redirect('checkout/address');
-	// 		}
-	// 		//$this->load->view('auth/add_address');
-	// 		display('add_address',null);
-	// 	}
-	// }
-
-
 	function register_address()
 	{		
 		if (!$this->tank_auth->is_logged_in())			// logged in
@@ -554,6 +504,13 @@ class Auth extends CI_Controller
 			//Run address detection script
 			$this->_show_address_detection_popup();
 			$this->_detect_address();
+
+			// if(!empty($_GET['usegeolocation'])) {
+			// 	if($_GET['usegeolocation'] == true) {
+			// 		$this->_show_address_detection_popup();
+			// 		$this->_detect_address();
+			// 	}
+			// }
 
 
 			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
@@ -579,7 +536,7 @@ class Auth extends CI_Controller
 					'address_3' => $this->form_validation->set_value('address3'),
 					'city' => $this->form_validation->set_value('city'),
 					'state' => $this->form_validation->set_value('state'),
-					'country' => 'India',	//$this->form_validation->set_value('country'),
+					'country' => 'India',	// $this->form_validation->set_value('country'),
 					'pincode' => $this->form_validation->set_value('pincode'),
 					'phone_number' => $this->form_validation->set_value('number'),
 					'user_id' => $this->tank_auth->get_user_id()
@@ -1096,6 +1053,123 @@ class Auth extends CI_Controller
 		}
 	}
 
+
+
+
+
+	// dev on 19.05.2021
+	function guest_checkout()
+	{
+		if ($this->tank_auth->is_logged_in()) {
+
+			$haveAnyAddress = $this->database->GetAddressesForUser($this->tank_auth->get_user_id());
+			if(count($haveAnyAddress) > 0) {
+				redirect('checkout/review');
+			} else {
+				redirect('auth/register_address');
+			}
+		}
+
+		if(!empty($_GET['usegeolocation'])) {
+			if($_GET['usegeolocation'] == true) {
+				$this->_show_address_detection_popup();
+				$this->_detect_address();
+			}
+		}
+
+
+		// $this->_show_address_detection_popup();
+		// $this->_detect_address();
+
+		if(!empty($this->input->post('submit'))) 
+		{
+
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
+			$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address1', 'Address1', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('address3', 'Address3', 'trim|xss_clean');
+			$this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('state', 'State', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('pincode', 'Pin Code', 'trim|required|xss_clean|min_length[6]|max_length[6]');
+			$this->form_validation->set_rules('number', 'Number', 'trim|required|xss_clean|min_length[10]|max_length[10]');
+
+			if ($this->form_validation->run() == FALSE)
+			{
+				// do nothing, auto display the page again
+			}
+			else
+			{
+
+				$email = $this->input->post('email');
+				$username = $this->input->post('first_name').' '.$this->input->post('last_name');
+				$user = $this->database->GetUserByEmail($email);
+
+				// echo '<pre>';
+				// print_r($user);
+				// exit();
+
+				if(empty($user)) {
+					$user = $this->_external_register($email, $username);
+				}
+				$user_id = isset($user['user_id']) ? $user['user_id'] : $user['id'];
+
+				if(empty($user_id)) {
+					redirect('auth/login');
+				}
+
+				$this->_guest_user_external_login($user_id, $username );
+				
+				$address = array
+				(
+					'first_name' => $this->form_validation->set_value('first_name'),
+					'last_name' => $this->form_validation->set_value('last_name'),
+					'address_1' => $this->form_validation->set_value('address1'),
+					'address_3' => $this->form_validation->set_value('address3'),
+					'city' => $this->form_validation->set_value('city'),
+					'state' => $this->form_validation->set_value('state'),
+					'country' => 'India',	// $this->form_validation->set_value('country'),
+					'pincode' => $this->form_validation->set_value('pincode'),
+					'phone_number' => $this->form_validation->set_value('number'),
+					'user_id' => $user_id
+					// 'address_2' => $this->form_validation->set_value('address2'),
+				);
+
+				$address_id = $this->database->RegisterAddress($address);			
+				$this->database->SaveAddressOnCheckout($address_id, $this->session->userdata('txn_id'));
+				$this->_save_guest_user_details();			
+				redirect('checkout/review');
+
+				
+
+			}
+		}
+
+
+		$data = [];
+		display('save_guest_information', $data);
+	}
+
+
+	function _guest_user_external_login($user_id, $username)
+	{
+		// simulate what happens in the tank auth
+		$this->session->set_userdata(array(	'user_id' => $user_id, 'username' => $username,
+			'status' => STATUS_ACTIVATED));
+		
+		$this->users->update_login_info( $user_id, $this->config->item('login_record_ip', 'tank_auth'), 
+			$this->config->item('login_record_time', 'tank_auth'));
+
+	}
+
+
+	function _save_guest_user_details()
+	{
+		//Save address and user id on checkout
+		$txn_id = $this->session->userdata('txn_id');
+		$this->database->SaveUserIdOnCheckout($this->tank_auth->get_user_id(), $txn_id);
+	}
+	// End: dev on 19.05.2021
 
 
 

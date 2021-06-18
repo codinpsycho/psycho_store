@@ -2,7 +2,7 @@
 	<h1>Select an Address <span class='pull-right'><?php echo anchor("auth/register_address/", 'Add Address', "class='btn btn-default play navbar-btn' "); ?></span> </h1>
 	<hr>
 	<div class="well">
-		<form method = 'post' action = <?php echo site_url('checkout/save_address')?> role="form">
+		<form method = 'post' action = "<?php echo site_url('checkout/save_address')?>" role="form">
 		<div class="row">
 			<?php
 			foreach($addresses as $address): 	

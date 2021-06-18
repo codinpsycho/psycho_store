@@ -33,6 +33,7 @@ function error(err)
 function update_alert(text, status)
 {
 	var alert = document.getElementById('alert');
+	
 	switch (status)
 	{
 		case 'success' :

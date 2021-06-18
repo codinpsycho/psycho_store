@@ -38,7 +38,7 @@ $(function () {
             </label>
           </div>
           <?php if ($this->config->item('allow_registration', 'tank_auth')) echo anchor("/auth/register/?redirect_url=$redirect_url", ' Register'); ?> \
-          <?php echo anchor('/auth/forgot_password/', 'Forgot password'); ?>
+          <?php echo anchor('/auth/forgot_password/', 'Forgot password'); ?> <?php //echo anchor("/auth/guest_checkout/?redirect_url=$redirect_url", 'Guest Checkout'); ?>
         </div>
         <div class="col-md-1 col-xs-12 vcenter">
           <h1 class=" text-center play"><small>or</small></h1>
