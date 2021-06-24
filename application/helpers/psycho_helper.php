@@ -557,6 +557,18 @@ function _live($page, $data)
 		case 'save_guest_information':
 			$body = $ci->load->view('auth/save_guest_information_form', $data, true);
 			break;
+		case 'admin_manage_banners':
+			$body = $ci->load->view('admin/admin_manage_banners', $data, true);
+			break;
+		case 'admin_add_edit_banner':
+			$body = $ci->load->view('admin/admin_add_edit_banner', $data, true);
+			break;	
+		case 'admin_manage_subcategories':
+			$body = $ci->load->view('admin/admin_manage_subcategories', $data, true);
+			break;
+		case 'admin_add_edit_subcategory':
+			$body = $ci->load->view('admin/admin_add_edit_subcategory', $data, true);
+			break;
 		default:
 			show_404();
 		break;

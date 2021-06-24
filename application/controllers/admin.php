@@ -652,6 +652,7 @@ class Admin extends CI_controller
 			$order[] = $this->database->GetOrderById($id);
 			_add_address_and_user_to_orders($order);
 			$order = $order[0];
+			
 			//Mark as shipped
 			$this->database->UpdateOrderStatus($id, OrderState::Shipped);
 
@@ -1018,6 +1019,7 @@ class Admin extends CI_controller
 			$feedback_link	= null;
 			$order_ship_link = null;
 			$order_tracking_link = null;
+			$order_done_link = null;
 
 			switch ($status)
 			{
@@ -1032,6 +1034,9 @@ class Admin extends CI_controller
 				$process_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Pending);
 				$order_process_link = "<a class='btn btn-warning' href=$process_link> Don't Ship </a>";
 				$order_tracking_link = "<a class='btn btn-success exampleModal' data-toggle='modal' data-target='#exampleModal' data-txnid=".$txn_id."> Enter Tracking Link </a>";
+
+				$order_shipped_link = site_url('admin/update_order/'.$txn_id.'/'.OrderState::Shipped);
+				$order_done_link = "<a class='btn btn-danger' href=$order_shipped_link onclick='return confirm(".'"Are you sure?"'.")'> Done </a>";
 				break;
 				
 				case OrderState::Returned:
@@ -1076,7 +1081,7 @@ class Admin extends CI_controller
 
 			// $this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $waybill, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
 			
-			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_tracking_link);
+			$this->table->add_row($num, $txn_id,  $date, $email, $address, $mode, $amount, $status, $order_process_link, $order_ship_link, $view_label_link, $feedback_link, $order_done_link, $order_tracking_link);
 
 			foreach ($order['order_items'] as $key => $item) 
 			{
@@ -1360,15 +1365,31 @@ class Admin extends CI_controller
 		try {
 			
 			$txnid = trim($_POST['txnid']);
-			$tracking_link = trim($_POST['tracking_link']);
+			$tracking_link = trim($_POST['tracking_link'], TRUE);
 
+			$order[] = $this->database->GetOrderById($txnid);
+			_add_address_and_user_to_orders($order);
+			$order = $order[0];
 
-			$order = $this->database->GetOrderById($txnid);
 			$this->database->_updateOrderTrackingDetail($order, $tracking_link);
 
-			$this->update_order($txnid, 'shipped');
+			if( !empty($tracking_link) )
+			{
+				//Mail User
+				$data['order_id'] = $order['txn_id'];
+				$data['username'] = $order['user']['username'];
+				$data['waybill'] = $order['waybill'];
+				$data['tracking_address'] = $tracking_link;
+				$data['site_name'] = $this->config->item('website_name', 'tank_auth');
+				$params = mg_create_mail_params('shipped', $data);
+				mg_send_mail($order['user']['email'], $params);
 
-			$response = ['success' => true, 'message' => 'Order Tracking Detail Added Successful!'];
+				$response = ['success' => true, 'message' => 'Order Tracking Detail Added Successful! Mail send!'];
+				echo json_encode( $response );
+				exit();
+			}
+
+			$response = ['success' => false, 'message' => 'Something went wrong!'];
 			echo json_encode( $response );
 
 		} catch (Exception $e) {
@@ -1384,20 +1405,38 @@ class Admin extends CI_controller
 	// developed on 03.05.2021
 	function manage_category()
 	{
+		_validate_user();
 		$data['categories'] = $this->database->_getProductCategories();
 		display('admin_manage_categories', $data);
 	}
 
 	function add_category()
 	{
+		_validate_user();
 		if(!empty($this->input->post('submit'))) {
 
 			$name = trim($this->input->post('name'));
-			$this->database->_storeProductCategory($name);
+			$input['name'] = $name;
+
+			if($_FILES['upload']) {
+
+				$newFileName = microtime(true) * 10000 . '.png';
+				$config['upload_path'] = 'images/uploads/category/';
+				$config['allowed_types'] = '*';
+				$config['overwrite'] = TRUE;
+				$config['file_name'] = $newFileName;
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('upload'))
+				{
+					
+					$input['file_path'] = 'images/uploads/category/'.$newFileName;
+				}
+			}
+			
+			$this->database->_storeProductCategory($input);
 			redirect('admin/manage_category');
 
 		}
-
 
 		$data = [];
 		display('admin_add_edit_category', $data);
@@ -1405,20 +1444,204 @@ class Admin extends CI_controller
 
 	function edit_category($id)
 	{
-		$data['category'] = $this->database->_getProductCategory($id);
+		_validate_user();
+		$category = $this->database->_getProductCategory($id);
+		$data['category'] = $category;
 		
 		if(!empty($this->input->post('submit'))) {
 
-			$name = trim($this->input->post('name'));
-			$this->database->_updateProductCategory($id, $name);
-			redirect('admin/manage_category');
-			
+			$input['name'] = trim($this->input->post('name'));
+
+			if($_FILES['upload']) {
+
+				unlink(FCPATH.$category['file_path']);
+
+				$newFileName = microtime(true) * 10000 . '.png';
+				$config['upload_path'] = 'images/uploads/category/';
+				$config['allowed_types'] = '*';
+				$config['overwrite'] = TRUE;
+				$config['file_name'] = $newFileName;
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('upload'))
+				{
+					
+					$input['file_path'] = 'images/uploads/category/'.$newFileName;
+				}
+			}
+
+
+			$this->database->_updateProductCategory($id, $input);
+			redirect('admin/manage_category');	
 		}
 
 		display('admin_add_edit_category', $data);
 	}
 	// developed on 03.05.2021
 	
+
+	// Open: dev on 22.06.2021
+	function banners()
+	{
+		_validate_user();
+		$data['banners'] = $this->database->_getallBanners();
+		display('admin_manage_banners', $data);
+	}
+
+	function add_banner()
+	{
+		_validate_user();
+		if(!empty($this->input->post('submit'))) {
+
+			$files = $_FILES['uploads'];
+			$filesCount = count($files['name']);
+
+			if( $filesCount )	{
+
+				$file_path = 'images/uploads/banners/';
+				for($i = 0; $i < $filesCount; $i++) {
+
+					$_FILES['files']['name']     = $files['name'][$i];
+					$_FILES['files']['type']     = $files['type'][$i];
+					$_FILES['files']['tmp_name']    = $files['tmp_name'][$i];
+					$_FILES['files']['error']     = $files['error'][$i];
+					$_FILES['files']['size']     = $files['size'][$i];
+
+					$newFileName = microtime(true) * 10000 . '.png';
+
+					$config['upload_path'] = $file_path;
+					$config['allowed_types'] = '*';
+					$config['overwrite'] = TRUE;
+					$config['file_name'] = $newFileName;
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config); 
+
+					if( $this->upload->do_upload('files') )
+					{
+
+						// $data = array('upload_data' => $this->upload->data());
+						
+						$data = [
+							'page' => 'home',
+							'sort' => $this->input->post('sort'), 
+							'is_active' => $this->input->post('is_active'), 
+							'file_path' => $file_path.$newFileName
+						];
+
+						$this->database->_storeBanner($data);
+					}
+
+				}
+
+			}
+
+			redirect('admin/banners');
+			// echo '<pre>'; print_r($files); exit();
+		}
+
+		$data = [];
+		display('admin_add_edit_banner', $data);
+	}
+
+
+
+	function delete_banner($id)
+	{
+		_validate_user();
+		$banner = $this->database->_getBanner($id);
+		$this->database->_delBanner($id);
+		unlink(FCPATH.$banner['file_path']);
+		redirect('admin/banners');
+	}
+	// Closed: dev on 22.06.2021
+
+
+
+
+	// developed on 23.05.2021
+	function subcategory()
+	{
+		_validate_user();
+		$data['subcategories'] = $this->database->_getCategoriesGames();
+		display('admin_manage_subcategories', $data);
+		// echo '<pre>'; print_r($data['subcategories']); exit();
+	}
+
+	function add_subcategory()
+	{
+		_validate_user();
+		if(!empty($this->input->post('submit'))) {
+
+			$game_name = trim($this->input->post('game_name'));
+			$category_id = $this->input->post('category_id');
+			$input['game_name'] = $game_name;
+			$input['category_id'] = $category_id;
+
+			if($_FILES['upload']['name']) {
+
+				$newFileName = microtime(true) * 10000 . '.png';
+				$config['upload_path'] = 'images/uploads/category/';
+				$config['allowed_types'] = '*';
+				$config['overwrite'] = TRUE;
+				$config['file_name'] = $newFileName;
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('upload'))
+				{
+					
+					$input['file_path'] = 'images/uploads/category/'.$newFileName;
+				}
+			}
+			
+			$this->database->_storeCategoryGames($input);
+			redirect('admin/subcategory');
+
+		}
+
+		$data['categories'] = $this->database->_getProductCategories();
+		display('admin_add_edit_subcategory', $data);
+	}
+
+
+
+	function edit_subcategory($id)
+	{
+		_validate_user();
+		$subcategory = $this->database->_getCategoryGame($id);
+		$data['subcategory'] = $subcategory;
+		
+		if(!empty($this->input->post('submit'))) {
+
+			$game_name = trim($this->input->post('game_name'));
+			$category_id = $this->input->post('category_id');
+			$input['game_name'] = $game_name;
+			$input['category_id'] = $category_id;
+
+			if($_FILES['upload']['name']) {
+
+				unlink(FCPATH.$subcategory['file_path']);
+
+				$newFileName = microtime(true) * 10000 . '.png';
+				$config['upload_path'] = 'images/uploads/category/';
+				$config['allowed_types'] = '*';
+				$config['overwrite'] = TRUE;
+				$config['file_name'] = $newFileName;
+				$this->load->library('upload', $config);
+				if ($this->upload->do_upload('upload'))
+				{
+					
+					$input['file_path'] = 'images/uploads/category/'.$newFileName;
+				}
+			}
+
+
+			$this->database->_updateCategoryGame($id, $input);
+			redirect('admin/subcategory');	
+		}
+
+		display('admin_add_edit_subcategory', $data);
+	}
+	// developed on 23.05.2021
+
+
 
 
 }

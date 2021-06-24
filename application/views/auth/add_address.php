@@ -112,9 +112,9 @@ $number = array(
 ?>
 <div class="container top-bottom-space">
 	<h1>Wheres your realm?
-		<span class="pull-right play">
+		<!-- <span class="pull-right play">
 			<button type="button" id="usegeolocation" class="btn btn-danger">Use current location</button>
-		</span>
+		</span> -->
 	</h1>
 	<hr>
 

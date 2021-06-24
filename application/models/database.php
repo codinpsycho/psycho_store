@@ -887,12 +887,8 @@ function AddProduct($product)
 		return $query->result_array();
 	}
 
-	function _storeProductCategory($name)
+	function _storeProductCategory($data)
 	{
-		$data = array(
-			'name'=> $name,
-		);
-
 		$this->db->insert('categories',$data);
 	}
 
@@ -903,10 +899,10 @@ function AddProduct($product)
 		return $query->row_array();
 	}
 
-	function _updateProductCategory($id, $name)
+	function _updateProductCategory($id, $data)
 	{
 
-		$this->db->set('name', $name);
+		$this->db->set($data);
 		$this->db->where('id', $id);
 		$this->db->update('categories');
 
@@ -1262,6 +1258,76 @@ function AddProduct($product)
 			return false;
 		}
 	}
+
+	// Open: dev on 22.06.2021
+	function _getallBanners()
+	{
+		$this->db->order_by('sort', 'ASC');
+		$query = $this->db->get('banners');
+		return $query->result_array();
+	}
+
+	function _storeBanner($data)
+	{
+		$this->db->insert('banners', $data);
+	}
+
+	function _getBanner($id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->get('banners');
+		return $query->row_array();
+	}
+
+	function _updateBanner($id, $data)
+	{
+
+		$this->db->set($data);
+		$this->db->where('id', $id);
+		$this->db->update('banners');
+	}
+
+	function _delBanner($id)
+	{
+		$this->db->delete('banners', ['id' => $id]);
+	}
+	// Closed: dev on 22.06.2021
+
+
+
+	// Open: dev on 23.06.2021
+	function _getCategoriesGames()
+	{
+		$this->db->select('cg.id, cg.game_name, cg.file_path, c.name as category');
+		$this->db->from('category_games cg');
+		$this->db->join('categories c', 'c.id = cg.category_id', 'left');
+		$this->db->order_by('c.name', 'ASC');
+		$this->db->order_by('cg.game_name', 'ASC');
+		$query = $this->db->get(); 
+		return $query->result_array();
+
+	}
+
+	function _storeCategoryGames($data)
+	{
+		$this->db->insert('category_games',$data);
+	}
+
+	function _getCategoryGame($id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->get('category_games');
+		return $query->row_array();
+	}
+
+	function _updateCategoryGame($id, $data)
+	{
+
+		$this->db->set($data);
+		$this->db->where('id', $id);
+		$this->db->update('category_games');
+	}
+	// Closed: dev on 23.06.2021
 
 
 

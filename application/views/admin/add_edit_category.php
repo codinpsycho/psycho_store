@@ -10,8 +10,15 @@
 
 					<div class='form-group'>
 
-						<div class="col-md-12">
-							<input class='form-control' type="text" placeholder="Enter Category Name" name="name" value = '<?php echo !empty($category['name']) ? $category['name'] : set_value('name'); ?>'></input>
+						<div class="col-md-6">
+							<label for="exampleInputName">Category Name</label>
+							<input class='form-control' type="text" placeholder="Enter Category Name" name="name" id="exampleInputName" value = '<?php echo !empty($category['name']) ? $category['name'] : set_value('name'); ?>'></input>
+						</div>
+
+						<div class="col-md-6">
+							<label for="exampleInputFile">File Upload</label>
+							<input class='form-control' type="file" name="upload" id="exampleInputFile" accept="image/*" >
+							<p class="help-block">You can selet one file at a time.</p>
 						</div>
 
 					</div>
@@ -21,5 +28,6 @@
 		</div>
 
 		<button class='btn btn-primary' type="submit" name="submit" value="submit"> Save Category </button>
+		<a class='btn btn-danger' href="<?=base_url().'admin/manage_category';?>"> Cancel </a>
 	</form>
 </div>

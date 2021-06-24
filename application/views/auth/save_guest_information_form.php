@@ -114,7 +114,7 @@ $number = array(
 <div class="container top-bottom-space">
 	<h1>Wheres your realm?
 		<span class="pull-right play">
-		<a href="<?= base_url().'auth/guest_checkout?redirect_url='.rawurlencode('checkout/').'&usegeolocation=true'; ?>" class="btn btn-danger">Use current location</a>
+			<a href="<?= base_url().'auth/guest_checkout?redirect_url='.rawurlencode('checkout/').'&usegeolocation=true'; ?>" class="btn btn-danger">Use current location</a>
 		</span>
 	</h1>
 

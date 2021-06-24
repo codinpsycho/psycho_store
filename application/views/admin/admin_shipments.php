@@ -95,7 +95,6 @@
 
                 $('.loader-bg').hide();
                 $('#exampleModal').modal('toggle');
-                window.location.reload();
             });
 
         } else {

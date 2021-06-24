@@ -140,7 +140,9 @@ if(!function_exists('mg_send_mail'))
 			'text' => $params['txt'],
 			'html' => $params['html'],
 			'o:campaign'=>	$params['campaign_id'],
-			'h:Reply-To'=>	$params['reply_to']
+			'h:Reply-To'=>	$params['reply_to'],
+			'o:tracking-clicks' => false,
+			'o:tracking-opens' => false,
 		]);
 
 	}

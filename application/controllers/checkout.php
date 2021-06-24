@@ -157,7 +157,9 @@ class Checkout extends CI_controller
 
 		if(!$this->tank_auth->is_logged_in())
 		{
-			// redirect('auth/login?redirect_url='.rawurlencode('checkout/')); // commented on 17.06.2021
+			if($this->config->item('instant_checkout') == false) 
+			redirect('auth/login?redirect_url='.rawurlencode('checkout/'));
+			
 			redirect('auth/guest_checkout?redirect_url='.rawurlencode('checkout/')); // added on 17.06.2021
 		}
 		else
@@ -391,8 +393,8 @@ class Checkout extends CI_controller
 
 	// 	$data['txn_id'] = $checkout_order['txn_id'];
 	// 	$data['email'] = $user['email'];
- // 		$data['raw_address'] = $address;
- // 		$data['formatted_address'] = format_address($address);
+	// 		$data['raw_address'] = $address;
+	// 		$data['formatted_address'] = format_address($address);
 	// 	$data['shipping_available'] = $shipping_available;
 	// 	$data['cod_available'] = $cod_available;
 	// 	$data['cod_charges'] = $this->config->item('cod_charge');
