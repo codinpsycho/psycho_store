@@ -254,6 +254,8 @@ $number = array(
 			</div>
 		</div>
 	</div>
-	<button class="btn btn-primary" type="submit">Add Address</button>
+	 <div class="w-100 stkynew">
+	<button class="btn btn-primary" id="address" type="submit">Add Address</button>
+</div>
 </form>
 </div>

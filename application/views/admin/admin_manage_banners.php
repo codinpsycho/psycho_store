@@ -19,6 +19,7 @@
                         <tr>
                             <th>Id#</th>
                             <th>Banner</th>
+                            <th>Page Link</th>
                             <th>Sort</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -34,9 +35,11 @@
                             <td> 
                                 <a href="<?=base_url().$value['file_path']?>" target="_blank"><img src="<?=base_url().$value['file_path']?>" width=50px height=50px></a> 
                             </td>
+                            <td> <?=$value['page_url']?> </td>
                             <td> <?=$value['sort']?> </td>
                             <td> <?=$value['is_active']?> </td>
                             <td>
+                                <a href="<?=base_url().'admin/edit_banner/'.$value['id']?>"> <i class="fa fa-pencil"></i> Edit</a>
                                 <a href="<?=base_url().'admin/delete_banner/'.$value['id']?>" onclick="return confirm('Are you sure?')"> <i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>

@@ -1330,7 +1330,24 @@ function AddProduct($product)
 	// Closed: dev on 23.06.2021
 
 
+	// Open: dev on 29.06.2021
+	function RemoveCheckoutSingleItemForTxnId($txn_id, $product_id)
+	{
+		$this->db->where('txn_id', $txn_id);
+		$this->db->where('product_id', $product_id);
+		$this->db->delete('checkout_items');
+	}
+	// closed: dev on 29.06.2021
 
+
+	// Open: dev on 30.06.2021
+	function getOrdersByUserID($user_id)
+	{
+		$this->db->where('user_id', $user_id);
+		$query = $this->db->get('orders');
+		return $query->result_array();
+	}
+	// closed: dev on 30.06.2021
 
 }
 ?>

@@ -83,9 +83,11 @@
                 data: { tracking_link: tracking_link, txnid: txnid },
             })
             .done(function(resposne) {
-                if(resposne.success == true) {
-                    alert(resposne.message);
-                }
+                
+                console.log(resposne);
+                // if(resposne.success == true) {
+                //     alert(resposne.message);
+                // }
 
             })
             .fail(function() {

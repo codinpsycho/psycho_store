@@ -70,18 +70,33 @@ class Auth extends CI_Controller
 		
 		$email =  $user_info['email'];//trim($this->input->post('email'));
 		$username = $user_info['username']; //trim($this->input->post('username'));
+
 		
 		if($this->users->is_email_available($email))
 		{
 			//First time fb_Login, create new user
-			$this->_external_register($email, $username);
+			$result = $this->_external_register($email, $username);
+
+			if(empty($result)) {
+
+				// changed on 30.06.2021		
+				// append a random number with the username to prevent duplicate username checking in tank_auth. earlier it return null response if username exist
+				$username = $user_info['username'].' '.mt_rand(1111, 9999); 
+			    $result = $this->_external_register($email, $username);
+			}
+
 		}
 
 		//get the user by email
 		$user = $this->users->get_user_by_email($email);
 
-		//Sign-in
-		$this->_external_login($user->id, $user->username);
+		// dev on 30.06.2021
+        // check user to overcome with null response
+        if(!empty($user)) {
+            //Sign-in
+		    $this->_external_login($user->id, $user->username);
+        }
+        // dev on 30.06.2021
 	}
 
 	function _external_login($user_id, $username)

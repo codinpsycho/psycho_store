@@ -569,6 +569,9 @@ function _live($page, $data)
 		case 'admin_add_edit_subcategory':
 			$body = $ci->load->view('admin/admin_add_edit_subcategory', $data, true);
 			break;
+		case 'new_review':
+			$body = $ci->load->view('newtheme/new_view_review_order', $data, true);
+			break;
 		default:
 			show_404();
 		break;

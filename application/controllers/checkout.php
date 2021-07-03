@@ -79,18 +79,15 @@ class Checkout extends CI_controller
 		$this->session->set_userdata('txn_id', $txn_id);
 	}
 
+
 	// function _save_cart_items()
 	// {
 	// 	//Try applying domain based discount before saving
 	// 	check_domain_discount();
-
 	// 	$txn_id = $this->session->userdata('txn_id');
-
 	// 	//Empty checkout_items for this txn_id		
 	// 	$this->database->RemoveCheckoutItemsForTxnId($txn_id);
-
 	// 	$this->database->SaveAmountOnCheckout($this->cart->final_price(), $txn_id);
-
 	// 	//Save cart items
 	// 	foreach ($this->cart->contents() as $item)
 	// 	{
@@ -101,7 +98,6 @@ class Checkout extends CI_controller
 	// 						'count'			=> 	$item['qty'],
 	// 						'option'		=> 	isset($item['options']) ? $item['options']['extra'] : null,
 	// 					);
-
 	// 		$this->database->SaveCartItemOnCheckout($checkout_item);
 	// 	}
 	// }
@@ -124,7 +120,6 @@ class Checkout extends CI_controller
 		$final_price = $this->cart->final_price() - $checkout_order['points_applied'];
 		$this->database->SaveAmountOnCheckout($final_price, $txn_id);
 		// dev on 17.05.2021
-
 
 		//Save cart items
 		foreach ($this->cart->contents() as $item)
@@ -356,41 +351,34 @@ class Checkout extends CI_controller
 		redirect('checkout/');
 	}	
 
+
+
 	// function review()
 	// {
 	// 	$this->_validate_cart();
 	// 	$this->_validate_address();
-
 	// 	//make sure address is set in checkout_db
 	// 	$checkout_order = $this->_get_active_checkout_order();
 	// 	$user = $this->database->GetUserById($checkout_order['user_id']);
-
 	// 	$user = $this->database->GetUserById($checkout_order['user_id']);
-
 	// 	if( is_null($checkout_order['address_id'] ))
 	// 	{
 	// 		redirect('checkout/');
 	// 	}
-
 	// 	$address = $this->database->GetAddressById($checkout_order['address_id']);		
 	// 	$shipping_details = $this->database->GetShippingDetails($address['pincode']);
 	// 	$shipping_available = true;
 	// 	$cod_available = true;
-
-
 	// 	// $shipping_available = false;
 	// 	// $cod_available = false;
-
 	// 	// if($shipping_details)
 	// 	// {
 	// 	// 	$shipping_available = true;
-
 	// 	// 	if($shipping_details['cod'] === 'Y')
 	// 	// 	{
 	// 	// 		$cod_available = true;
 	// 	// 	}	
 	// 	// }
-
 	// 	$data['txn_id'] = $checkout_order['txn_id'];
 	// 	$data['email'] = $user['email'];
 	// 		$data['raw_address'] = $address;
@@ -398,13 +386,11 @@ class Checkout extends CI_controller
 	// 	$data['shipping_available'] = $shipping_available;
 	// 	$data['cod_available'] = $cod_available;
 	// 	$data['cod_charges'] = $this->config->item('cod_charge');
-
 	// 	//Add 'notes' for Razorpay
 	// 	$data['txn_id'] = $checkout_order['txn_id'];
-
-
 	// 	display('review', $data);
 	// }
+
 
 
 	function review()
@@ -416,9 +402,44 @@ class Checkout extends CI_controller
 		$checkout_order = $this->_get_active_checkout_order();
 		$user = $this->database->GetUserById($checkout_order['user_id']);
 
+
+		// dev on 25.06.2021
+		$checkout_items = $this->database->GetCheckoutOrderItems($checkout_order['txn_id']);
+		if(!empty($checkout_order['txn_id'])) {
+			foreach ($checkout_items as $key => $value) {
+				$checkout_items[$key]['product'] = $this->database->GetProductById($value['product_id']);
+			}
+		}
+		$data['checkout_items'] = $checkout_items;
+		// dev on 25.06.2021
+
+
+		// dev on 30.06.2021 
+		// an auto discount to customer with conditions follow:
+		// 1. if they don't have any discount applied earlier, and
+		// 2. if they are ordering for the first time
+		if($this->config->item('review_discount_toggle')) {
+
+			$is_discount_applied = $this->cart->is_discount_applied();
+			if($is_discount_applied == false)
+			{
+				$is_first_order = $this->database->getOrdersByUserID($user['id']);
+				if(count($is_first_order) < 1) {
+
+					_apply_discount($this->config->item('review_discount_coupon_code'));
+					redirect( 'checkout/review' );
+				}
+			}
+		}
+		// dev on 30.06.2021
+
+
 		// echo '<pre>';
-		// print_r($checkout_order);
+		// print_r($is_first_order);
+		// print_r($this->cart->contents());
+		// // print_r($checkout_order);
 		// exit();
+
 
 		// dev on 12.05.2021
 		$final_price = $this->cart->final_price();
@@ -487,8 +508,17 @@ class Checkout extends CI_controller
 
 		//Add 'notes' for Razorpay
 		$data['txn_id'] = $checkout_order['txn_id'];
-		display('review', $data);
+
+		// dev on 29.06.2021
+		if($this->config->item('review_toggle') == false)	{
+			display('review', $data);
+		} else  {
+			display('new_review', $data); // html designed by ratna
+		}
+
 	}
+
+
 
 	function payment()
 	{

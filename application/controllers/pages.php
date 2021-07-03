@@ -297,6 +297,8 @@ class Pages extends CI_controller
 			}
 			$product_game = $this->beautify(url_title($result['product_game']),'-');
 			$suggested_products = $this->database->GetSuggestedProducts('all','popular', $product_game, $id, $same_designed_ids);
+
+
 			
 			if(empty($suggested_products)) {
 				$suggested_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids);

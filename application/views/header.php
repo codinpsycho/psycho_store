@@ -15,7 +15,11 @@
 <link rel="stylesheet" href=<?php echo site_url('css/bootstrap.min.css') ?> >
 <link rel="stylesheet" href= <?php echo site_url('css/font-awesome.min.css') ?> >
 <link rel="stylesheet" href=<?php echo site_url('css/manual.css?v3')?>>
-<link rel="stylesheet" href=<?php echo site_url('css/custom.css?v1')?>>
+<link rel="stylesheet" href=<?php echo site_url('css/custom.css?v11')?>>
+
+<link rel="stylesheet" href="<?php echo site_url('css/style-by-ratna.css?v1.2')?>"> <!-- added on 25.06.2021 -->
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet"> <!-- added on 25.06.2021 -->
+
 <script type="text/javascript" src= <?php echo site_url('scripts/jquery-2.1.3.min.js') ?> ></script>
 <script type="text/javascript" src= <?php echo site_url('scripts/bootstrap.min.js') ?> ></script>
 

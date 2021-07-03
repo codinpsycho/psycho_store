@@ -128,6 +128,22 @@ class Insights extends CI_Controller
 		return $count;
 	}
 
+
+	function _getTotalOrderValuesUsingMode($orders, $mode = 'cod')
+	{
+		$total = 0;
+		foreach ($orders as $key => $value)
+		{
+			if($value['payment_mode'] == $mode)
+			{
+				$total += $value['order_amount'];
+			}
+		}
+
+		return $total;
+	}
+
+
 	function _getNumPrePaidOrders($orders)
 	{
 		$count = 0;
@@ -353,12 +369,25 @@ class Insights extends CI_Controller
 		$data['revenue_data'] = $month_info['revenue'];
 		$data['total_revenue'] = $month_info['total_revenue'];
 
+
 		$data['cod_orders'] = $this->_getNumCodOrders($allOrdersWithInDateRange);
 		$data['online_orders'] = $this->_getNumPrePaidOrders($allOrdersWithInDateRange);
-
 		$data['payment_modes'][] = $data['cod_orders'];
 		$data['payment_modes'][] = $data['online_orders'];
 
+		// dev on 02.07.2021
+		// total value in INR of pre-paid and COD orders
+		$data['cod_values'] = $this->_getTotalOrderValuesUsingMode($allOrdersWithInDateRange, 'cod');
+		$data['prepaid_values'] = $this->_getTotalOrderValuesUsingMode($allOrdersWithInDateRange, 'pre-paid');
+		// dev on 02.07.2021
+
+		
+
+
+		// echo '<pre>'; 
+		// print_r($data['payment_values']); 
+		// print_r($data['payment_modes']); 
+		// exit();
 
 		//Get Statewise Orders data
 		$state_infos = $this->database->_getStateWiseOrderUsingDateRange($data['start_date'], $data['end_date']);

@@ -12,7 +12,7 @@ $config['size_chart'] = 'images/size_chart.jpg';
 
 $config['restock_date'] = '20th June';
 $config['cod_charge'] = '60';
-$config['auto_discounts'] = true;
+$config['auto_discounts'] = false;
 
 //Admin Panel
 $config['admin_email'] = array('ishkaran.fearme@gmail.com', 'ishkaran.singh@hotmail.com', 'pekoj@getairmail.com');
@@ -51,5 +51,11 @@ $config['gstin_state'] = 'Karnataka';
 // dev on 28.05.2021
 $config['redeem_points'] = false;
 $config['guest_checkout'] = false;
+$config['review_toggle'] = true;
+
+// dev on 30.06.2021
+$config['review_discount_toggle'] = true;
+$config['review_discount_coupon_code'] = 'review_discount';
+// dev on 30.06.2021
 
 ?>

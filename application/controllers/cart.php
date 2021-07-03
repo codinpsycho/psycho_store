@@ -113,7 +113,9 @@ class Cart extends CI_controller
 		if($this->cart->is_discount_applied())
 		{
 			$coupon = $this->cart->discount_info();
-			if($this->_can_apply_code($coupon) == false)
+
+			// if($this->_can_apply_code($coupon) == false) // closed on 01.07.2021
+			if(_can_apply_code($coupon) == false) // dev on 01.07.2021
 			{
 				$this->cart->remove_discount();
 			}
@@ -161,7 +163,8 @@ class Cart extends CI_controller
 		//auto discount should be more than the applied disc (if any)
 		if($applied_disc['percentage'] < $auto_disc_info['percentage'])
 		{
-			$this->_apply_discount( $auto_disc_info['coupon'] );
+			// $this->_apply_discount( $auto_disc_info['coupon'] ); // closed on 01.07.2021
+			_apply_discount($auto_disc_info['coupon']); // dev on 01.07.2021
 		}		
 	}
 
@@ -225,8 +228,20 @@ class Cart extends CI_controller
 		$this->cart->update($data);
 		$this->_reconfirm_cheat_code();
 
+		// dev on 29.06.2021
+		// update checkout_items table if that product is removed
+		if(!empty($_GET['product_id'])) {
+			$txn_id = $this->session->userdata('txn_id');
+			$this->database->RemoveCheckoutSingleItemForTxnId($txn_id, $_GET['product_id']);
+		}
+		// End: dev on 29.06.2021
+
+
+
 		redirect('cart');
 	}
+
+
 
 	function update()
 	{
@@ -266,17 +281,21 @@ class Cart extends CI_controller
 		return 0;
 	}	
 
+
 	function applyDiscount()
 	{
 		$coupon = strtolower( trim($this->input->post('coupon')) );
 		
 		if($coupon != (string)FALSE)
 		{
-			$this->_apply_discount($coupon);
+			// $this->_apply_discount($coupon); // closed on 01.07.2021
+			_apply_discount($coupon); // dev on 01.07.2021
 		}
 
 		redirect('cart');
 	}
+
+
 
 	function _apply_discount($coupon)
 	{

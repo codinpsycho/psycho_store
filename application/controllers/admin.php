@@ -1524,6 +1524,7 @@ class Admin extends CI_controller
 							'page' => 'home',
 							'sort' => $this->input->post('sort'), 
 							'is_active' => $this->input->post('is_active'), 
+							'page_url' => $this->input->post('page_url'), 
 							'file_path' => $file_path.$newFileName
 						];
 
@@ -1539,6 +1540,74 @@ class Admin extends CI_controller
 		}
 
 		$data = [];
+		display('admin_add_edit_banner', $data);
+	}
+
+
+	function edit_banner($id)
+	{
+		_validate_user();
+		$data['banner'] = $this->database->_getBanner($id);
+
+		if(!empty($this->input->post('submit'))) {
+
+			// first update other details
+			$input = [
+				'page' => 'home',
+				'sort' => $this->input->post('sort'), 
+				'is_active' => $this->input->post('is_active'), 
+				'page_url' => $this->input->post('page_url'), 
+			];
+			$this->database->_updateBanner($id, $input);
+
+
+			$files = $_FILES['uploads'];
+			$filesCount = count($files['name']);
+			
+			// check if file select
+			if( $filesCount )	{
+
+				// unlink existing file
+				unlink(FCPATH.$data['banner']['file_path']);
+
+				$file_path = 'images/uploads/banners/';
+				for($i = 0; $i < $filesCount; $i++) {
+
+					$_FILES['files']['name']     = $files['name'][$i];
+					$_FILES['files']['type']     = $files['type'][$i];
+					$_FILES['files']['tmp_name']    = $files['tmp_name'][$i];
+					$_FILES['files']['error']     = $files['error'][$i];
+					$_FILES['files']['size']     = $files['size'][$i];
+
+					$newFileName = microtime(true) * 10000 . '.png';
+
+					$config['upload_path'] = $file_path;
+					$config['allowed_types'] = '*';
+					$config['overwrite'] = TRUE;
+					$config['file_name'] = $newFileName;
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config); 
+
+					if( $this->upload->do_upload('files') )
+					{
+						// $input = array('upload_data' => $this->upload->data());
+						
+						// update the file_path with new uploaded ones
+						$input = [
+							'file_path' => $file_path.$newFileName
+						];
+
+						$this->database->_updateBanner($id, $input);
+					}
+
+				}
+
+			}
+
+			redirect('admin/banners');
+			// echo '<pre>'; print_r($files); exit();
+		}
+
 		display('admin_add_edit_banner', $data);
 	}
 

@@ -65,6 +65,9 @@
 			<div class="col-md-12">
 				<h3 class="text-center"> COD/Online From <?=$start_date?> - <?=$end_date?></h3>
 				<canvas id='payment_chart'></canvas>
+				<br>
+				<h4 class="text-center">Total COD Order Values(INR)     : Rs.<?=$cod_values?> </h4>
+				<h4 class="text-center">Total Pre-paid Order Values(INR)   : Rs.<?=$prepaid_values?> </h4>
 			</div>
 		</div>
 
@@ -346,6 +349,7 @@
 
 
 					<?php } ?>
+
 
 					<?php if(isset($states_sales)) { ?>
 

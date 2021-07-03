@@ -40,7 +40,7 @@ $(function () {
 			          'class' => 'img-responsive',);?>
 			        <div class="col-md-12">
 			        	<div class="pull-right">
-							<h4><a href= <?php echo site_url("cart/remove/{$items['rowid']}")?>>Remove <i class="fa fa-times"></i></a></h4>
+							<h4><a href= <?php echo site_url("cart/remove/{$items['rowid']}?product_id=".$product['product_id'])?>>Remove <i class="fa fa-times"></i></a></h4>
 						</div>
 			        	<div class="col-md-2 col-lg-2 col-xs-12">
 							<?php echo anchor($url, img($image_properties));?>
@@ -116,12 +116,15 @@ $(function () {
 		</div>
 		<div class="row">
 			<div class="col-md-12">
+				
 				<?php echo anchor('', 'Continue Shopping','class="btn btn-default"'); ?>
 						<?php if($this->cart->total_items()): ?>
-							<a id="checkout" class="btn btn-primary pull-right" href=<?php echo site_url('checkout/')?> > Checkout | <i class="fa fa-rupee"> <?php echo $this->cart->final_price();?> </i> <i class="fa fa-arrow-right"></i> </a>
+							 <span class="stkynew">
+							<a id="checkout" class="btn btn-primary pull-right" href=<?php echo site_url('checkout/')?> > Checkout | <i class="fa fa-rupee"> <?php echo $this->cart->final_price();?> </i> <i class="fa fa-arrow-right"></i> </a></span>
 						<?php endif; ?>
 				</span> </h1>
 			</div>
 		</div>
 	</div>
 </body>
+
