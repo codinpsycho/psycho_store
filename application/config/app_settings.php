@@ -51,11 +51,15 @@ $config['gstin_state'] = 'Karnataka';
 // dev on 28.05.2021
 $config['redeem_points'] = false;
 $config['guest_checkout'] = false;
-$config['review_toggle'] = true;
+$config['new_review_page_toggle'] = false;
 
 // dev on 30.06.2021
 $config['review_discount_toggle'] = true;
 $config['review_discount_coupon_code'] = 'review_discount';
 // dev on 30.06.2021
+
+// dev on 07.07.2021
+$config['prepaid_discount'] = 5; // discount is in percentage i.e. 5% 
+
 
 ?>

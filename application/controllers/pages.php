@@ -278,6 +278,7 @@ class Pages extends CI_controller
 			$other_types_of_prods = $this->_get_other_products_for_design($result);
 			$data['other_prod_types'] = $other_types_of_prods;
 			
+			// echo '<pre>'; print_r($data); exit();
 			$this->_generate_product_specific_views($result, $data);
 
 			$params['tag_name'] = $data['hashtag'];
@@ -298,7 +299,6 @@ class Pages extends CI_controller
 			$product_game = $this->beautify(url_title($result['product_game']),'-');
 			$suggested_products = $this->database->GetSuggestedProducts('all','popular', $product_game, $id, $same_designed_ids);
 
-
 			
 			if(empty($suggested_products)) {
 				$suggested_products = $this->database->GetCategoryWiseProducts($result['category_id'], $id, $same_designed_ids);
@@ -316,7 +316,9 @@ class Pages extends CI_controller
 			$data['suggested_products'] = $this->shuffle_assoc($suggested_products);
 			// Dev on 04.05.2021
 
-			// echo '<pre>'; print_r($data['suggested_products']); exit();
+			$data['game'] = $this->database->_getCategoryNameUsingGameName($data['product']['product_game']);
+			// echo '<pre>'; print_r($data['game']); exit();
+
 			display('product', $data);
 		}
 		else
@@ -412,6 +414,7 @@ class Pages extends CI_controller
 		$data['medium_stock']="";
 		$data['large_stock']="";
 		$data['xl_stock']="";
+		$data['xxl_stock']="";
 
 		$prod_details = $product['product_details'];
 
@@ -437,6 +440,13 @@ class Pages extends CI_controller
 			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
 			$data['xl_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
 		}
+
+		// dev on 06.07.2021
+		if($prod_details['xxl_qty'] <= 0)
+		{
+			$data['show_size_preorder_info'] = $prod_details['size_preorder'] ? TRUE : false;
+			$data['xxl_stock'] = $prod_details['size_preorder'] ? "preorder" : 'disabled';
+		}
 	}
 
 	function show_featured_prods()
@@ -456,7 +466,7 @@ class Pages extends CI_controller
 
 	function latest()
 	{
-		echo 99; exit();
+		
 		$data['products'] = $this->database->GetProducts('all', 'latest', 'all');
 		$data['latest_link_state'] = 'active';
 		$data['popular_link_state'] = 'none';
@@ -623,9 +633,8 @@ class Pages extends CI_controller
 		$position = strpos($url, 'psychostore');
 		$game_name = substr($url, 0, $position-1);
 
-		$category_name = ucwords($this->beautify($game_name,'-'));
-		$category = $this->database->_getCategoryNameUsingGameName($category_name);
-		// echo '<pre>'; print_r($category['category_name']); exit();
+		$game_name = ucwords($this->beautify($game_name,'-'));
+		$category = $this->database->_getCategoryNameUsingGameName($game_name);
 		
 		$this->like($game_name, $category['category_name']);
 	}

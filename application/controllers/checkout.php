@@ -117,7 +117,7 @@ class Checkout extends CI_controller
 		// dev on 17.05.2021
 		// bug fix: update order amount if any points applied during checkout
 		$checkout_order = $this->_get_active_checkout_order();
-		$final_price = $this->cart->final_price() - $checkout_order['points_applied'];
+		$final_price = ($this->cart->final_price() - $checkout_order['points_applied']) - $checkout_order['prepaid_discount'];
 		$this->database->SaveAmountOnCheckout($final_price, $txn_id);
 		// dev on 17.05.2021
 
@@ -433,13 +433,14 @@ class Checkout extends CI_controller
 		}
 		// dev on 30.06.2021
 
+		// dev on 07.07.2021
+		// by default pre-paid order is active, so calculate the prepaid_discount price.
+		$data['prepaid_discount'] = round(($this->cart->final_price() * $this->config->item('prepaid_discount'))/100);
+		// dev on 07.07.2021
 
 		// echo '<pre>';
-		// print_r($is_first_order);
-		// print_r($this->cart->contents());
-		// // print_r($checkout_order);
+		// print_r($checkout_order);
 		// exit();
-
 
 		// dev on 12.05.2021
 		$final_price = $this->cart->final_price();
@@ -473,7 +474,6 @@ class Checkout extends CI_controller
 
 		}
 		// dev on 12.05.2021
-
 
 
 		if( is_null($checkout_order['address_id'] ))
@@ -510,7 +510,7 @@ class Checkout extends CI_controller
 		$data['txn_id'] = $checkout_order['txn_id'];
 
 		// dev on 29.06.2021
-		if($this->config->item('review_toggle') == false)	{
+		if($this->config->item('new_review_page_toggle') == false)	{
 			display('review', $data);
 		} else  {
 			display('new_review', $data); // html designed by ratna
@@ -532,6 +532,13 @@ class Checkout extends CI_controller
 
 		$payment_mode = $this->input->post('payment_mode');
 
+		// dev on 07.07.2021
+		if($payment_mode == 'pre-paid') {
+			$txn_id = $this->session->userdata('txn_id');
+			$input = ['order_amount' => $this->input->post('prepaid_final_price'), 'prepaid_discount' => $this->input->post('prepaid_discount')];
+			$this->database->_updateCheckoutOrderPrepaidDiscount($input, $txn_id, 'open');
+		}
+
 		//Once we get the correct payment mode, then lock and fire
 		//Locking inside switch is imp.
 		switch ($payment_mode)
@@ -552,6 +559,7 @@ class Checkout extends CI_controller
 			break;
 		}
 	}
+
 
 	function place_order()
 	{
@@ -803,6 +811,9 @@ class Checkout extends CI_controller
 				'payment_mode'	=>	$order_info['payment_mode'],
 				'order_amount'	=>	$order_info['amount'],
 				'points_applied' => $order_info['points_applied'],
+				
+				'prepaid_discount' => $order_info['prepaid_discount'], // dev on 07.07.2021
+
 					//'order_status'=>	Default set as pending
 			);
 
@@ -912,6 +923,8 @@ class Checkout extends CI_controller
 		$order_info['address'] = $this->database->GetAddressById($checkout_order['address_id']);
 
 		$order_info['points_applied'] = $checkout_order['points_applied'];
+
+		$order_info['prepaid_discount'] = $checkout_order['prepaid_discount']; // dev on 07.07.2021
 
 		return $order_info;
 	}

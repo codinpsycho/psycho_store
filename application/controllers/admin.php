@@ -787,7 +787,6 @@ class Admin extends CI_controller
 			$data['num_prods'] = count($products);
 			$data['products_table'] = $this->_generate_products_table($products);
 			
-
 			display('admin_products', $data);
 
 			// display('404', null); // comment out by Dev. Sukamal on 19.04.2021
@@ -797,15 +796,16 @@ class Admin extends CI_controller
 	function add_product()
 	{
 		$categories = $this->database->_getProductCategories();
+
 		if(!empty($this->input->post('addgallery'))) 
 		{
 			$data = $this->_fill_data_var_for_view(null);
 			$data['noofinputs'] = $this->input->post('noofinputs');
 			$data['action'] = site_url('admin/add_product');
 			$data['categories'] = $categories;
+			$data['types'] = $this->getProductTypesEnums(); // dev on 07.07.2021
 			display('admin_product_add_edit', $data);
 		}
-
 		else  
 		{
 
@@ -814,8 +814,6 @@ class Admin extends CI_controller
 			if($this->form_validation->run())
 			{
 				$product = $this->_get_product_form_post($this->input->post());
-				// echo '<pre>'; print_r($product); exit();
-
 				$this->database->AddProduct($product);
 				redirect('admin/products');
 			}
@@ -824,6 +822,7 @@ class Admin extends CI_controller
 				$data = $this->_fill_data_var_for_view(null);
 				$data['action'] = site_url('admin/add_product');
 				$data['categories'] = $categories;
+				$data['types'] = $this->getProductTypesEnums(); // dev on 07.07.2021
 				display('admin_product_add_edit', $data);
 			}
 
@@ -834,6 +833,7 @@ class Admin extends CI_controller
 	{
 		$product = $this->database->GetProductById($product_id);
 		$categories = $this->database->_getProductCategories();
+		$data['types'] = $this->getProductTypesEnums(); // dev on 07.07.2021
 
 		if(count($product))
 		{
@@ -929,6 +929,7 @@ class Admin extends CI_controller
 			$product['product_details']['medium_qty'] = $input['m_qty'];
 			$product['product_details']['large_qty'] = $input['l_qty'];
 			$product['product_details']['xl_qty'] = $input['xl_qty'];
+			$product['product_details']['xxl_qty'] = $input['xxl_qty']; // dev on 07.07.2021
 			break;
 			
 			default:
@@ -954,6 +955,7 @@ class Admin extends CI_controller
 		$this->form_validation->set_rules('m_qty', 'Medium Qty', 'is_numeric|trim|xss_clean');
 		$this->form_validation->set_rules('l_qty', 'Large Qty', 'is_numeric|trim|xss_clean');
 		$this->form_validation->set_rules('xl_qty', 'XL Qty', 'is_numeric|trim|xss_clean');
+		$this->form_validation->set_rules('xxl_qty', 'XXL Qty', 'is_numeric|trim|xss_clean'); // dev on 07.07.2021
 	}
 
 	function _fill_data_var_for_view($product)
@@ -976,6 +978,7 @@ class Admin extends CI_controller
 			$data['m_qty'] = is_null($product) ? '' : $product['product_details']['medium_qty'];
 			$data['l_qty'] = is_null($product) ? '' : $product['product_details']['large_qty'];
 			$data['xl_qty'] = is_null($product) ? '' : $product['product_details']['xl_qty'];
+			$data['xxl_qty'] = is_null($product) ? '' : $product['product_details']['xxl_qty']; // dev on 07.07.2021
 			break;
 			
 			default:
@@ -1101,7 +1104,7 @@ class Admin extends CI_controller
 	function _generate_products_table($products)
 	{
 		$this->load->library('table');
-		$this->table->set_heading('id', 'type', 'game', 'name', 'url', 'image', 'price', 'small', 'med', 'lrg', 'xl', 'sold');
+		$this->table->set_heading('id', 'type', 'game', 'name', 'url', 'image', 'price', 'small', 'med', 'lrg', 'xl', 'xxl', 'sold'); // dev on 06.07.2021
 
 		$tmpl = array ( 'table_open'  => '<table class="table table-condensed" >' );
 		$this->table->set_template($tmpl);
@@ -1123,7 +1126,7 @@ class Admin extends CI_controller
 			$prod_details = $prod['product_details'];
 
 			//Stock info
-			$small_qty = $med_qty = $lrg_qty = $xl_qty = 0;
+			$small_qty = $med_qty = $lrg_qty = $xl_qty = $xxl_qty = 0; // dev on 06.07.2021
 
 			switch ($prod['product_type'])
 			{
@@ -1133,6 +1136,7 @@ class Admin extends CI_controller
 				$med_qty = $prod_details['medium_qty'];
 				$lrg_qty = $prod_details['large_qty'];
 				$xl_qty = $prod_details['xl_qty'];
+				$xxl_qty = $prod_details['xxl_qty']; // dev on 06.07.2021
 				break;
 				
 				default:
@@ -1140,7 +1144,7 @@ class Admin extends CI_controller
 				break;
 			}
 
-			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $small_qty, $med_qty, $lrg_qty, $xl_qty, $prod['product_qty_sold']);
+			$this->table->add_row($prod_id_cell, $prod['product_type'], $prod['product_game'], $prod_name_cell, $prod['product_url'], $image_cell, $prod['product_price'], $small_qty, $med_qty, $lrg_qty, $xl_qty, $xxl_qty, $prod['product_qty_sold']); // dev on 06.07.2021
 		}
 
 		return $this->table->generate();
@@ -1703,7 +1707,7 @@ class Admin extends CI_controller
 
 
 			$this->database->_updateCategoryGame($id, $input);
-			redirect('admin/subcategory');	
+			redirect('admin/subcategory');
 		}
 
 		display('admin_add_edit_subcategory', $data);
@@ -1712,6 +1716,42 @@ class Admin extends CI_controller
 
 
 
+	// dev on 06.07.2021
+	function manage_product_types()
+	{
+		$data['types'] = $this->getProductTypesEnums();
+		display('admin_manage_product_types', $data);
+		// echo '<pre>'; print_r($data['types']); exit();
+
+	}
+
+	function update_product_types()
+	{
+		$data['types'] = $this->getProductTypesEnums();
+
+		if(!empty($this->input->post('submit'))) {
+
+			$newValues = trim($this->input->post('product_types'));
+			$newValues = "'" . str_replace(",", "','", $newValues) . "'";
+			$this->database->updateProductTypesEnumValues($newValues);
+			
+			redirect('admin/manage_product_types');
+			// echo '<pre>'; print_r($newValues); exit();
+		}
+
+		display('admin_update_product_types', $data);
+	}
+	// dev on 06.07.2021
+
+	// dev on 07.07.2021
+	function getProductTypesEnums()
+	{
+		$string = $this->database->getProductTypesEnumValues();
+		$string = explode(')', (explode('(', $string)[1]))[0];
+		$types = explode(',', str_replace("'", "", $string));
+		return $types;
+	}
+	// dev on 07.07.2021
 
 }
 

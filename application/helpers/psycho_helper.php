@@ -572,6 +572,12 @@ function _live($page, $data)
 		case 'new_review':
 			$body = $ci->load->view('newtheme/new_view_review_order', $data, true);
 			break;
+		case 'admin_manage_product_types':
+			$body = $ci->load->view('admin/admin_manage_product_types', $data, true);
+			break;
+		case 'admin_update_product_types':
+			$body = $ci->load->view('admin/admin_update_product_types', $data, true);
+			break;
 		default:
 			show_404();
 		break;

@@ -923,6 +923,8 @@ function AddProduct($product)
 		//Dont get hidden products
 		$this->db->where('product_state !=', 'hidden');		
 
+		$this->db->order_by("product_name", "asc");
+
 		if($limit!=''){
 			$this->db->limit($limit);
 		}
@@ -1348,6 +1350,35 @@ function AddProduct($product)
 		return $query->result_array();
 	}
 	// closed: dev on 30.06.2021
+
+
+	// dev on 06.07.2021
+	function getProductTypesEnumValues()
+	{
+		$dbname = $this->db->database;
+		$sql = "SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '$dbname' AND TABLE_NAME = 'products' AND COLUMN_NAME = 'product_type'";
+		$query = $this->db->query($sql);
+		return $query->row_array()['AllPossibleEnumValues'];
+	}
+
+	function updateProductTypesEnumValues($newValues)
+	{
+		$dbname = $this->db->database;
+		$sql = "ALTER TABLE products MODIFY COLUMN `product_type` ENUM($newValues)";
+		$query = $this->db->query($sql);
+	}
+	// dev on 06.07.2021
+
+	// dev on 07.07.2021
+	function _updateCheckoutOrderPrepaidDiscount($data, $txn_id, $state = 'open')
+	{
+		$this->db->where('txn_id', $txn_id);
+		$this->db->where('state', $state);
+		$this->db->update('checkout_orders', $data);
+	}
+	// dev on 07.07.2021
+	
+
 
 }
 ?>

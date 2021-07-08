@@ -198,6 +198,7 @@ class Cart extends CI_controller
 			$cart_item['options']['extra'] = $extra;
 		}
 
+		$this->cart->product_name_rules = '[:print:]';
 		$row_id = $this->cart->insert($cart_item);
 
 	}

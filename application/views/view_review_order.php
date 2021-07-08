@@ -13,12 +13,12 @@
 	}
 	function update_for_cod()
 	{
-		var new_price = parseInt(<?php echo ($this->cart->final_price() - $points_claimed) + $cod_charges ?>);
+		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) + $cod_charges ?>);
 		update_price_text(new_price);
 	}
 	function update_for_online()
 	{
-		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) ?>);
+		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?>);
 		update_price_text(new_price);
 	}
 	function update_price_text(price)
@@ -39,7 +39,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1 id='header_price'>Order Review
-				<span class="pull-right"> <i class="fa fa-rupee"></i> <span id='price'> <?= ($this->cart->final_price() - $points_claimed)?></span></span> 
+				<span class="pull-right"> <i class="fa fa-rupee"></i> <span id='price'> <?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?></span></span> 
 			</h1>
 		</div>
 	</div>
@@ -69,11 +69,11 @@
 					<h4 id='actual_price'>Actual Price : <i class="fa fa-rupee"></i> <?php echo $this->cart->total() ?></h4>
 					<h4 id='discount'>Discount : <i class="fa fa-rupee"></i> <?php echo $this->cart->discount() ?> </h4>
 					<h4 id='shipping'>Shipping : Always Free </h4>
-					<h4 id='final_price'>Final Price : <i class="fa fa-rupee"></i> <?= ($this->cart->final_price() - $points_claimed) ?> </h4>
+					<h4 id='final_price'>Final Price : <i class="fa fa-rupee"></i> <?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?> </h4>
 
 					<?php 
 					if($this->config->item('redeem_points'))	{
-					?>
+						?>
 						<h4>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </h4>
 
 						<form action="" method="post">
@@ -90,8 +90,13 @@
 
 					<input type="hidden" name="points_claimed" value="<?=$points_claimed?>">
 
+					<!-- dev on 07.07.2021 -->
+					<input type="hidden" name="prepaid_discount" value="<?=$prepaid_discount ?>">
+					<input type="hidden" name="prepaid_final_price" value="<?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?>">
+					<!-- dev on 07.07.2021 -->					
+
 					<select class="form-control" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
-						<option value="pre-paid" >Pay Online</option>
+						<option value="pre-paid" >Pay Online(Extra 5% off)</option>
 						<?php if($cod_available == true): ?>
 							<option value="cod">Cash On Delivery( ₹60 extra )</option>
 						<?php endif; ?>
@@ -105,16 +110,16 @@
 		</div>
 	</div>
 	<!-- Placing the order implies you agree to our <a target="_blank" href = <?php //echo site_url('shipping_returns') ?> > 365 days Shipping and Returns policy </a> -->
-	 <div class="w-100 stkynew">
-	<button class="btn btn-primary pull-right" id='place_order_btn'> Place Order | <i class="fa fa-rupee"></i>  <?=($this->cart->final_price() - $points_claimed);?> <i class="fa fa-arrow-right"></i></button>
+	<div class="w-100 stkynew">
+		<button class="btn btn-primary pull-right" id='place_order_btn'> Place Order | <i class="fa fa-rupee"></i>  <?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?> <i class="fa fa-arrow-right"></i></button>
 	</div>
 </div>
 
 <script>
 	var options = {
-		
+
 		"key": "<?php echo $this->config->item('rzp_merchant_key') ?>",
-    "amount": "<?= ($this->cart->final_price() - $points_claimed)*100; ?>", // 2000 paise = INR 20
+    "amount": "<?= (($this->cart->final_price() - $points_claimed) - $prepaid_discount) * 100; ?>", // 2000 paise = INR 20
     "name": "Psycho Store",
     
     "handler": payment_authorized,

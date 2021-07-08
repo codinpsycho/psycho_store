@@ -28,11 +28,20 @@
 								<?php if($type != ''):?>
 									<option value = <?php echo $type ?> ><?php echo $type ?></option>
 								<?php else: ?>
-									<option value = "tshirt">Tshirt</option>
+
+									<!-- dev on 07.07.2021 -->
+									<?php foreach ($types as $key => $value) { ?>
+									<option value = "<?=$value?>"><?=$value?></option>										
+									<?php } ?>
+									<!-- dev on 07.07.2021 -->
+									
+
+									<!-- <option value = "tshirt">Tshirt</option>
 									<option value = "hoodie">Hoodie</option>
 									<option value = "mobilecover">Mobile Covers</option>
 									<option value = "mugs">Coffee Mugs</option>
-									<option value = "posters">Poster</option>
+									<option value = "posters">Poster</option> -->
+
 								<?php endif;?>
 							</select>
 						</div>
@@ -57,7 +66,7 @@
 						</div>
 					</div>
 					<div class='form-group '>
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<input class='form-control' type="text" placeholder="Image path with '/'" name="image_path" value = "<?php echo !empty($image_path) ? $image_path : set_value('image_path'); ?>"></input>
 						</div>
 						<div class="col-md-2">
@@ -74,7 +83,13 @@
 						</div>
 						<div class='col-md-1'>
 							<input class='form-control' type="number" placeholder="XL Qty" name="xl_qty" value = '<?php echo !empty($xl_qty) ? $xl_qty : set_value('xl_qty');?>'></input>
-						</div>	
+						</div>
+
+						<!-- dev on 07.07.2021 -->
+						<div class='col-md-1'>
+							<input class='form-control' type="number" placeholder="XXL Qty" name="xxl_qty" value = '<?php echo !empty($xxl_qty) ? $xxl_qty : set_value('xxl_qty');?>'></input>
+						</div>
+						<!-- dev on 07.07.2021 -->
 
 						<div class='col-md-2'>
 							<select class= "form-control " name="featured">
@@ -146,6 +161,8 @@
 			</div>
 
 			<button class='btn btn-primary' type="submit"> Save Product </button>
+			<a class='btn btn-danger' href="<?=base_url().'admin/products'?>"> Back </a>
+
 		</form>
 	</div>
 

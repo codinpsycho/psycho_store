@@ -34,6 +34,7 @@
                 <span class='pull-right'>
                     <a class="btn btn-primary play" href= <?php echo site_url('admin/add_product') ?> >Add New Product</a>
                     <a class="btn btn-primary play" href= <?php echo site_url('admin/manage_category') ?> >Manage Categories</a>
+                    <a class="btn btn-primary play" href= <?php echo site_url('admin/manage_product_types') ?> >Manage Product Types</a>
                 </span>
             </form>
         </div>

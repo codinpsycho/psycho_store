@@ -76,7 +76,15 @@ function update_btn_text_on_addtocart(cb)
         <hr>        
         <div class="row ">
           <div class="col-md-12">
-            <h4 class="molot"><a href=<?php $game = url_title($product['product_game']); echo site_url("like/$game")?>> More from <?php echo $product['product_game']?></a>
+            <h4 class="molot">
+            <a href=<?php 
+
+            // $game = url_title($product['product_game']); 
+
+            $game_url = url_title($game['game_name'], '-', true);
+            $category = url_title($game['category_name'], '-', true); 
+            
+            echo site_url("like/$game_url-psychostore-$category-tshirts-merchandise-india"); //echo site_url("like/$game")?>> More from <?php echo $product['product_game']?></a>
             <hr>
           </div>
           <div class="col-md-12">

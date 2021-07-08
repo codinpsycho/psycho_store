@@ -13,12 +13,12 @@
 	}
 	function update_for_cod()
 	{
-		var new_price = parseInt(<?php echo ($this->cart->final_price() - $points_claimed) + $cod_charges ?>);
+		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) + $cod_charges; ?>);
 		update_price_text(new_price);
 	}
 	function update_for_online()
 	{
-		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) ?>);
+		var new_price = parseInt(<?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?>);
 		update_price_text(new_price);
 	}
 	function update_price_text(price)
@@ -40,7 +40,7 @@
 		<div class="row borderrow">
 
 			<h1 id='header_price'>Order Review
-				<span class="pull-right"> <i class="fa fa-rupee"></i> <span id='price'> <?= ($this->cart->final_price() - $points_claimed)?></span></span> 
+				<span class="pull-right"> <i class="fa fa-rupee"></i> <span id='price'> <?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?></span></span> 
 			</h1>
 
 		</div>
@@ -84,10 +84,19 @@
 							<div class="mb5" style="margin-bottom:20px">
 								<h2>Payment Method</h2>
 								<form id="payment_mode_form"  method = "post" action = "<?php echo site_url('checkout/payment')?>" role="form">
+									
+
 									<input type="hidden" name="points_claimed" value="<?=$points_claimed?>">
 
+									
+									<!-- dev on 07.07.2021 -->
+									<input type="hidden" name="prepaid_discount" value="<?=$prepaid_discount ?>">
+									<input type="hidden" name="prepaid_final_price" value="<?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?>">
+									<!-- dev on 07.07.2021 -->
+
+
 									<select class="custom-select" id="payment_mode_select" name="payment_mode" onchange="update_price(this)">
-										<option value="pre-paid" >Pay Online</option>
+										<option value="pre-paid" >Pay Online(Extra 5% off)</option>
 										<?php if($cod_available == true): ?>
 											<option value="cod">Cash On Delivery( ₹60 extra )</option>
 										<?php endif; ?>
@@ -99,52 +108,53 @@
 							</div>
 
 							<div class="mb5"  style="margin-bottom:70px">
-								<button type="button" class="btn btn-primary btnorder" id='place_order_btn'>Place order | <i class="fa fa-rupee"></i>  <?=($this->cart->final_price() - $points_claimed);?> <i class="fa fa-arrow-right"></i></button>
+								<button type="button" class="btn btn-primary btnorder" id='place_order_btn'>Place order | <i class="fa fa-rupee"></i>  
+									<?= ($this->cart->final_price() - $prepaid_discount) - $points_claimed;?> <i class="fa fa-arrow-right"></i></button>
+								</div>
+
+								<div class="mb-5">
+									<h2>Pricing</h2>
+									<p id='actual_price'>Actual Price : <i class="fa fa-rupee"></i> <?php echo $this->cart->total() ?></p> 
+									<p id='discount'>Discount : <i class="fa fa-rupee"></i> <?php echo $this->cart->discount() ?></p> 
+									<p id='shipping'>Shipping : Always free</p> 
+									<p id='final_price'>Final Price : <i class="fa fa-rupee"></i> <?= ($this->cart->final_price() - $points_claimed) - $prepaid_discount; ?></p>
+
+									<?php if($this->config->item('redeem_points'))	{	?>
+										<p>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </p>
+										<form action="" method="post">											
+											<input type="hidden" name="is_clicked" value="1">
+											<input type="checkbox" name="is_applied" value="1" onClick='submit();' <?=$checked == 1 ? 'checked' : ''?>> Click to claim your points
+										</form>
+									<?php } ?>
+
+								</div>
+
+
+								<div class="mb-5">
+									<h2>Shipping address</h2>
+									<p><?=$formatted_address;?></p>
+									<a href="<?=base_url().'checkout/address?edit=true'?>">Click to Change address</a>
+								</div>
+
+
 							</div>
 
-							<div class="mb-5">
-								<h2>Pricing</h2>
-								<p id='actual_price'>Actual Price : <i class="fa fa-rupee"></i> <?php echo $this->cart->total() ?></p> 
-								<p id='discount'>Discount : <i class="fa fa-rupee"></i> <?php echo $this->cart->discount() ?></p> 
-								<p id='shipping'>Shipping : Always free</p> 
-								<p id='final_price'>Final Price : <i class="fa fa-rupee"></i> <?= ($this->cart->final_price() - $points_claimed) ?></p>
-
-								<?php if($this->config->item('redeem_points'))	{	?>
-									<p>Points Claimed : <i class="fa fa-rupee"></i> <?=$points_claimed?> </p>
-									<form action="" method="post">
-										<input type="hidden" name="is_clicked" value="1">
-										<input type="checkbox" name="is_applied" value="1" onClick='submit();' <?=$checked == 1 ? 'checked' : ''?>> Click to claim your points
-									</form>
-								<?php } ?>
-
-							</div>
-
-
-							<div class="mb-5">
-								<h2>Shipping address</h2>
-								<p><?=$formatted_address;?></p>
-								<a href="<?=base_url().'checkout/address?edit=true'?>">Click to Change address</a>
-							</div>
-							
-							
 						</div>
-						
 					</div>
 				</div>
+
 			</div>
 
 		</div>
+	</section>
 
-	</div>
-</section>
+	<script type="text/javascript">
 
-<script type="text/javascript">
-	
-	var options = 
-	{
-		
-		"key": "<?php echo $this->config->item('rzp_merchant_key') ?>",
-		"amount": "<?= ($this->cart->final_price() - $points_claimed)*100; ?>", // 2000 paise = INR 20
+		var options = 
+		{
+
+			"key": "<?php echo $this->config->item('rzp_merchant_key') ?>",
+		"amount": "<?= (($this->cart->final_price() - $points_claimed) - $prepaid_discount) * 100; ?>", // 2000 paise = INR 20
 		"name": "Psycho Store",
 
 		"handler": payment_authorized,

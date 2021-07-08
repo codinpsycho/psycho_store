@@ -56,54 +56,69 @@
       <form id="cart_form" method = "post" action = "<?php echo site_url("cart/instant_checkout/{$product['product_id']}")?>" role="form">
 
         <select id="size_selection" required class="form-control" name="extra" onchange="update_btn_text_on_size_select(this)">
-          <option disabled selected value="">Select Size</option>  
+
+          <option disabled selected value="">Select Size</option>
+
           <option <?php echo $small_stock; ?> value ="Small">Small 
             <?php if($small_stock == 'disabled') echo '(Out Of Stock)';
             elseif ($small_stock == 'preorder') echo '(Pre-Order)';?>
           </option>
+
           <option <?php echo $medium_stock; ?> value ="Medium">Medium
             <?php if($medium_stock == 'disabled') echo '(Out Of Stock)';
-            elseif ($medium_stock == 'preorder') echo '(Pre-Order)';?></option>
-            <option <?php echo $large_stock; ?> value ="Large">Large
-              <?php if($large_stock == 'disabled') echo '(Out Of Stock)';
-              elseif ($large_stock == 'preorder') echo '(Pre-Order)';?></option>
-              <option <?php echo $xl_stock; ?> value ="XL">XL
-                <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';
-                elseif ($xl_stock == 'preorder') echo '(Pre-Order)';?></option>
-              </select>
+            elseif ($medium_stock == 'preorder') echo '(Pre-Order)';?>
+          </option>
+
+          <option <?php echo $large_stock; ?> value ="Large">Large
+            <?php if($large_stock == 'disabled') echo '(Out Of Stock)';
+            elseif ($large_stock == 'preorder') echo '(Pre-Order)';?>
+          </option>
+
+          <option <?php echo $xl_stock; ?> value ="XL">XL
+            <?php if($xl_stock == 'disabled') echo '(Out Of Stock)';
+            elseif ($xl_stock == 'preorder') echo '(Pre-Order)';?>            
+          </option>
+
+          <!-- dev on 06.07.2021 -->
+          <option <?php echo $xxl_stock; ?> value ="XXL">XXL
+            <?php if($xxl_stock == 'disabled') echo '(Out Of Stock)';
+            elseif ($xxl_stock == 'preorder') echo '(Pre-Order)';?>
+          </option>
+
+        </select>
 
 
-            </div>
-            <div class="w-100 stky">
-              <div class="col-md-6 col-sm-12 col-xs-12">
-                <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
+      </div>
+      <div class="w-100 stky">
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <?php $button_text = $product_state == 'preorder' ? 'Pre-Order Now' : 'Order Now'?>
 
-                <button type="submit" name="add_to_cart" id="add_to_cart" class="btn btn-primary btn-block" style="display: none;"><?php echo $button_text?></button>
+          <button type="submit" name="add_to_cart" id="add_to_cart" class="btn btn-primary btn-block" style="display: none;"><?php echo $button_text?></button>
 
-                <a href="#ordersize" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
+          <a href="#ordersize" role="button" id="anchorcart" class="btn btn-primary btn-block"><?php echo $button_text?></a>
 
-              </div>
-            </div>
-          </form> 
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >free shipping + 365 days return</a>
-             <a class="pull-right" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> </h5>
-           </div>
-         </div>
-       </div>
+        </div>
+      </div>
+    </form> 
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <h5 class=""><a class="" href= <?php echo site_url('shipping_returns')?> >free shipping + 365 days return</a>
+       <a class="pull-right" href='#size_chart' data-toggle='modal' data-target="#size_chart">size chart</a> </h5>
+     </div>
+   </div>
+ </div>
 
 
-       <script type="text/javascript">
+ <script type="text/javascript">
 
-        $('#anchorcart').click(function (e) {
-          $('#orderalert').show();
-        });
+  $('#anchorcart').click(function (e) {
+    $('#orderalert').show();
+  });
 
-        $('#size_selection').change(function (e) {
+  $('#size_selection').change(function (e) {
 
-         $('#anchorcart').hide();
-         $('#add_to_cart').show();
-         $('#orderalert').hide();
+   $('#anchorcart').hide();
+   $('#add_to_cart').show();
+   $('#orderalert').hide();
 
-       });
-     </script>
+ });
+</script>
