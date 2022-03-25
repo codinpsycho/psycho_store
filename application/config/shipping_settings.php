@@ -2,7 +2,7 @@
 
 //Delhivery
 $config['delhivery_url'] = 'http://test.delhivery.com';
-$config['delhivery_token'] = 'b20fa5c4a56ae2d1249bb81957aa5398585d8c91';
+$config['delhivery_token'] = '';
 $config['delhivery_warehouse'] = 'PSYCHONETSOLUTIO';
 $config['delhivery_logo'] ='images/shipping/delhivery.png';
 $config['company_logo'] ='images/shipping/shipping_logo.png';
